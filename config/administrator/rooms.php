@@ -8,6 +8,11 @@ return [
         'id',
         'name',
         'description',
+        'num_terminals' => [
+            'title' => '# Terminals',
+            'relationship' => 'terminals', //this is the name of the Eloquent relationship method!
+            'select' => "COUNT((:table).id)",
+        ],
         'created_at',
         'updated_at',
     ],
@@ -19,7 +24,12 @@ return [
         'description' => [
             'title' => 'description',
             'type' => 'text',
-        ]
+        ],
+        'terminals' => [
+            'title' => 'Terminals',
+            'type' => 'relationship',
+            'name_field' => 'description',
+        ],
     ]
 ];
 
