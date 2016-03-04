@@ -65,7 +65,7 @@ return array(
 	 * 		'Analytics' => array('E-Commerce' => 'page.ecommerce.analytics'),
 	 *	)
 	 */
-	'menu' => array(),
+	'menu' => array('rooms',),
 
 	/**
 	 * The permission option is the highest-level authentication check that lets you define a closure that should return true if the current user
@@ -98,7 +98,7 @@ return array(
 	 *
 	 * @type string
 	 */
-	'home_page' => '',
+	'home_page' => 'rooms',
 
 	/**
 	 * The route to which the user will be taken when they click the "back to site" button
@@ -112,7 +112,7 @@ return array(
 	 *
 	 * @type string
 	 */
-	'login_path' => 'auth/login',
+	'login_path' => 'login',
 
 	/**
 	 * The logout path is the path where Administrator will send the user when they click the logout link
