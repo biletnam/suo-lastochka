@@ -38,4 +38,5 @@ Route::group(['middleware' => 'web'], function () {
 
     Route::get('/operator', 'OperatorController@index');
     Route::post('/operator/call', 'OperatorController@call');
+    Route::post('/operator/close', 'OperatorController@close');
 });

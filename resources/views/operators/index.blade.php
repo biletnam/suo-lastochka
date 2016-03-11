@@ -12,7 +12,8 @@
                         <th>Tickets</th>
                         <th>&nbsp;</th>
                         <th>Status</th>
-                        <th>Do</th>
+                        <th>Call</th>
+                        <th>Close</th>
                     </thead>
 
                     <!-- Table Body -->
@@ -39,6 +40,17 @@
                                         <input type="hidden" name="ticket" value="{{ $ticket->id }}">
                                         <button type="submit" id="call-{{ $ticket->id }}" class="btn btn-danger">
                                             <i class="fa fa-btn fa-trash"></i>Call
+                                        </button>
+                                    </form>
+                                </td>
+
+                                <td>
+                                    <form action="{{ url('operator/close') }}" method="POST">
+                                        {!! csrf_field() !!}
+
+                                        <input type="hidden" name="ticket" value="{{ $ticket->id }}">
+                                        <button type="submit" id="close-{{ $ticket->id }}" class="btn btn-danger">
+                                            <i class="fa fa-btn fa-trash"></i>Close
                                         </button>
                                     </form>
                                 </td>

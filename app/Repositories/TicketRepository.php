@@ -41,9 +41,19 @@ class TicketRepository
 
     public function call($ticket_id)
     {
+        return $this->setStatus($ticket_id, Ticket::CALLED);
+    }
+
+    public function close($ticket_id)
+    {
+        return $this->setStatus($ticket_id, Ticket::CLOSED);
+    }
+
+    private function setStatus($ticket_id, $status)
+    {
         $ticket = Ticket::find($ticket_id);
 
-        $ticket->status = Ticket::CALLED;
+        $ticket->status = $status;
 
         $ticket->save();
 
