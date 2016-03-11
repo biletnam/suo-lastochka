@@ -1,0 +1,47 @@
+@extends('layouts.app')
+
+@section('content')
+    @if (count($tickets) > 0)
+        <div class="panel panel-default">
+
+            <div class="panel-body">
+                <table class="table table-striped task-table">
+
+                    <!-- Table Headings -->
+                    <thead>
+                        <th>Tickets</th>
+                        <th>&nbsp;</th>
+                        <th>Do</th>
+                    </thead>
+
+                    <!-- Table Body -->
+                    <tbody>
+                        @foreach ($tickets as $ticket)
+                            <tr>
+                                <!-- Task Name -->
+                                <td class="table-text">
+                                    <div>{{ $ticket->room->description }}</div>
+                                </td>
+
+                                <td>
+                                    <div>{{ $ticket->id }}</div>
+                                </td>
+
+                                <td>
+                                    <form action="{{ url('operator/call') }}" method="POST">
+                                        {!! csrf_field() !!}
+
+                                        <input type="hidden" name="ticket" value="{{ $ticket->id }}">
+                                        <button type="submit" id="call-{{ $ticket->id }}" class="btn btn-danger">
+                                            <i class="fa fa-btn fa-trash"></i>Call
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    @endif
+@endsection
