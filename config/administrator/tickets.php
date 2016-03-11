@@ -13,6 +13,7 @@ return [
     'columns' => [
         'id',
         'room_id',
+        'status',
         'deleted_at',
         'created_at',
         'updated_at',
@@ -22,6 +23,10 @@ return [
             'type' => 'relationship',
             'title' => 'Room',
             'name_field' => 'description',
+        ],
+        'status' => [
+            'type' => 'text',
+            'title' => 'Status',
         ],
     ]
 ];

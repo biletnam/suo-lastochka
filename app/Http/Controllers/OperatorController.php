@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use suo\Http\Requests;
 
-use suo\Ticket;
+use suo\Repositories\TicketRepository;
 
 class OperatorController extends Controller
 {
@@ -18,9 +18,9 @@ class OperatorController extends Controller
      */
     public function index(Request $request)
     {
-        $tickets = Ticket::with(['room' => function ($query) {
-            $query->orderBy('id', 'asc');
-        }])->get();
+        $ticketRepo = new TicketRepository();
+
+        $tickets = $ticketRepo->forOperator();
 
         return view('operators.index', [
             'tickets' => $tickets,
@@ -29,10 +29,10 @@ class OperatorController extends Controller
 
     public function call(Request $request)
     {
-//        $ticketRepo = new TicketRepository();
-//
-//        $ticketRepo->createTicket($request->room);
-//
+        $ticketRepo = new TicketRepository();
+
+        $ticketRepo->call($request->ticket);
+
         return redirect('/operator');
     }
 

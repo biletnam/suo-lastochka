@@ -11,6 +11,7 @@
                     <thead>
                         <th>Tickets</th>
                         <th>&nbsp;</th>
+                        <th>Status</th>
                         <th>Do</th>
                     </thead>
 
@@ -25,6 +26,10 @@
 
                                 <td>
                                     <div>{{ $ticket->id }}</div>
+                                </td>
+
+                                <td>
+                                    <div>{{ $ticket->status }}</div>
                                 </td>
 
                                 <td>
