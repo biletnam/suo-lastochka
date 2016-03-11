@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use suo\Http\Requests;
 
 use suo\Room;
+use suo\Repositories\TicketRepository;
 
 class TerminalController extends Controller
 {
@@ -27,6 +28,10 @@ class TerminalController extends Controller
 
     public function createticket(Request $request)
     {
-        
+        $ticketRepo = new TicketRepository();
+
+        $ticketRepo->createTicket($request->room);
+
+        return redirect('/terminals');
     }
 }
