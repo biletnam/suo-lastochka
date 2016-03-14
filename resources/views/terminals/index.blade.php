@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.terminal')
 
 @section('content')
     @if (count($rooms) > 0)

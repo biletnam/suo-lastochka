@@ -12,7 +12,7 @@
 
     <!-- Styles -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
-    {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
+    <link href="/css/suo.css" rel="stylesheet">
 
     <style>
         .fa-btn {
@@ -72,6 +72,6 @@
     <!-- JavaScripts -->
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
-    {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
+    <script src="/js/suo.js"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.operator')
 
 @section('content')
     @if (count($tickets) > 0)
