@@ -14,7 +14,7 @@ class TerminalsTableSeeder extends Seeder
         DB::table('terminals')->truncate();
         DB::table('room_terminal')->truncate();
 
-        factory(suo\Terminal::class, 50)->create();
+        factory(suo\Terminal::class, 10)->create();
 
         suo\Terminal::find(1)->rooms()->attach([1,2,3,4]);
         suo\Terminal::find(2)->rooms()->attach([1,2,3,4,5,6]);

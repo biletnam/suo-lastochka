@@ -14,7 +14,7 @@ class PanelsTableSeeder extends Seeder
         DB::table('panels')->truncate();
         DB::table('panel_room')->truncate();
 
-        factory(suo\Panel::class, 50)->create();
+        factory(suo\Panel::class, 10)->create();
 
         suo\Panel::find(1)->rooms()->attach([1,2,3,4]);
         suo\Panel::find(2)->rooms()->attach([1,2,3,4,5,6]);

@@ -30,7 +30,7 @@
                                     <form action="{{ url('terminal/select') }}" method="POST">
                                         {!! csrf_field() !!}
 
-                                        <input type="hidden" name="terminal" value="{{ $room->id }}">
+                                        <input type="hidden" name="room" value="{{ $room->id }}">
                                         <button type="submit" id="create-ticket-{{ $room->id }}" class="btn btn-danger">
                                             <i class="fa fa-btn fa-trash"></i>Create
                                         </button>

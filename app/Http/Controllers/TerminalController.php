@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use suo\Http\Requests;
 
 use suo\Terminal;
-use suo\Room;
 use suo\Repositories\TicketRepository;
+use suo\Repositories\RoomRepository;
 
 class TerminalController extends Controller
 {
@@ -40,7 +40,9 @@ class TerminalController extends Controller
      */
     public function page(Request $request)
     {
-        $rooms = Room::all();
+        $room_repo = new RoomRepository();
+
+        $rooms = $room_repo->forTerminal($request->terminal);
 
         return view('terminals.page', [
             'rooms' => $rooms,
