@@ -42,3 +42,22 @@ $factory->define(suo\Terminal::class, function (Faker\Generator $faker) {
         'description' => $faker->company,
     ];
 });
+
+$factory->define(suo\Ticket::class, function (Faker\Generator $faker) {
+    return [
+        'status' => suo\Ticket::NEWTICKET,
+        'room_id' => 1,
+    ];
+});
+
+$factory->defineAs(suo\Ticket::class, 'ticket_closed', function (Faker\Generator $faker) use ($factory) {
+    $ticket = $factory->raw(suo\Ticket::class);
+
+    return array_merge($ticket, ['status' => suo\Ticket::CLOSED]);
+});
+
+$factory->defineAs(suo\Ticket::class, 'ticket_accepted', function (Faker\Generator $faker) use ($factory) {
+    $ticket = $factory->raw(suo\Ticket::class);
+
+    return array_merge($ticket, ['status' => suo\Ticket::ACCEPTED]);
+});
