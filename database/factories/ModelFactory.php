@@ -15,7 +15,30 @@ $factory->define(suo\User::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->email,
-        'password' => bcrypt(str_random(10)),
+        'password' => bcrypt('1'),
         'remember_token' => str_random(10),
+    ];
+});
+
+$factory->define(suo\Room::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->name,
+        'description' => $faker->company,
+    ];
+});
+
+$factory->define(suo\Panel::class, function (Faker\Generator $faker) {
+    return [
+        'ip_address' => $faker->localIpv4,
+        'name' => $faker->name,
+        'description' => $faker->company,
+    ];
+});
+
+$factory->define(suo\Terminal::class, function (Faker\Generator $faker) {
+    return [
+        'ip_address' => $faker->localIpv4,
+        'name' => $faker->name,
+        'description' => $faker->company,
     ];
 });
