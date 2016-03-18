@@ -40,6 +40,8 @@
                         @endforeach
                     </tbody>
                 </table>
+
+                <div>{!! $rooms->links() !!}</div>
             </div>
         </div>
     @endif

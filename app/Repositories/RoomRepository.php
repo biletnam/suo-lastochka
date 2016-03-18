@@ -16,7 +16,7 @@ class RoomRepository
     {
         $terminal = Terminal::find($terminal_id);
 
-        return $terminal->rooms;
+        return $terminal->rooms()->simplePaginate(5);
     }
 
 }

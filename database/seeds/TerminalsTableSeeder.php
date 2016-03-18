@@ -18,7 +18,7 @@ class TerminalsTableSeeder extends Seeder
 
         suo\Terminal::find(1)->rooms()->attach([1,2,3,4]);
         suo\Terminal::find(2)->rooms()->attach([1,2,3,4,5,6]);
-        suo\Terminal::find(3)->rooms()->attach([10,11,12]);
+        suo\Terminal::find(3)->rooms()->attach(range(1,17));
         suo\Terminal::find(4)->rooms()->attach([20]);
    }
 }
