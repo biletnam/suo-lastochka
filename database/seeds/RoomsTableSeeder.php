@@ -13,6 +13,16 @@ class RoomsTableSeeder extends Seeder
     {
         DB::table('rooms')->truncate();
 
+        DB::table('rooms')->insert([
+            'name' => 'reg',
+            'description' => 'Регистратура',
+        ]);
+
+        DB::table('rooms')->insert([
+            'name' => 'ter',
+            'description' => 'Терапия',
+        ]);
+
         factory(suo\Room::class, 50)->create();
     }
 }

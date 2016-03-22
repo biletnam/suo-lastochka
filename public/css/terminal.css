@@ -1,0 +1,20 @@
+@media screen {
+ .onprint {
+  display:none;
+ }
+}
+
+@media print {
+ .onscreen {
+  display:none;
+ }
+ html, body {
+  font-size:20px;
+ }
+ #check_number {
+  font-size:3em;
+ }
+ #check_get_time {
+  font-size:0.7em;
+ }
+}
