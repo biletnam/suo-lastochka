@@ -29,7 +29,7 @@ class TerminalController extends Controller
 
     public function select(Request $request)
     {
-        return redirect("/terminal/{$request->terminal}/page/0");
+        return redirect("/terminal/page/{$request->terminal}/page/0");
     }
 
     /**
@@ -55,6 +55,6 @@ class TerminalController extends Controller
 
         $ticketRepo->createTicket($request->room);
 
-        return redirect('/terminals');
+        return response()->json(['check' => 'CHECK room ' . $request->room . ' rand ' . rand(1, 10)]);
     }
 }

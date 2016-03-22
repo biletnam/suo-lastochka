@@ -32,9 +32,9 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/home', 'HomeController@index');
 
     Route::get('/terminals', 'TerminalController@index');
-    Route::get('/terminal/{terminal}', 'TerminalController@page');
+    Route::get('/terminal/page/{terminal}', 'TerminalController@page');
     Route::post('/terminal/select', 'TerminalController@select');
-    Route::post('/terminal/createticket', 'TerminalController@createticket');
+    Route::get('/terminal/createticket', 'TerminalController@createticket');
 
     Route::get('/panels', 'PanelController@index');
 
