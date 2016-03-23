@@ -43,10 +43,18 @@ $factory->define(suo\Terminal::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(suo\Check::class, function (Faker\Generator $faker) {
+    return [
+        'number' => $faker->numberBetween(1, 1000),
+        'admission_date' => date('Y-m-d'),
+    ];
+});
+
 $factory->define(suo\Ticket::class, function (Faker\Generator $faker) {
     return [
         'status' => suo\Ticket::NEWTICKET,
         'room_id' => 1,
+        'check_id' => $faker->numberBetween(1, 50),
     ];
 });
 

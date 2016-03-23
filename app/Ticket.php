@@ -45,10 +45,15 @@ class Ticket extends Model
      *
      * @var array
      */
-    protected $fillable = ['room_id', 'status'];
+    protected $fillable = ['room_id', 'status', 'check_id'];
 
     public function room()
     {
         return $this->belongsTo('suo\Room');
+    }
+
+    public function check()
+    {
+        return $this->belongsTo('suo\Check');
     }
 }
