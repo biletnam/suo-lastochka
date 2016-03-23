@@ -9,7 +9,7 @@ function createTicket(room) {
     dlgGetACheck.dialog( "open" );
     setTimeout(function() {
         dlgGetACheck.dialog( "close" );
-    }, 7000);
+    }, 5000);
 
     // Using the core $.ajax() method
     $.ajax({
@@ -31,8 +31,8 @@ function createTicket(room) {
       // Code to run if the request succeeds (is done);
       // The response is passed to the function
       .done(function( json ) {
-         alert( json.check );
-         $( "#check_number" ).html( json.check );
+         alert( json.check_number );
+         $( "#check_number" ).html( json.check_number );
 
          //setTimeout(print, 600);
 

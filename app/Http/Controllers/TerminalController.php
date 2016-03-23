@@ -53,8 +53,8 @@ class TerminalController extends Controller
     {
         $ticketRepo = new TicketRepository();
 
-        $ticketRepo->createTicket($request->room);
+        $check_data = $ticketRepo->createTicket($request->room);
 
-        return response()->json(['check' => 'CHECK room ' . $request->room . ' rand ' . rand(1, 10)]);
+        return response()->json($check_data);
     }
 }

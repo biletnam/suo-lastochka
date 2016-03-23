@@ -30,13 +30,24 @@ class TicketRepository
 
     public function createTicket($room_id)
     {
+        $result = ['error' => ''];
         $room = Room::find($room_id);
 
-        $ticket = new Ticket(['room_id' => $room->id]);
+        if (!$room) {
+            $result['error'] = 'no room';
+        } else {
+            $date = date('Y-m-d');
 
-        $ticket->save();
+            $check_repo = new CheckRepository();
+            $check = $check_repo->newCheckToDate($date);
+            $ticket = new Ticket(['room_id' => $room->id, 'check_id' => $check->id]);
 
-        return $ticket;
+            $ticket->save();
+
+            $result['check_number'] = $check->number;
+        }
+
+        return $result;
     }
 
     public function call($ticket_id)
