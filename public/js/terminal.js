@@ -2,7 +2,8 @@ var dlgGetACheck = $( "#dlg-get-a-check" ).dialog({
     autoOpen: false,
     height: 300,
     width: 350,
-    modal: true
+    modal: true,
+    dialogClass: "no-close onscreen"
 });
 
 function createTicket(room) {
@@ -33,6 +34,7 @@ function createTicket(room) {
       .done(function( json ) {
          alert( json.check_number );
          $( "#check_number" ).html( json.check_number );
+         $( "#check_room_description" ).html( json.check_room_description );
 
          //setTimeout(print, 600);
 

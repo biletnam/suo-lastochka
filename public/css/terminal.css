@@ -1,12 +1,16 @@
+.no-close .ui-dialog-titlebar {
+  display: none;
+}
+
 @media screen {
  .onprint {
-  display:none;
+  display:none !important;
  }
 }
 
 @media print {
  .onscreen {
-  display:none;
+  display:none !important;
  }
  html, body {
   font-size:20px;

@@ -45,6 +45,7 @@ class TicketRepository
             $ticket->save();
 
             $result['check_number'] = $check->number;
+            $result['check_room_description'] = $room->description;
         }
 
         return $result;

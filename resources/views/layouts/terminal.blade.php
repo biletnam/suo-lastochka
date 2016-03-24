@@ -28,7 +28,7 @@
         <div id="check_number">111</div>
         <div id="check_operator"></div>
         <div id="check_room_number"></div>
-        <div id="check_room_description">Регистратура</div>
+        <div id="check_room_description">1</div>
         <div id="check_start_date"></div>
         <div id="check_position"></div>
         <div id="check_get_time"></div>
