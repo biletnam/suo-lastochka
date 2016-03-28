@@ -37,6 +37,9 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/terminal/createticket', 'TerminalController@createticket');
 
     Route::get('/panels', 'PanelController@index');
+    Route::post('/panel/select', 'PanelController@select');
+    Route::get('/panel/checks', 'PanelController@checks');
+    Route::get('/panel/{panel}', 'PanelController@show');
 
     Route::get('/operator', 'OperatorController@index');
     Route::post('/operator/call', 'OperatorController@call');

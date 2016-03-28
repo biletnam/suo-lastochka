@@ -1,7 +1,7 @@
 @extends('layouts.panel')
 
 @section('content')
-    @if (count($tickets) > 0)
+    @if (count($panels) > 0)
         <div class="panel panel-default">
 
             <div class="panel-body">
@@ -9,24 +9,15 @@
 
                     <!-- Table Headings -->
                     <thead>
-                        <th>Tickets</th>
+                        <th>Panel</th>
                         <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>Select</th>
                     </thead>
 
                     <!-- Table Body -->
                     <tbody>
-                        @foreach ($tickets as $ticket)
-                            <tr>
-                                <!-- Task Name -->
-                                <td class="table-text">
-                                    <div>{{ $ticket->room->description }}</div>
-                                </td>
-
-                                <td>
-                                    <div>{{ $ticket->id }}</div>
-                                </td>
-                            </tr>
-                        @endforeach
+                        @each('panels.panel_select', $panels, 'panel')
                     </tbody>
                 </table>
             </div>

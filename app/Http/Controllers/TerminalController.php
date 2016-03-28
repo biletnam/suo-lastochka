@@ -29,7 +29,7 @@ class TerminalController extends Controller
 
     public function select(Request $request)
     {
-        return redirect("/terminal/page/{$request->terminal}/page/0");
+        return redirect("/terminal/page/{$request->terminal}/page/1");
     }
 
     /**

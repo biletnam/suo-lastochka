@@ -12,7 +12,7 @@
                         <th>Terminals</th>
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
-                        <th>Create</th>
+                        <th>Select</th>
                     </thead>
 
                     <!-- Table Body -->

@@ -56,5 +56,3 @@ function createTicket(room) {
         ;
 
 }
-
-    //    $( ".btn-create-ticket" ).button().on( "click", createTicket);
