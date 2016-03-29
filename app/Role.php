@@ -4,7 +4,7 @@ namespace suo;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Room extends Model
+class Role extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -13,8 +13,8 @@ class Room extends Model
      */
     protected $fillable = ['name', 'description'];
 
-    public function terminals()
+    public function users()
     {
-        return $this->belongsToMany('suo\Terminal');
+        return $this->belongsToMany('suo\User');
     }
 }

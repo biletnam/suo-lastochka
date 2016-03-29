@@ -19,6 +19,14 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('aaaaaa'),
         ]);
 
+        DB::table('users')->insert([
+            'name' => 'Op',
+            'email' => 'op@aaa.aaa',
+            'password' => bcrypt('o'),
+        ]);
+
         factory(suo\User::class, 10)->create();
+
+        suo\User::find(2)->roles()->attach([3]);
     }
 }
