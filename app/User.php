@@ -29,4 +29,13 @@ class User extends Authenticatable
         return $this->belongsToMany('suo\Role');
     }
 
+    public function isOperator()
+    {
+        $isOperator = !$this->roles->filter(function($item) {
+            return $item->name == 'Operator';
+        })->isEmpty();
+    
+        return $isOperator;
+    }
+
 }

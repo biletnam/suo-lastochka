@@ -40,6 +40,15 @@ class AuthController extends Controller
         $this->middleware('guest', ['except' => 'logout']);
     }
 
+    protected function authenticated($request, $user)
+    {
+        if ($user->isOperator()) {
+            return redirect()->intended('/operator');
+        }
+
+        return redirect()->intended('/'); //redirect to standard user homepage
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *
