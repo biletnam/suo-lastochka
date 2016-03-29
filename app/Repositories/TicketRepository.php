@@ -27,14 +27,10 @@ class TicketRepository
     {
         $result = [];
 
-        $tickets = 
-                DB::table('tickets')
-    ->join('checks', 'checks.id', '=', 'tickets.check_id')
-    ->get(['tickets.room_id', 'checks.number AS check_number']);
-
-//                Ticket::/*whereIn('room_id', $rooms)
-//                ->*/with('check')
-//                ->get();
+        $tickets = DB::table('tickets')
+            ->join('checks', 'checks.id', '=', 'tickets.check_id')
+            ->whereBetween('tickets.admission_date', [date('Y-m-d 00:00:00'), date('Y-m-d 23:59:59')])
+            ->get(['tickets.room_id', 'tickets.admission_date', 'tickets.status', 'checks.number AS check_number']);
 
         $room_id = 0;
         $data = [];

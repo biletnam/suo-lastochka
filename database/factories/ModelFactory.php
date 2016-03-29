@@ -55,6 +55,7 @@ $factory->define(suo\Ticket::class, function (Faker\Generator $faker) {
         'status' => suo\Ticket::NEWTICKET,
         'room_id' => 1,
         'check_id' => $faker->numberBetween(1, 50),
+        'admission_date' => date('Y-m-d H:i:s'),
     ];
 });
 

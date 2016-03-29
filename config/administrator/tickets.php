@@ -28,6 +28,12 @@ return [
             'title' => 'Check',
             'name_field' => 'number',
         ],
+        'admission_date' => [
+            'type' => 'datetime',
+            'title' => 'admission_date',
+            'date_format' => 'dd.mm.yy', //optional, will default to this value
+            'time_format' => 'HH:mm',    //optional, will default to this value
+        ],
     ]
 ];
 

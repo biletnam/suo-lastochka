@@ -45,7 +45,7 @@ class Ticket extends Model
      *
      * @var array
      */
-    protected $fillable = ['room_id', 'status', 'check_id'];
+    protected $fillable = ['room_id', 'status', 'check_id', 'admission_date'];
 
     public function room()
     {
