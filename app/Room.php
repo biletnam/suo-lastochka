@@ -17,4 +17,9 @@ class Room extends Model
     {
         return $this->belongsToMany('suo\Terminal');
     }
+
+    public function users()
+    {
+        return $this->belongsToMany('suo\User');
+    }
 }

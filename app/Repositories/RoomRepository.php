@@ -4,6 +4,7 @@ namespace suo\Repositories;
 
 use suo\Panel;
 use suo\Terminal;
+use suo\User;
 
 /**
  * Description of TicketRepository
@@ -24,6 +25,13 @@ class RoomRepository
         $panel = Panel::find($panel_id);
 
         return $panel->rooms()->get();
+    }
+
+    public function forOperator($operator_id)
+    {
+        $operator = User::find($operator_id);
+
+        return $operator->rooms()->get();
     }
 
 }

@@ -11,6 +11,8 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('role_user')->truncate();
+        DB::table('room_user')->truncate();
         DB::table('users')->truncate();
 
         DB::table('users')->insert([
@@ -28,5 +30,6 @@ class UsersTableSeeder extends Seeder
         factory(suo\User::class, 10)->create();
 
         suo\User::find(2)->roles()->attach([3]);
+        suo\User::find(2)->rooms()->attach([1]);
     }
 }

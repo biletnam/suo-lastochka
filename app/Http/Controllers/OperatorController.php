@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use suo\Http\Requests;
 
+use Auth;
+
 use suo\Repositories\TicketRepository;
 
 class OperatorController extends Controller
@@ -18,6 +20,12 @@ class OperatorController extends Controller
     protected $tickets;
 
     /**
+     *
+     * @var int
+     */
+    protected $operator;
+
+    /**
      * Создание контроллера
      *
      * @param TicketRepository $tickets
@@ -25,6 +33,8 @@ class OperatorController extends Controller
     public function __construct(TicketRepository $tickets)
     {
         $this->tickets = $tickets;
+
+        $this->operator = Auth::user()->id;
     }
 
     /**
@@ -36,7 +46,7 @@ class OperatorController extends Controller
     public function index(Request $request)
     {
         return view('operators.index', [
-            'tickets' => $this->tickets->forOperator(),
+            'tickets' => $this->tickets->forOperator($this->operator),
         ]);
     }
 

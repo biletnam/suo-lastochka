@@ -11,6 +11,7 @@
                     <thead>
                         <th>Tickets</th>
                         <th>&nbsp;</th>
+                        <th>&nbsp;</th>
                         <th>Status</th>
                         <th>Call</th>
                         <th>Close</th>
@@ -22,11 +23,15 @@
                             <tr>
                                 <!-- Task Name -->
                                 <td class="table-text">
-                                    <div>{{ $ticket->room->description }}</div>
+                                    <div>{{ $ticket->room_id }}</div>
                                 </td>
 
                                 <td>
-                                    <div>{{ $ticket->id }}</div>
+                                    <div>{{ $ticket->admission_date }}</div>
+                                </td>
+
+                                <td>
+                                    <div>{{ $ticket->check_number }}</div>
                                 </td>
 
                                 <td>

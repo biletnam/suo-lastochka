@@ -40,7 +40,9 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('/panel/select', 'PanelController@select');
     Route::get('/panel/checks', 'PanelController@checks');
     Route::get('/panel/{panel}', 'PanelController@show');
+});
 
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/operator', 'OperatorController@index');
     Route::post('/operator/call', 'OperatorController@call');
     Route::post('/operator/close', 'OperatorController@close');

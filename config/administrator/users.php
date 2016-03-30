@@ -13,6 +13,11 @@ return [
             'relationship' => 'roles', //this is the name of the Eloquent relationship method!
             'select' => "COUNT((:table).id)",
         ],
+        'num_rooms' => [
+            'title' => '# Rooms',
+            'relationship' => 'rooms', //this is the name of the Eloquent relationship method!
+            'select' => "COUNT((:table).id)",
+        ],
         'created_at',
         'updated_at',
     ],
@@ -27,6 +32,11 @@ return [
         ],
         'roles' => [
             'title' => 'Roles',
+            'type' => 'relationship',
+            'name_field' => 'description',
+        ],
+        'rooms' => [
+            'title' => 'Rooms',
             'type' => 'relationship',
             'name_field' => 'description',
         ],

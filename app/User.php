@@ -29,6 +29,11 @@ class User extends Authenticatable
         return $this->belongsToMany('suo\Role');
     }
 
+    public function rooms()
+    {
+        return $this->belongsToMany('suo\Room');
+    }
+
     public function isOperator()
     {
         $isOperator = !$this->roles->filter(function($item) {
