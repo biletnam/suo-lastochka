@@ -13,6 +13,6 @@ class ChecksTableSeeder extends Seeder
     {
         DB::table('checks')->truncate();
 
-        factory(suo\Check::class, 10)->create();
+        factory(suo\Check::class, 50)->create();
     }
 }

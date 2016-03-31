@@ -45,7 +45,7 @@ $factory->define(suo\Terminal::class, function (Faker\Generator $faker) {
 
 $factory->define(suo\Check::class, function (Faker\Generator $faker) {
     return [
-        'number' => $faker->numberBetween(1, 1000),
+        'number' => $faker->numberBetween(1, 100),
         'admission_date' => date('Y-m-d'),
     ];
 });
@@ -69,4 +69,10 @@ $factory->defineAs(suo\Ticket::class, 'ticket_accepted', function (Faker\Generat
     $ticket = $factory->raw(suo\Ticket::class);
 
     return array_merge($ticket, ['status' => suo\Ticket::ACCEPTED]);
+});
+
+$factory->defineAs(suo\Ticket::class, 'ticket_called', function (Faker\Generator $faker) use ($factory) {
+    $ticket = $factory->raw(suo\Ticket::class);
+
+    return array_merge($ticket, ['status' => suo\Ticket::CALLED]);
 });

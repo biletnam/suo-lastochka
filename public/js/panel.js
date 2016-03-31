@@ -23,8 +23,18 @@ function checks() {
       // Code to run if the request succeeds (is done);
       // The response is passed to the function
       .done(function( json ) {
-          $.each( json, function( i, val ) {
-                $( "#checks-room-" + val[ "room" ] ).text( val[ "checks" ] );
+          $.each( json, function( i, rooms ) {
+                $( "#checks-room-" + rooms[ "room" ] ).text( rooms[ "checks" ] );
+                if ("" != rooms[ "accepted" ]) {
+                    $( "#call-room-" + rooms[ "room" ] ).text( rooms[ "accepted" ] ).removeClass( "called" );
+                } else if ("" != rooms[ "called" ]) {
+                    $( "#call-room-" + rooms[ "room" ] ).html( rooms[ "called" ] ).fadeToggle( "slow" ,
+                        function() { $( "#call-room-" + rooms[ "room" ] ).fadeToggle( "slow" ); });
+//                    $( "#call-room-" + rooms[ "room" ] ).text( rooms[ "called" ] ).fadeToggle( "slow" ,
+//                        function() { $( "#call-room-" + rooms[ "room" ] ).fadeToggle( "slow" ); });
+                } else {
+                    //$( "#call-room-" + rooms[ "room" ] ).text( "" ).removeClass( "called" );
+                }
             });
 
          //setTimeout(print, 600);

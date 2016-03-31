@@ -25,28 +25,18 @@ class TicketRepository
 
     public function forRooms($rooms)
     {
-        $result = [];
-
         $tickets = DB::table('tickets')
             ->join('checks', 'checks.id', '=', 'tickets.check_id')
             ->whereBetween('tickets.admission_date', [date('Y-m-d 00:00:00'), date('Y-m-d 23:59:59')])
-            ->get(['tickets.room_id', 'tickets.admission_date', 'tickets.status', 'checks.number AS check_number']);
+            ->whereIn('tickets.room_id', $rooms)
+            ->get(['tickets.room_id'
+                , 'tickets.admission_date'
+                , 'tickets.status'
+                , 'checks.number AS check_number'
+                ]
+            );
 
-        $room_id = 0;
-        $data = [];
-
-        foreach ($tickets as $ticket) {
-            if ($ticket->room_id != $room_id) {
-                if (0 != $room_id) {
-                    $result[] = $data;
-                }
-                $room_id = $ticket->room_id;
-                $data['room'] = $room_id;
-                $data['checks'] = [];
-            }
-            $data['checks'][] = $ticket->check_number;
-        }
-        $result[] = $data;
+        $result = $this->convertPanelData($tickets);
 
         return $result;
     }
@@ -126,5 +116,35 @@ class TicketRepository
         $ticket->save();
 
         return $ticket;
+    }
+
+    private function convertPanelData($tickets)
+    {
+        $result = [];
+
+        if (count($tickets) > 0) {
+            $data = [];
+            $data['room'] = current($tickets)->room_id;
+
+            foreach ($tickets as $ticket) {
+                if ($ticket->room_id != $data['room']) {
+                    $result[] = $data;
+                    $data['room'] = $ticket->room_id;
+                    $data['checks'] = [];
+                    $data['accepted'] = '';
+                    $data['called'] = '';
+                }
+                if (Ticket::ACCEPTED == $ticket->status) {
+                    $data['accepted'] = $ticket->check_number;
+                } else if (Ticket::CALLED == $ticket->status) {
+                    $data['called'] = $ticket->check_number;
+                } else {
+                    $data['checks'][] = $ticket->check_number;
+                }
+            }
+            $result[] = $data;
+        }
+
+        return $result;
     }
 }

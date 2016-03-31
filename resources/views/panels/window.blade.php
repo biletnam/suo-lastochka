@@ -1,13 +1,14 @@
-<td>
-    <div>
-        {{ $room->name }}
-    </div>
-    <div>
-        {{ $room->description }}
-    </div>
+<tr>
+    <td>{{ $room->description }}</td>
 
-    <div id="checks-room-{{ $room->id }}">
+    <td>
+        <div id="call-room-{{ $room->id }}">
 
-    </div>
+        </div>
+    <td>
+    <td>
+        <div id="checks-room-{{ $room->id }}">
 
-</td>
+        </div>
+    <td>
+</tr>
