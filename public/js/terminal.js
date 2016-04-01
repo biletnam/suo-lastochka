@@ -12,6 +12,8 @@ function createTicket(room) {
         dlgGetACheck.dialog( "close" );
     }, 5000);
 
+    var date = 'today';
+
     // Using the core $.ajax() method
     $.ajax({
 
@@ -21,6 +23,7 @@ function createTicket(room) {
         // The data to send (will be converted to a query string)
         data: {
             room: room
+            , date: date
         },
 
         // Whether this is a POST or GET request

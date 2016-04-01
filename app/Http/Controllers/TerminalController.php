@@ -53,7 +53,12 @@ class TerminalController extends Controller
     {
         $ticketRepo = new TicketRepository();
 
-        $check_data = $ticketRepo->createTicket($request->room);
+        $admission_time = $request->date;
+        if ('today' == $admission_time) {
+            $admission_time = date('Y-m-d H:i:s');
+        }
+
+        $check_data = $ticketRepo->createTicket($request->room, $admission_time);
 
         return response()->json($check_data);
     }

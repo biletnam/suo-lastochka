@@ -7,7 +7,6 @@ use DB;
 use suo\Panel;
 use suo\Ticket;
 use suo\Room;
-use suo\User;
 
 /**
  * Description of TicketRepository
@@ -29,6 +28,7 @@ class TicketRepository
             ->join('checks', 'checks.id', '=', 'tickets.check_id')
             ->whereBetween('tickets.admission_date', [date('Y-m-d 00:00:00'), date('Y-m-d 23:59:59')])
             ->whereIn('tickets.room_id', $rooms)
+            ->orderBy('tickets.admission_date')
             ->get(['tickets.room_id'
                 , 'tickets.admission_date'
                 , 'tickets.status'
@@ -53,6 +53,7 @@ class TicketRepository
                     ->from('room_user')
                     ->where('user_id', $operator);
                 })
+            ->orderBy('tickets.admission_date')
             ->get(['tickets.id', 'tickets.room_id', 'tickets.admission_date', 'tickets.status', 'checks.number AS check_number']);
 
 //        $room_id = 0;
@@ -74,7 +75,7 @@ class TicketRepository
         return $tickets;
     }
 
-    public function createTicket($room_id)
+    public function createTicket($room_id, $admission_time)
     {
         $result = ['error' => ''];
         $room = Room::find($room_id);
@@ -86,7 +87,12 @@ class TicketRepository
 
             $check_repo = new CheckRepository();
             $check = $check_repo->newCheckToDate($date);
-            $ticket = new Ticket(['room_id' => $room->id, 'check_id' => $check->id]);
+
+            $ticket = new Ticket([
+                'room_id' => $room->id
+                , 'check_id' => $check->id
+                , 'admission_date' => $admission_time
+            ]);
 
             $ticket->save();
 
