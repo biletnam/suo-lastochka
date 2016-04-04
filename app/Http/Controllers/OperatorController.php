@@ -52,13 +52,11 @@ class OperatorController extends Controller
         ]);
     }
 
-    public function checks(Request $request)
+    public function checks()
     {
-        $ticket_repo = new TicketRepository();
-
         $rooms = session('rooms');
 
-        $data = $ticket_repo->forRooms($rooms);
+        $data = $this->tickets->forOperator($rooms);
 
         return response()->json($data);
     }
@@ -67,21 +65,21 @@ class OperatorController extends Controller
     {
         $this->tickets->call($request->ticket);
 
-        return redirect('/operator');
+        return $this->checks();
     }
 
-    public function callcurrent(Request $request)
+    public function accept(Request $request)
     {
-        $this->tickets->callcurrent($request->ticket);
+        $this->tickets->accept($request->ticket);
 
-        return redirect('/operator');
+        return $this->checks();
     }
 
     public function close(Request $request)
     {
         $this->tickets->close($request->ticket);
 
-        return redirect('/operator');
+        return $this->checks();
     }
 
 }

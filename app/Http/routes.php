@@ -46,6 +46,6 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/operator', 'OperatorController@index');
     Route::get('/operator/checks', 'OperatorController@checks');
     Route::post('/operator/call', 'OperatorController@call');
-    Route::post('/operator/current', 'OperatorController@callcurrent');
+    Route::post('/operator/accept', 'OperatorController@accept');
     Route::post('/operator/close', 'OperatorController@close');
 });

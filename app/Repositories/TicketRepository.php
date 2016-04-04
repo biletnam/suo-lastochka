@@ -47,6 +47,7 @@ class TicketRepository
             ->leftJoin('checks', 'checks.id', '=', 'tickets.check_id')
             ->whereBetween('tickets.admission_date', [date('Y-m-d 00:00:00'), date('Y-m-d 23:59:59')])
             ->whereIn('tickets.room_id', $rooms)
+            ->whereIN('tickets.status', [Ticket::NEWTICKET, Ticket::CALLED, Ticket::ACCEPTED])
             ->orderBy('tickets.admission_date')
             ->get(['tickets.id', 'tickets.room_id', 'tickets.admission_date', 'tickets.status', 'checks.number AS check_number']);
 
@@ -88,6 +89,11 @@ class TicketRepository
         return $this->setStatus($ticket_id, Ticket::CALLED);
     }
 
+    public function accept($ticket_id)
+    {
+        return $this->setStatus($ticket_id, Ticket::ACCEPTED);
+    }
+
     public function close($ticket_id)
     {
         return $this->setStatus($ticket_id, Ticket::CLOSED);
@@ -97,9 +103,11 @@ class TicketRepository
     {
         $ticket = Ticket::find($ticket_id);
 
-        $ticket->status = $status;
+        if (null != $ticket) {
+            $ticket->status = $status;
 
-        $ticket->save();
+            $ticket->save();
+        }
 
         return $ticket;
     }
@@ -138,25 +146,19 @@ class TicketRepository
     {
         $result = [];
 
+        $result['count'] = count($tickets);
         if (count($tickets) > 0) {
-            $data = [];
-            $data['count'] = count($tickets);
-            $data['checks'] = [];
-            $data['tickets'] = [];
+            $result['accepted'] = 0;
+            $result['called'] = 0;
+            $result['current'] = current($tickets);
 
             foreach ($tickets as $ticket) {
                 if (Ticket::ACCEPTED == $ticket->status) {
-                    $data['accepted'] = $ticket->check_number;
-                    $data['accepted_ticket'] = $ticket->id;
+                    $result['accepted'] = $ticket;
                 } else if (Ticket::CALLED == $ticket->status) {
-                    $data['called'] = $ticket->check_number;
-                    $data['called_ticket'] = $ticket->id;
-                } else {
-                    $data['checks'][] = $ticket->check_number;
-                    $data['tickets'][] = $ticket->check_number;
+                    $result['called'] = $ticket;
                 }
             }
-            $result = $data;
         }
 
         return $result;
