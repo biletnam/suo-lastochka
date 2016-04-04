@@ -11,7 +11,7 @@ class Room extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'description'];
+    protected $fillable = ['name', 'description', 'ip'];
 
     public function terminals()
     {

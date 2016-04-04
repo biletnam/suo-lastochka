@@ -21,6 +21,7 @@ class RoomsTableSeeder extends Seeder
         DB::table('rooms')->insert([
             'name' => 'ter',
             'description' => 'Терапия',
+            'ip' => '192.168.203.1'
         ]);
 
         factory(suo\Room::class, 50)->create();

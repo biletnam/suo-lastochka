@@ -8,6 +8,7 @@ return [
         'id',
         'name',
         'description',
+        'ip',
         'num_terminals' => [
             'title' => '# Terminals',
             'relationship' => 'terminals', //this is the name of the Eloquent relationship method!
@@ -27,6 +28,10 @@ return [
             'type' => 'text',
         ],
         'description' => [
+            'title' => 'description',
+            'type' => 'text',
+        ],
+        'ip' => [
             'title' => 'description',
             'type' => 'text',
         ],

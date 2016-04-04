@@ -24,6 +24,7 @@ $factory->define(suo\Room::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
         'description' => $faker->company,
+        'ip' => $faker->ipv4,
     ];
 });
 
