@@ -41,38 +41,18 @@ class TicketRepository
         return $result;
     }
 
-    public function forOperator($operator)
+    public function forOperator($rooms)
     {
-        $result = [];
-
         $tickets = DB::table('tickets')
             ->leftJoin('checks', 'checks.id', '=', 'tickets.check_id')
             ->whereBetween('tickets.admission_date', [date('Y-m-d 00:00:00'), date('Y-m-d 23:59:59')])
-            ->whereIn('tickets.room_id', function ($query) use ($operator) {
-                $query->select('room_id')
-                    ->from('room_user')
-                    ->where('user_id', $operator);
-                })
+            ->whereIn('tickets.room_id', $rooms)
             ->orderBy('tickets.admission_date')
             ->get(['tickets.id', 'tickets.room_id', 'tickets.admission_date', 'tickets.status', 'checks.number AS check_number']);
 
-//        $room_id = 0;
-//        $data = [];
-//
-//        foreach ($tickets as $ticket) {
-//            if ($ticket->room_id != $room_id) {
-//                if (0 != $room_id) {
-//                    $result[] = $data;
-//                }
-//                $room_id = $ticket->room_id;
-//                $data['room'] = $room_id;
-//                $data['checks'] = [];
-//            }
-//            $data['checks'][] = $ticket->check_number;
-//        }
-//        $result[] = $data;
+        $result = $this->convertOperatorData($tickets);
 
-        return $tickets;
+        return $result;
     }
 
     public function createTicket($room_id, $admission_time)
@@ -149,6 +129,34 @@ class TicketRepository
                 }
             }
             $result[] = $data;
+        }
+
+        return $result;
+    }
+
+    private function convertOperatorData($tickets)
+    {
+        $result = [];
+
+        if (count($tickets) > 0) {
+            $data = [];
+            $data['count'] = count($tickets);
+            $data['checks'] = [];
+            $data['tickets'] = [];
+
+            foreach ($tickets as $ticket) {
+                if (Ticket::ACCEPTED == $ticket->status) {
+                    $data['accepted'] = $ticket->check_number;
+                    $data['accepted_ticket'] = $ticket->id;
+                } else if (Ticket::CALLED == $ticket->status) {
+                    $data['called'] = $ticket->check_number;
+                    $data['called_ticket'] = $ticket->id;
+                } else {
+                    $data['checks'][] = $ticket->check_number;
+                    $data['tickets'][] = $ticket->check_number;
+                }
+            }
+            $result = $data;
         }
 
         return $result;

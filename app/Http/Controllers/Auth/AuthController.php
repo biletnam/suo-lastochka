@@ -7,6 +7,7 @@ use Validator;
 use suo\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use suo\Repositories\RoomRepository;
 
 class AuthController extends Controller
 {
@@ -43,6 +44,10 @@ class AuthController extends Controller
     protected function authenticated($request, $user)
     {
         if ($user->isOperator()) {
+            $room_repo = new RoomRepository();
+            $rooms = $room_repo->forOperator($user->id);
+            session(['rooms' => $rooms->pluck('id')->all()]);
+
             return redirect()->intended('/operator');
         }
 

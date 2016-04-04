@@ -45,14 +45,23 @@ class OperatorController extends Controller
      */
     public function index(Request $request)
     {
+        $rooms = session('rooms');
+
         return view('operators.index', [
-            'tickets' => $this->tickets->forOperator($this->operator),
+            'tickets' => $this->tickets->forOperator($rooms),
         ]);
     }
 
     public function call(Request $request)
     {
         $this->tickets->call($request->ticket);
+
+        return redirect('/operator');
+    }
+
+    public function callcurrent(Request $request)
+    {
+        $this->tickets->callcurrent($request->ticket);
 
         return redirect('/operator');
     }

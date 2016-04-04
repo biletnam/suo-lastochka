@@ -1,69 +1,29 @@
 @extends('layouts.operator')
 
 @section('content')
+<div>Электронная очередь</div>
+<div>Всего в очереди <span id="ticket-count">{{ $tickets['count'] }}</span></div>
     @if (count($tickets) > 0)
-        <div class="panel panel-default">
+    <div>
+        <form action="{{ url('operator/current') }}" method="POST">
+            {!! csrf_field() !!}
 
-            <div class="panel-body">
-                <table class="table table-striped task-table">
+            <input type="hidden" name="ticket" id="current-ticket" value="{{ $tickets['tickets'][0] }}">
+            <button type="submit" id="current-button" class="btn btn-danger">
+                <i class="fa fa-btn fa-trash"></i>Вызвать <span id="current-check">{{ $tickets['checks'][0] }}</span>
+            </button>
+        </form>
+    </div>
+    <div>
+        <form action="{{ url('operator/callnext') }}" method="POST">
+            {!! csrf_field() !!}
 
-                    <!-- Table Headings -->
-                    <thead>
-                        <th>Tickets</th>
-                        <th>&nbsp;</th>
-                        <th>&nbsp;</th>
-                        <th>Status</th>
-                        <th>Call</th>
-                        <th>Close</th>
-                    </thead>
+            <input type="hidden" name="ticket" id="call-next-ticket" value="{{ $tickets['tickets'][1] }}">
+            <button type="submit" id="call-next-button" class="btn btn-danger">
+                <i class="fa fa-btn fa-trash"></i>Вызвать следующего <span id="call-next-check">{{ $tickets['checks'][1] }}</span>
+            </button>
+        </form>
+    </div>
 
-                    <!-- Table Body -->
-                    <tbody>
-                        @foreach ($tickets as $ticket)
-                            <tr>
-                                <!-- Task Name -->
-                                <td class="table-text">
-                                    <div>{{ $ticket->room_id }}</div>
-                                </td>
-
-                                <td>
-                                    <div>{{ $ticket->admission_date }}</div>
-                                </td>
-
-                                <td>
-                                    <div>{{ $ticket->check_number }}</div>
-                                </td>
-
-                                <td>
-                                    <div>{{ $ticket->status }}</div>
-                                </td>
-
-                                <td>
-                                    <form action="{{ url('operator/call') }}" method="POST">
-                                        {!! csrf_field() !!}
-
-                                        <input type="hidden" name="ticket" value="{{ $ticket->id }}">
-                                        <button type="submit" id="call-{{ $ticket->id }}" class="btn btn-danger">
-                                            <i class="fa fa-btn fa-trash"></i>Call
-                                        </button>
-                                    </form>
-                                </td>
-
-                                <td>
-                                    <form action="{{ url('operator/close') }}" method="POST">
-                                        {!! csrf_field() !!}
-
-                                        <input type="hidden" name="ticket" value="{{ $ticket->id }}">
-                                        <button type="submit" id="close-{{ $ticket->id }}" class="btn btn-danger">
-                                            <i class="fa fa-btn fa-trash"></i>Close
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
     @endif
 @endsection
