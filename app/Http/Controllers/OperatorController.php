@@ -52,6 +52,17 @@ class OperatorController extends Controller
         ]);
     }
 
+    public function checks(Request $request)
+    {
+        $ticket_repo = new TicketRepository();
+
+        $rooms = session('rooms');
+
+        $data = $ticket_repo->forRooms($rooms);
+
+        return response()->json($data);
+    }
+
     public function call(Request $request)
     {
         $this->tickets->call($request->ticket);
