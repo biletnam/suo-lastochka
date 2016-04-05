@@ -1,3 +1,16 @@
-.called {
-    animation: eye 1s ease-in-out infinite;
+.suo-table > tbody > tr > td {
+    vertical-align: middle;
+}
+
+.suo-header {
+    font-size: 3em;
+}
+
+.suo-current-check {
+    font-size: 10em;
+    font-weight: bolder;
+}
+
+.suo-next-check {
+    font-size: 8em;
 }

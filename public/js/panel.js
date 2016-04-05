@@ -1,61 +1,61 @@
-$(function() {
-  checks();
-});
+var timers = [];
 
 function checks() {
-    // Using the core $.ajax() method
-    $.ajax({
-
-        // The URL for the request
-        url: "/panel/checks",
-
-        // The data to send (will be converted to a query string)
-//        data: {
-//            room: room
-//        },
-
-        // Whether this is a POST or GET request
-        type: "GET",
-
-        // The type of data we expect back
-        dataType : "json",
+    $.get("/panel/checks",
+        { rooms: rooms },
+        function( tickets ) {
+            parseTickets( tickets );
+        }),
+        "json"
+    // Code to run if the request fails; the raw request and
+    // status codes are passed to the function
+    .fail(function( xhr, status, errorThrown ) {
+        console.log( "Error: " + errorThrown );
+        console.log( "Status: " + status );
+        console.dir( xhr );
     })
-      // Code to run if the request succeeds (is done);
-      // The response is passed to the function
-      .done(function( json ) {
-          $.each( json, function( i, rooms ) {
-                $( "#checks-room-" + rooms[ "room" ] ).text( rooms[ "checks" ] );
-                if ("" != rooms[ "accepted" ]) {
-                    $( "#call-room-" + rooms[ "room" ] ).text( rooms[ "accepted" ] ).removeClass( "called" );
-                } else if ("" != rooms[ "called" ]) {
-                    $( "#call-room-" + rooms[ "room" ] ).html( rooms[ "called" ] ).fadeToggle( "slow" ,
-                        function() { $( "#call-room-" + rooms[ "room" ] ).fadeToggle( "slow" ); });
-//                    $( "#call-room-" + rooms[ "room" ] ).text( rooms[ "called" ] ).fadeToggle( "slow" ,
-//                        function() { $( "#call-room-" + rooms[ "room" ] ).fadeToggle( "slow" ); });
-                } else {
-                    //$( "#call-room-" + rooms[ "room" ] ).text( "" ).removeClass( "called" );
-                }
-            });
-
-         //setTimeout(print, 600);
-
-//         $( "<h1>" ).text( json.title ).appendTo( "body" );
-//         $( "<div class=\"content\">").html( json.html ).appendTo( "body" );
-      })
-      // Code to run if the request fails; the raw request and
-      // status codes are passed to the function
-//      .fail(function( xhr, status, errorThrown ) {
-//        alert( "Sorry, there was a problem!" );
-//        console.log( "Error: " + errorThrown );
-//        console.log( "Status: " + status );
-//        console.dir( xhr );
-//      })
-      // Code to run regardless of success or failure;
-//      .always(function( xhr, status ) {
-//        alert( "The request is complete!" );
-//      }
-        ;
-
+    ;
 }
 
+function parseTickets( tickets ) {
+    $.each( rooms, function( key, value) {
+        $( "#current-" + value ).html( "&nbsp;" );
+        $( "#next-" + value ).html( "&nbsp;" );
+    });
 
+    $.each( timers, function( name, timer ) {
+        clearTimeout( timer );
+    });
+
+    if ( tickets[ "count" ] > 0) {
+        $.each( tickets[ "rooms" ], function( room, ticket) {
+            if ('' != ticket[ "accepted" ]) {
+                $( "#current-" + room ).html( ticket[ "accepted" ] );
+            } else if ('' != ticket[ "called" ]) {
+                $( "#current-" + room ).html( ticket[ "called" ] );
+                blink( room, ticket[ "called" ] );
+            }
+
+            if ('' != ticket[ "next" ]) {
+                $( "#next-" + room ).html( ticket[ "next" ] );
+            }
+        });
+    }
+
+//    timers[ "checks" ] = setTimeout(function() {
+//        checks();
+//    }, 5000);
+}
+
+function blink( room, text ) {
+    if (text == $( "#current-" + room ).html()) {
+        $( "#current-" + room ).html( "&nbsp;" );
+    } else {
+        $( "#current-" + room ).html( text );
+    }
+
+    clearTimeout( timers[ "room" + room ] );
+    timers[ "room" + room ] = setTimeout(function() {
+        blink( room, text );
+    }, 1000);
+}

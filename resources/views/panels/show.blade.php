@@ -1,22 +1,30 @@
 @extends('layouts.panel')
 
 @section('content')
-    <div class="panel panel-default">
-
-        <div class="panel-body">
-            <div>Электронная очередь</div>
-            <table class="table table-striped task-table">
-
-                <thead>
-                    <th>Кабинет</th>
-                    <th>Клиент</th>
-                    <th></th>
-                </thead>
-                <!-- Table Body -->
-                <tbody>
-@each('panels.window', $rooms, 'room')
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <table class="table suo-table">
+        <thead>
+            <th class="suo-header">Кабинет</th>
+            @each('panels.table.header', $rooms, 'room')
+        </thead>
+        <tbody>
+            <tr>
+                <td class="suo-header">Обслуживается</td>
+                @each('panels.table.current', $rooms, 'room')
+            </tr>
+            <tr>
+                <td class="suo-header">Следующий</td>
+                @each('panels.table.next', $rooms, 'room')
+            </tr>
+        </tbody>
+    </table>
 @endsection
+
+@push('roomids')
+    <script>
+        var rooms = {!! $ids !!};
+        var panel = {!! $panel !!};
+        $(function() {
+            checks();
+        });
+</script>
+@endpush

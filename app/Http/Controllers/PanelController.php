@@ -40,20 +40,20 @@ class PanelController extends Controller
 
         $rooms = $room_repo->forPanel($request->panel);
 
-        session(['panel' => $request->panel]);
-
-        session(['rooms' => $rooms->pluck('id')->all()]);
+        $ids = $rooms->pluck('id')->all();
 
         return view('panels.show', [
-                        'rooms' => $rooms,
-                    ]);
+            'rooms' => $rooms,
+            'ids' => json_encode($ids),
+            'panel' => $request->panel,
+        ]);
     }
 
     public function checks(Request $request)
     {
         $ticket_repo = new TicketRepository();
         
-        $rooms = session('rooms');
+        $rooms = $request->rooms;
 
         $data = $ticket_repo->forRooms($rooms);
 

@@ -16,12 +16,14 @@
 
 </head>
 <body id="app-layout">
+    <h1 class="center-block text-center">Электронная очередь</h1>
 
-    @yield('content')
+@yield('content')
 
     <!-- JavaScripts -->
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    @stack('roomids')
     <script src="/js/panel.js"></script>
 </body>
 </html>
