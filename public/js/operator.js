@@ -1,20 +1,21 @@
 var ticket_to_call = 0;
+var timers = [];
 
 $(function() {
-  init();
+    init();
 });
 
 function init() {
     $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
     });
 
-    getTickets();
+    checks();
 }
 
-function getTickets() {
+function checks() {
     $.get("/operator/checks",
         function( tickets ) {
             parseTickets( tickets );
@@ -91,12 +92,17 @@ function onclickClose() {
 
 function parseTickets( tickets ) {
     var call = '', accept = '', close = '';
+
+    $.each( timers, function( name, timer ) {
+        clearTimeout( timer );
+    });
+
     if ( 0 != tickets[ "accepted" ] ) { // нажали "Принять", теперь надо "Завершить"
         ticket_to_call = tickets[ "accepted" ][ "id" ];
         close = tickets[ "accepted" ][ "check_number" ];
     } else if ( 0 != tickets[ "called" ] ) { // нажали "Вызвать", теперь надо или "Принять", или "Вызвать" ещё раз
         ticket_to_call = tickets[ "called" ][ "id" ];
-        call = accept = tickets[ "called" ][ "check_number" ];
+        call = accept = close = tickets[ "called" ][ "check_number" ];
     } else if ( 0 != tickets[ "count" ] ) { // нет вызыванных или принятых, но в очереди кто-то есть, можно "Вызвать"
         ticket_to_call = tickets[ "current" ][ "id" ];
         call = tickets[ "current" ][ "check_number" ];
@@ -109,4 +115,8 @@ function parseTickets( tickets ) {
     $( "#btn-call").prop( "disabled", (('' !== call) ? false : true) );
     $( "#btn-accept").prop( "disabled", (('' !== accept) ? false : true) );
     $( "#btn-close").prop( "disabled", (('' !== close) ? false : true) );
+
+//    timers[ "checks" ] = setTimeout(function() {
+//        checks();
+//    }, 5000);
 }
