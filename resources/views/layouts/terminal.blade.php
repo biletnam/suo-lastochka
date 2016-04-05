@@ -17,13 +17,13 @@
     
 </head>
 <body id="app-layout">
-    <div class="onscreen">
+    <div class="hidden-print">
     @include('terminals.dlg_get_a_check')
 
     @yield('content')
     </div>
 
-    <div class="onprint">
+    <div class="visible-print-block">
         <div id="check_title">Поликлиника</div>
         <div id="check_number">111</div>
         <div id="check_operator"></div>
