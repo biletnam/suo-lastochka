@@ -33,6 +33,7 @@ function parseTickets( tickets ) {
                 $( "#current-" + room ).html( ticket[ "accepted" ] );
             } else if ('' != ticket[ "called" ]) {
                 $( "#current-" + room ).html( ticket[ "called" ] );
+                playNote();
                 blink( room, ticket[ "called" ] );
             }
 
@@ -58,4 +59,13 @@ function blink( room, text ) {
     timers[ "room" + room ] = setTimeout(function() {
         blink( room, text );
     }, 1000);
+}
+
+function playNote() {
+    $( "#audio" ).removeProp( "muted" );
+    stopPlayNote();
+}
+
+function stopPlayNote() {
+    $( "#audio" ).attr( "muted", "muted" );
 }

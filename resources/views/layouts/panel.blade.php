@@ -16,6 +16,9 @@
 
 </head>
 <body id="app-layout">
+    <audio muted="muted" id="audio">
+        <source src="/audio/note.wav" type="audio/mpeg">
+    </audio>
     <h1 class="center-block text-center">Электронная очередь</h1>
 
 @yield('content')
