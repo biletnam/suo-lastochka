@@ -6,7 +6,7 @@
 
         $(function() {
             init();
-            nextPage(1);
+            page(1);
         });
 </script>
 @endpush

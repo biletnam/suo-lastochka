@@ -3,6 +3,7 @@
 namespace suo\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 use suo\Http\Requests;
 
@@ -51,17 +52,22 @@ class TerminalController extends Controller
             return redirect("/terminals");
         }
 
-        if (false != $rooms->hasMorePages()) {
-            $rooms->suoNextPage = $rooms->currentPage() + 1;
-        } else if (1 != $rooms->currentPage()) {
-            $rooms->suoNextPage = 1;
-        } else {
-            $rooms->suoNextPage = 0;
-        }
-
         if ($request->ajax()) {
-            return view('terminals.page', [
-                'rooms' => $rooms,
+            if (false != $rooms->hasMorePages()) {
+                $rooms->suoNextPage = $rooms->currentPage() + 1;
+            } else if (1 != $rooms->currentPage()) {
+                $rooms->suoNextPage = 1;
+            } else {
+                $rooms->suoNextPage = 0;
+            }
+
+            $room_ids = $rooms->pluck('id')->all();
+
+            return response()->json([
+                    'rooms' => $room_ids,
+                    'page' => view('terminals.page', [
+                        'rooms' => $rooms,
+                    ])->render()
             ]);
         } else {
             return view('terminals.show', [
@@ -82,5 +88,19 @@ class TerminalController extends Controller
         $check_data = $ticketRepo->createTicket($request->room, $admission_time);
 
         return response()->json($check_data);
+    }
+
+    public function ticketcount(Request $request)
+    {
+        $room_repo = new RoomRepository();
+
+        $date = $request->date;
+        if ('today' == $date) {
+            $date = date('Y-m-d');
+        }
+
+        $counts = $room_repo->countTicketsByRoomsAndDate($request->rooms, $date);
+
+        return response()->json($counts);
     }
 }

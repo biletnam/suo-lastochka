@@ -11,7 +11,7 @@ class Room extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'description', 'ip'];
+    protected $fillable = ['name', 'description', 'ip', 'max_day_record'];
 
     public function terminals()
     {
@@ -22,4 +22,5 @@ class Room extends Model
     {
         return $this->belongsToMany('suo\User');
     }
+
 }

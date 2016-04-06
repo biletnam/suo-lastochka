@@ -6,6 +6,16 @@ var dlgGetACheck = $( "#suo-dlg-get-a-check" ).dialog({
     dialogClass: "no-close hidden-print"
 });
 
+var dlgNoRecord = $( "#suo-dlg-no-record" ).dialog({
+    autoOpen: false,
+    height: 300,
+    width: 350,
+    modal: true,
+    dialogClass: "no-close hidden-print"
+});
+
+var rooms = [];
+
 function init() {
     $.ajaxSetup({
         headers: {
@@ -14,13 +24,15 @@ function init() {
     });
 }
 
-function nextPage( nextPage ) {
+function page( page ) {
     $.get("",
-        { page: nextPage },
-        function( html ) {
-            $( "#suo-page" ).html( html );
+        { page: page },
+        function( json ) {
+            $( "#suo-page" ).html( json.page );
+            rooms = json.rooms;
+            ticketcount();
         }),
-        "html"
+        "json"
     .fail(function( xhr, status, errorThrown ) {
         console.log( "Error: " + errorThrown );
         console.log( "Status: " + status );
@@ -30,12 +42,21 @@ function nextPage( nextPage ) {
 }
 
 function createTicket( room ) {
+    if (true != isLessThenMaxRecords( room )) {
+        dlgNoRecord.dialog( "open" );
+        setTimeout(function() {
+            dlgNoRecord.dialog( "close" );
+        }, 5000);
+
+        return;
+    }
+
     dlgGetACheck.dialog( "open" );
     setTimeout(function() {
         dlgGetACheck.dialog( "close" );
     }, 5000);
 
-    var date = 'today';
+    var date = "today";
 
     $.post(
         "/terminal/createticket",
@@ -66,4 +87,41 @@ function parseCheck( check ) {
     $( "#suo-check-room-description" ).html( check.room_description );
     $( "#suo-check-start-date" ).html( check.start_date );
     $( "#suo-check-get-time" ).html( check.get_time );
+}
+
+function ticketcount() {
+    $.get("/terminal/ticketcount",
+        {
+            rooms: rooms,
+            date: "today"
+        },
+        function( json ) {
+            $.each( json, function( key, value) {
+                $( "#suo-tickets-count-" + value.room ).text( value.ticket_count );
+            });
+        }),
+        "json"
+    .fail(function( xhr, status, errorThrown ) {
+        console.log( "Error: " + errorThrown );
+        console.log( "Status: " + status );
+        console.dir( xhr );
+    })
+    ;
+
+    setTimeout(function() {
+        ticketcount();
+    }, 5000);
+}
+
+function isLessThenMaxRecords( room ) {
+    var result = true;
+
+    if (0 != $( "#suo-max-day-record-" + room ).length) {
+        var max = $( "#suo-max-day-record-" + room ).text();
+        if (max <= $( "#suo-tickets-count-" + room ).text()) {
+            result = false;
+        }
+    }
+
+    return result;
 }

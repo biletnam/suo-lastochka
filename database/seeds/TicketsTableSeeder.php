@@ -17,7 +17,7 @@ class TicketsTableSeeder extends Seeder
         factory(suo\Ticket::class, 'ticket_closed', 5)->create();
         factory(suo\Ticket::class, 'ticket_accepted')->create();
 
-        factory(suo\Ticket::class, 15)->create(['room_id' => 2]);
+        factory(suo\Ticket::class, 3)->create(['room_id' => 2]);
         factory(suo\Ticket::class, 'ticket_closed', 5)->create(['room_id' => 2]);
 
         factory(suo\Ticket::class, 5)->create(['room_id' => 3]);

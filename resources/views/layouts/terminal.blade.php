@@ -22,6 +22,8 @@
 
     @include('terminals.dlg_get_a_check')
 
+    @include('terminals.dlg_no_record')
+
     <div id="suo-page">
         
 @yield('content')
