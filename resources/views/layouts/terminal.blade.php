@@ -4,8 +4,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Терминал</title>
+    <title>Электронная очередь - Терминал</title>
 
     <!-- Fonts -->
     <link href="/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
@@ -21,25 +22,31 @@
 
     @include('terminals.dlg_get_a_check')
 
+    <div id="suo-page">
+        
 @yield('content')
 
     </div>
+    </div>
 
     <div class="visible-print-block">
-        <div id="check_title">Поликлиника</div>
-        <div id="check_number">111</div>
-        <div id="check_operator"></div>
-        <div id="check_room_number"></div>
-        <div id="check_room_description">1</div>
-        <div id="check_start_date"></div>
-        <div id="check_position"></div>
-        <div id="check_get_time"></div>
+        <div class="suo-check">
+            <div id="suo-check-title">Поликлиника</div>
+            <div id="suo-check-number"></div>
+            <div id="suo-check-operator"></div>
+            <div id="suo-check-room-number"></div>
+            <div id="suo-check-room-description"></div>
+            <div id="suo-check-start-date"></div>
+            <div id="suo-check-position"></div>
+            <div id="suo-check-get-time"></div>
+        </div>
     </div>
 
     <!-- JavaScripts -->
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/jquery-ui.min.js"></script>
+    @stack('show')
     <script src="/js/terminal.js"></script>
 </body>
 </html>

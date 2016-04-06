@@ -84,8 +84,12 @@ class TicketRepository
 
             $ticket->save();
 
-            $result['check_number'] = $check->number;
-            $result['check_room_description'] = $room->description;
+            $result['number'] = $check->number;
+            $result['operator'] = '';
+            $result['room_number'] = '';
+            $result['room_description'] = $room->description;
+            $result['start_date'] = '';
+            $result['get_time'] = date('d.m.Y H:i:s', strtotime($admission_time));
         }
 
         return $result;

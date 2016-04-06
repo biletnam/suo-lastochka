@@ -1,12 +1,35 @@
-var dlgGetACheck = $( "#dlg-get-a-check" ).dialog({
+var dlgGetACheck = $( "#suo-dlg-get-a-check" ).dialog({
     autoOpen: false,
     height: 300,
     width: 350,
     modal: true,
-    dialogClass: "no-close"
+    dialogClass: "no-close hidden-print"
 });
 
-function createTicket(room) {
+function init() {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+}
+
+function nextPage( nextPage ) {
+    $.get("",
+        { page: nextPage },
+        function( html ) {
+            $( "#suo-page" ).html( html );
+        }),
+        "html"
+    .fail(function( xhr, status, errorThrown ) {
+        console.log( "Error: " + errorThrown );
+        console.log( "Status: " + status );
+        console.dir( xhr );
+    })
+    ;
+}
+
+function createTicket( room ) {
     dlgGetACheck.dialog( "open" );
     setTimeout(function() {
         dlgGetACheck.dialog( "close" );
@@ -14,48 +37,33 @@ function createTicket(room) {
 
     var date = 'today';
 
-    // Using the core $.ajax() method
-    $.ajax({
-
-        // The URL for the request
-        url: "/terminal/createticket",
-
-        // The data to send (will be converted to a query string)
-        data: {
-            room: room
-            , date: date
+    $.post(
+        "/terminal/createticket",
+        {
+            terminal: terminal,
+            room: room,
+            date: date,
+        }, function( check ) {
+            parseCheck( check );
         },
-
-        // Whether this is a POST or GET request
-        type: "GET",
-
-        // The type of data we expect back
-        dataType : "json",
+        "json"
+    )
+    // Code to run if the request fails; the raw request and
+    // status codes are passed to the function
+    .fail(function( xhr, status, errorThrown ) {
+        console.log( "Error: " + errorThrown );
+        console.log( "Status: " + status );
+        console.dir( xhr );
     })
-      // Code to run if the request succeeds (is done);
-      // The response is passed to the function
-      .done(function( json ) {
-         alert( json.check_number );
-         $( "#check_number" ).html( json.check_number );
-         $( "#check_room_description" ).html( json.check_room_description );
+    ;
 
-         //setTimeout(print, 600);
+}
 
-//         $( "<h1>" ).text( json.title ).appendTo( "body" );
-//         $( "<div class=\"content\">").html( json.html ).appendTo( "body" );
-      })
-      // Code to run if the request fails; the raw request and
-      // status codes are passed to the function
-//      .fail(function( xhr, status, errorThrown ) {
-//        alert( "Sorry, there was a problem!" );
-//        console.log( "Error: " + errorThrown );
-//        console.log( "Status: " + status );
-//        console.dir( xhr );
-//      })
-      // Code to run regardless of success or failure;
-//      .always(function( xhr, status ) {
-//        alert( "The request is complete!" );
-//      }
-        ;
-
+function parseCheck( check ) {
+    $( "#suo-check-number" ).html( check.number );
+    $( "#suo-check-operator" ).html( check.operator );
+    $( "#suo-check-room-number" ).html( check.room_number );
+    $( "#suo-check-room-description" ).html( check.room_description );
+    $( "#suo-check-start-date" ).html( check.start_date );
+    $( "#suo-check-get-time" ).html( check.get_time );
 }

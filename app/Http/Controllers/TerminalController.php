@@ -29,22 +29,23 @@ class TerminalController extends Controller
 
     public function select(Request $request)
     {
-        return redirect("/terminal/page/{$request->terminal}/page/1");
+        return redirect("/terminal/{$request->terminal}");
     }
 
     /**
-     * Display a list of terminals.
+     * Display a list of rooms.
      *
      * @param  Request  $request
      * @return Response
      */
-    public function page(Request $request)
+    public function show(Request $request)
     {
         $perPage = 9;
+        $terminal = $request->terminal;
 
         $room_repo = new RoomRepository();
 
-        $rooms = $room_repo->forTerminal($request->terminal, $perPage);
+        $rooms = $room_repo->forTerminal($terminal, $perPage);
 
         if (0 == count($rooms)) {
             return redirect("/terminals");
@@ -58,9 +59,15 @@ class TerminalController extends Controller
             $rooms->suoNextPage = 0;
         }
 
-        return view('terminals.page', [
-            'rooms' => $rooms,
-        ]);
+        if ($request->ajax()) {
+            return view('terminals.page', [
+                'rooms' => $rooms,
+            ]);
+        } else {
+            return view('terminals.show', [
+                'terminal' => $terminal,
+            ]);
+        }
     }
 
     public function createticket(Request $request)

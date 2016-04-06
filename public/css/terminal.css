@@ -11,13 +11,18 @@
   display: none;
 }
 
-#check_number {
-    font-size:3em;
-}
-#check_get_time {
-    font-size:0.7em;
-}
-
 .suo-table > tbody > tr > td {
     vertical-align: middle;
+    text-align: center;
+}
+
+.suo-check {
+    text-align: center;
+}
+
+#suo-check-number {
+    font-size:3em;
+}
+#suo-check-get-time {
+    font-size:0.7em;
 }

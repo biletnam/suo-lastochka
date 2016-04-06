@@ -1,7 +1,4 @@
-@extends('layouts.terminal')
-
-@section('content')
-    <table class="table">
+    <table class="table suo-table table-no-border">
         <tbody>
             @if (count($rooms) <= 5)
                 @foreach($rooms as $room)
@@ -61,6 +58,5 @@
                 @endif
             @endif
 
-    </tbody>
-</table>
-@endsection
+        </tbody>
+    </table>
