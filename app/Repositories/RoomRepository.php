@@ -13,11 +13,11 @@ use suo\User;
  */
 class RoomRepository
 {
-    public function forTerminal($terminal_id)
+    public function forTerminal($terminal_id, $perPage)
     {
         $terminal = Terminal::find($terminal_id);
 
-        return $terminal->rooms()->simplePaginate(5);
+        return $terminal->rooms()->simplePaginate($perPage);
     }
 
     public function forPanel($panel_id)

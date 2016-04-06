@@ -18,9 +18,11 @@
 </head>
 <body id="app-layout">
     <div class="hidden-print">
+
     @include('terminals.dlg_get_a_check')
 
-    @yield('content')
+@yield('content')
+
     </div>
 
     <div class="visible-print-block">

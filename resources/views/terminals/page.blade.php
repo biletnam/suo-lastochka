@@ -1,20 +1,66 @@
 @extends('layouts.terminal')
 
 @section('content')
-    @if (count($rooms) > 0)
-        <div class="panel panel-default">
+    <table class="table">
+        <tbody>
+            @if (count($rooms) <= 5)
+                @foreach($rooms as $room)
 
-            <div class="panel-body">
-                <table class="table table-striped task-table">
+            <tr>
+                <td>
 
-                    <!-- Table Body -->
-                    <tbody>
-                        @each('terminals.button', $rooms, 'room')
-                    </tbody>
-                </table>
+                    @include('terminals.button')
+                </td>
+            </tr>
+                @endforeach
+            @else
+                @php($index = 0)
+                @foreach($rooms as $room)
+                    @if(($index % 2) == 0)
 
-                <div>{!! $rooms->links() !!}</div>
-            </div>
-        </div>
-    @endif
+            <tr>
+                    @endif
+
+                <td>
+
+                    @include('terminals.button')
+                </td>
+                    @if(($index % 2) != 0)
+
+            </tr>
+                    @endif
+                    @php(++ $index)
+                @endforeach
+                @if(0 != $rooms->suoNextPage)
+                    @if(($index % 2) != 0)
+
+                <td>
+
+                    @include('terminals.buttonmore')
+                </td>
+                    @else
+
+            <tr>
+                <td>
+                </td>
+                <td>
+
+                    @include('terminals.buttonmore')
+                </td>
+            </tr>
+                    @endif
+                @elseif(($index % 2) != 0)
+
+                <td>
+                </td>
+                @endif
+
+                @if(($index % 2) != 0)
+
+            </tr>
+                @endif
+            @endif
+
+    </tbody>
+</table>
 @endsection

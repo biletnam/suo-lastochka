@@ -3,7 +3,7 @@ var dlgGetACheck = $( "#dlg-get-a-check" ).dialog({
     height: 300,
     width: 350,
     modal: true,
-    dialogClass: "no-close onscreen"
+    dialogClass: "no-close"
 });
 
 function createTicket(room) {

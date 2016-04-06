@@ -40,9 +40,23 @@ class TerminalController extends Controller
      */
     public function page(Request $request)
     {
+        $perPage = 9;
+
         $room_repo = new RoomRepository();
 
-        $rooms = $room_repo->forTerminal($request->terminal);
+        $rooms = $room_repo->forTerminal($request->terminal, $perPage);
+
+        if (0 == count($rooms)) {
+            return redirect("/terminals");
+        }
+
+        if (false != $rooms->hasMorePages()) {
+            $rooms->suoNextPage = $rooms->currentPage() + 1;
+        } else if (1 != $rooms->currentPage()) {
+            $rooms->suoNextPage = 1;
+        } else {
+            $rooms->suoNextPage = 0;
+        }
 
         return view('terminals.page', [
             'rooms' => $rooms,

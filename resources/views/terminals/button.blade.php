@@ -1,7 +1,3 @@
-<tr>
-    <td class="table-text">
-        <button id="create-ticket-{{ $room->id }}" class="btn btn-danger btn-create-ticket" value="{{ $room->id }}" onclick="createTicket(this.value); return false;">
-            <div>{{ $room->description }}</div>
-        </button>
-    </td>
-</tr>
+                    <button id="create-ticket-{{ $room->id }}" class="btn suo-terminal-button" onclick="createTicket({{ $room->id }}); return false;">
+                        {{ $room->description }}
+                    </button>

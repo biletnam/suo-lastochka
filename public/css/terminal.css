@@ -1,24 +1,23 @@
+.suo-terminal-button {
+    font-size: 2em;
+    height: 6em;
+    width: 30em;
+    background: linear-gradient(to top,  #ffd2c0,  #fd773e);
+    border:0 solid;
+    border-radius: 1em;
+}
+
 .no-close .ui-dialog-titlebar {
   display: none;
 }
 
-@media screen {
- .onprint {
-  display:none !important;
- }
+#check_number {
+    font-size:3em;
+}
+#check_get_time {
+    font-size:0.7em;
 }
 
-@media print {
- .onscreen {
-  display:none !important;
- }
- html, body {
-  font-size:20px;
- }
- #check_number {
-  font-size:3em;
- }
- #check_get_time {
-  font-size:0.7em;
- }
+.suo-table > tbody > tr > td {
+    vertical-align: middle;
 }
