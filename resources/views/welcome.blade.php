@@ -13,17 +13,17 @@
         <div class="col-md-4">
           <h2>Терминалы</h2>
           <p>Выбор терминала для данного устройства</p>
-          <p><a class="btn btn-default" href="#" role="button">Выбрать &raquo;</a></p>
+          <p><a class="btn btn-default" href="{{ url('terminals') }}" role="button">Выбрать &raquo;</a></p>
         </div>
         <div class="col-md-4">
           <h2>Панели</h2>
           <p>Выбор панели для данного устройства. </p>
-          <p><a class="btn btn-default" href="#" role="button">Выбрать &raquo;</a></p>
+          <p><a class="btn btn-default" href="{{ url('panels') }}" role="button">Выбрать &raquo;</a></p>
        </div>
         <div class="col-md-4">
           <h2>Операторы</h2>
           <p>Выбрать оператора для данного устройства.</p>
-          <p><a class="btn btn-default" href="#" role="button">Выбрать &raquo;</a></p>
+          <p><a class="btn btn-default" href="{{ url('operator') }}" role="button">Выбрать &raquo;</a></p>
         </div>
       </div>
     </div>

@@ -22,7 +22,8 @@ class PanelController extends Controller
      */
     public function index(Request $request)
     {
-        $panels = Panel::all();
+        $panels = Panel::orderBy('ip_address')
+                ->get();
 
         return view('panels.index', [
             'panels' => $panels,

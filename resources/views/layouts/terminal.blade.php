@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -18,38 +18,12 @@
     
 </head>
 <body id="app-layout">
-    <div class="hidden-print">
-
-    @include('terminals.dlg_get_a_check')
-
-    @include('terminals.dlg_no_record')
-
-    <div id="suo-page">
         
 @yield('content')
 
-    </div>
-    </div>
-
-    <div class="visible-print-block">
-        <div class="suo-check">
-            <div id="suo-check-title">Поликлиника</div>
-            <div id="suo-check-number"></div>
-            <div id="suo-check-operator"></div>
-            <div id="suo-check-room-number"></div>
-            <div id="suo-check-room-description"></div>
-            <div id="suo-check-start-date"></div>
-            <div id="suo-check-position"></div>
-            <div id="suo-check-get-time"></div>
-        </div>
-    </div>
-
     <script src="/js/jquery.min.js"></script>
-
     <script src="/js/bootstrap.min.js"></script>
-    
     <script src="/js/jquery-ui.min.js"></script>
-
     @stack('show')
 
     <script src="/js/terminal.js"></script>
