@@ -29,17 +29,13 @@
                     @php(++ $index)
                 @endforeach
                 @if(0 != $rooms->suoNextPage)
-                    @if(($index % 2) != 0)
-
-                <td>
-
-                    @include('terminals.buttonmore')
-                </td>
-                    @else
+                    @if(($index % 2) == 0)
 
             <tr>
                 <td>
                 </td>
+                    @endif
+
                 <td>
 
                     @include('terminals.buttonmore')

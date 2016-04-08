@@ -25,7 +25,7 @@ function init() {
 }
 
 function page( page ) {
-    $.get("",
+    $.get("/terminal/" + terminal + "/page",
         { page: page },
         function( json ) {
             $( "#suo-page" ).html( json.page );

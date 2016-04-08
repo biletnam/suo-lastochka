@@ -14,6 +14,14 @@ use suo\Repositories\RoomRepository;
 class TerminalController extends Controller
 {
     /**
+     * Количество кабинетов на одном экране терминала
+     * Если кабинетов больше, то выводим кнопку "Другие"
+     *
+     * @var int
+     */
+    protected $roomPerPage = 9;
+
+    /**
      * Display a list of terminals.
      *
      * @param  Request  $request
@@ -42,39 +50,50 @@ class TerminalController extends Controller
      */
     public function show(Request $request)
     {
-        $perPage = 9;
         $terminal = $request->terminal;
 
         $room_repo = new RoomRepository();
 
-        $rooms = $room_repo->forTerminal($terminal, $perPage);
+        $rooms = $room_repo->forTerminal($terminal, $this->roomPerPage);
 
         if (0 == count($rooms)) {
             return redirect("/terminals");
         }
 
-        if ($request->ajax()) {
-            if (false != $rooms->hasMorePages()) {
-                $rooms->suoNextPage = $rooms->currentPage() + 1;
-            } else if (1 != $rooms->currentPage()) {
-                $rooms->suoNextPage = 1;
-            } else {
-                $rooms->suoNextPage = 0;
-            }
+        return view('terminals.show', [
+            'terminal' => $terminal,
+        ]);
+    }
 
-            $room_ids = $rooms->pluck('id')->all();
+    /**
+     * Display a list of rooms.
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function page(Request $request)
+    {
+        $terminal = $request->terminal;
 
-            return response()->json([
-                    'rooms' => $room_ids,
-                    'page' => view('terminals.page', [
-                        'rooms' => $rooms,
-                    ])->render()
-            ]);
-        } else {
-            return view('terminals.show', [
-                'terminal' => $terminal,
-            ]);
+        $room_repo = new RoomRepository();
+
+        $rooms = $room_repo->forTerminal($terminal, $this->roomPerPage);
+
+        $nextPage = 0; // если следующая страница равна нулю, то кнопку "Другие кабинеты" не выводим
+        if (false != $rooms->hasMorePages()) {
+            $nextPage = $rooms->currentPage() + 1;
+        } else if (1 != $rooms->currentPage()) {
+            $nextPage = 1;
         }
+
+        $rooms->suoNextPage = $nextPage;
+
+        return response()->json([
+                'rooms' => $rooms->pluck('id')->all(),
+                'page' => view('terminals.page', [
+                    'rooms' => $rooms,
+                ])->render()
+        ]);
     }
 
     public function createticket(Request $request)
