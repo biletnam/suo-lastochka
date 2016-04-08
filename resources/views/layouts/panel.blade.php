@@ -5,12 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Панель</title>
+    <title>Электронная очередь - Панель</title>
 
-    <!-- Fonts -->
     <link href="/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
 
-    <!-- Styles -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/panel.css" rel="stylesheet">
 
@@ -23,10 +21,12 @@
 
 @yield('content')
 
-    <!-- JavaScripts -->
     <script src="/js/jquery.min.js"></script>
+
     <script src="/js/bootstrap.min.js"></script>
+    
     @stack('roomids')
+
     <script src="/js/panel.js"></script>
 </body>
 </html>

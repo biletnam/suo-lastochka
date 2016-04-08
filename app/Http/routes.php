@@ -28,9 +28,9 @@ Route::get('/', function () {
 
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
+});
 
-    Route::get('/home', 'HomeController@index');
-
+Route::group(['middleware' => ['web', 'auth', 'localonly']], function () {
     Route::get('/terminals', 'TerminalController@index');
     Route::post('/terminal/select', 'TerminalController@select');
     Route::post('/terminal/createticket', 'TerminalController@createticket');
@@ -41,9 +41,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('/panel/select', 'PanelController@select');
     Route::get('/panel/checks', 'PanelController@checks');
     Route::get('/panel/{panel}', 'PanelController@show');
-});
 
-Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/operator', 'OperatorController@index');
     Route::get('/operator/checks', 'OperatorController@checks');
     Route::post('/operator/call', 'OperatorController@call');

@@ -1,26 +1,25 @@
 @extends('layouts.terminal')
 
 @section('content')
+    <div class="container">
     @if (count($terminals) > 0)
-        <div class="panel panel-default">
-
-            <div class="panel-body">
                 <table class="table table-striped task-table">
-
-                    <!-- Table Headings -->
                     <thead>
-                        <th>Terminals</th>
-                        <th>&nbsp;</th>
-                        <th>&nbsp;</th>
-                        <th>Select</th>
+                        <th>Адрес</th>
+                        <th>Имя</th>
+                        <th>Описание</th>
+                        <th></th>
                     </thead>
-
-                    <!-- Table Body -->
                     <tbody>
+
                         @each('terminals.terminal_select', $terminals, 'terminal')
+                        
                     </tbody>
                 </table>
-            </div>
-        </div>
+    @else
+          <h2>Не определён ни один терминал</h2>
     @endif
+        <p>Для настройки терминалов необходимо перейти в режим администратора.</p>
+        <p><a class="btn btn-default" href="{{ url('suoadmin') }}" role="button">Перейти &raquo;</a></p>
+    </div>
 @endsection

@@ -17,7 +17,7 @@
 
                                         <input type="hidden" name="terminal" value="{{ $terminal->id }}">
                                         <button type="submit" id="select-terminal-{{ $terminal->id }}" class="btn btn-danger">
-                                            <i class="fa fa-btn fa-trash"></i>Select
+                                            <i class="fa fa-btn fa-trash"></i>Выбрать
                                         </button>
                                     </form>
                                 </td>

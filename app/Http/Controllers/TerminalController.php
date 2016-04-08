@@ -21,7 +21,8 @@ class TerminalController extends Controller
      */
     public function index(Request $request)
     {
-        $terminals = Terminal::all();
+        $terminals = Terminal::orderBy('ip_address')
+                ->get();
 
         return view('terminals.index', [
             'terminals' => $terminals,

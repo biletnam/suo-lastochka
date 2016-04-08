@@ -7,7 +7,7 @@ return array(
 	 *
 	 * @type string
 	 */
-	'uri' => 'admin',
+	'uri' => 'suoadmin',
 
 	/**
 	 *  Domain for routing.
@@ -21,14 +21,14 @@ return array(
 	 *
 	 *  @type array
 	 */
-	'middleware' => array('web'),
+	'middleware' => array('web', 'localonly'),
 
 	/**
 	 * Page title
 	 *
 	 * @type string
 	 */
-	'title' => 'Admin',
+	'title' => 'Настройка',
 
 	/**
 	 * The path to your model config directory
