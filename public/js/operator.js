@@ -93,10 +93,6 @@ function onclickClose() {
 function parseTickets( tickets ) {
     var call = '', accept = '', close = '';
 
-    $.each( timers, function( name, timer ) {
-        clearTimeout( timer );
-    });
-
     if ( 0 != tickets[ "accepted" ] ) { // нажали "Принять", теперь надо "Завершить"
         ticket_to_call = tickets[ "accepted" ][ "id" ];
         close = tickets[ "accepted" ][ "check_number" ];
@@ -116,7 +112,15 @@ function parseTickets( tickets ) {
     $( "#btn-accept").prop( "disabled", (('' !== accept) ? false : true) );
     $( "#btn-close").prop( "disabled", (('' !== close) ? false : true) );
 
-//    timers[ "checks" ] = setTimeout(function() {
-//        checks();
-//    }, 5000);
+    nextChecks();
+}
+
+function nextChecks() {
+    $.each( timers, function( name, timer ) {
+        clearTimeout( timer );
+    });
+
+    timers[ "checks" ] = setTimeout(function() {
+        checks();
+    }, 5000);
 }

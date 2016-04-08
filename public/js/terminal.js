@@ -116,7 +116,7 @@ function ticketcount() {
 function isLessThenMaxRecords( room ) {
     var result = true;
 
-    if (0 != $( "#suo-max-day-record-" + room ).length) {
+    if (0 !== $( "#suo-max-day-record-" + room ).length) {
         var max = $( "#suo-max-day-record-" + room ).text();
         if (max <= $( "#suo-tickets-count-" + room ).text()) {
             result = false;

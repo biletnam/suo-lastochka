@@ -18,13 +18,11 @@ function checks() {
 }
 
 function parseTickets( tickets ) {
+    nextChecks();
+
     $.each( rooms, function( key, value) {
         $( "#current-" + value ).html( "&nbsp;" );
         $( "#next-" + value ).html( "&nbsp;" );
-    });
-
-    $.each( timers, function( name, timer ) {
-        clearTimeout( timer );
     });
 
     if ( tickets[ "count" ] > 0) {
@@ -42,10 +40,6 @@ function parseTickets( tickets ) {
             }
         });
     }
-
-//    timers[ "checks" ] = setTimeout(function() {
-//        checks();
-//    }, 5000);
 }
 
 function blink( room, text ) {
@@ -68,4 +62,14 @@ function playNote() {
 
 function stopPlayNote() {
     $( "#audio" ).attr( "muted", "muted" );
+}
+
+function nextChecks() {
+    $.each( timers, function( name, timer ) {
+        clearTimeout( timer );
+    });
+
+    timers[ "checks" ] = setTimeout(function() {
+        checks();
+    }, 5000);
 }
