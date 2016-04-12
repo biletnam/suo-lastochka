@@ -31,6 +31,14 @@ Route::group(['middleware' => 'web'], function () {
 });
 
 Route::group(['middleware' => ['web', 'auth', 'localonly']], function () {
+    Route::get('/operator', 'OperatorController@index');
+    Route::get('/operator/checks', 'OperatorController@checks');
+    Route::post('/operator/call', 'OperatorController@call');
+    Route::post('/operator/accept', 'OperatorController@accept');
+    Route::post('/operator/close', 'OperatorController@close');
+});
+
+Route::group(['middleware' => ['web', 'localonly']], function () {
     Route::get('/terminals', 'TerminalController@index');
     Route::post('/terminal/select', 'TerminalController@select');
     Route::post('/terminal/createticket', 'TerminalController@createticket');
@@ -42,10 +50,4 @@ Route::group(['middleware' => ['web', 'auth', 'localonly']], function () {
     Route::post('/panel/select', 'PanelController@select');
     Route::get('/panel/checks', 'PanelController@checks');
     Route::get('/panel/{panel}', 'PanelController@show');
-
-    Route::get('/operator', 'OperatorController@index');
-    Route::get('/operator/checks', 'OperatorController@checks');
-    Route::post('/operator/call', 'OperatorController@call');
-    Route::post('/operator/accept', 'OperatorController@accept');
-    Route::post('/operator/close', 'OperatorController@close');
 });
