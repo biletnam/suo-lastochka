@@ -23,4 +23,9 @@ class Room extends Model
         return $this->belongsToMany('suo\User');
     }
 
+    public function panels()
+    {
+        return $this->belongsToMany('suo\Panel');
+    }
+
 }

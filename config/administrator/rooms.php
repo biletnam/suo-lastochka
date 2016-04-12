@@ -20,6 +20,11 @@ return [
             'relationship' => 'users', //this is the name of the Eloquent relationship method!
             'select' => "COUNT((:table).id)",
         ],
+        'num_panels' => [
+            'title' => '# Panels',
+            'relationship' => 'panels', //this is the name of the Eloquent relationship method!
+            'select' => "COUNT((:table).id)",
+        ],
         'created_at',
         'updated_at',
     ],
@@ -49,6 +54,11 @@ return [
             'title' => 'Users',
             'type' => 'relationship',
             'name_field' => 'name',
+        ],
+        'panels' => [
+            'title' => 'Panels',
+            'type' => 'relationship',
+            'name_field' => 'description',
         ],
     ]
 ];
