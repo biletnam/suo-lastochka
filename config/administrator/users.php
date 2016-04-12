@@ -26,9 +26,13 @@ return [
             'title' => 'name',
             'type' => 'text',
         ],
-        'description' => [
+        'email' => [
             'title' => 'email',
             'type' => 'text',
+        ],
+        'password' => [
+            'title' => 'password',
+            'type' => 'password',
         ],
         'roles' => [
             'title' => 'Roles',
