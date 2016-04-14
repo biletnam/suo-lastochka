@@ -1,4 +1,5 @@
-                    <button id="create-ticket-{{ $room->id }}" class="btn suo-terminal-button" onclick="createTicket({{ $room->id }}); return false;">
+@php($func=('can' == $room->canRecord()) ? 'recordTicket' : 'createTicket')
+                    <button id="create-ticket-{{ $room->id }}" class="btn suo-terminal-button" onclick="{{ $func }}({{ $room->id }}, 'today' ); return false;">
                         <div>
                             {{ $room->description }}
                         </div>

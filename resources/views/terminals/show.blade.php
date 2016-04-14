@@ -7,6 +7,8 @@
 
         @include('terminals.dlg_no_record')
 
+        @include('terminals.dlg_record')
+
         <div id="suo-page"></div>
     </div>
 

@@ -16,6 +16,13 @@ var dlgNoRecord = $( "#suo-dlg-no-record" ).dialog({
 
 var rooms = [];
 
+/**
+ * Кабинет, в который собираемся записываться
+ *
+ * @type Number
+ */
+var recordRoom = -1;
+
 function init() {
     $.ajaxSetup({
         headers: {
@@ -41,7 +48,7 @@ function page( page ) {
     ;
 }
 
-function createTicket( room ) {
+function createTicket( room, date ) {
     if (true != isLessThenMaxRecords( room )) {
         dlgNoRecord.dialog( "open" );
         setTimeout(function() {
@@ -55,8 +62,6 @@ function createTicket( room ) {
     setTimeout(function() {
         dlgGetACheck.dialog( "close" );
     }, 5000);
-
-    var date = "today";
 
     $.post(
         "/terminal/createticket",
@@ -124,4 +129,22 @@ function isLessThenMaxRecords( room ) {
     }
 
     return result;
+}
+
+function recordTicket( room, date ) {
+    recordRoom = room;
+    dlgRecord.dialog( "open" );
+    setTimeout(function() {
+        dlgRecord.dialog( "close" );
+    }, 5000);
+}
+
+function recordDay( day ) {
+    var room = recordRoom;
+    dlgRecord.dialog( "close" );
+    createTicket( room, day );
+}
+
+function onDlgRecordClose( ) {
+    recordRoom = -1;
 }

@@ -28,4 +28,19 @@ class Room extends Model
         return $this->belongsToMany('suo\Panel');
     }
 
+    /**
+     * Можно ли записываться в данный кабинет
+     *
+     * @return boolean
+     */
+    public function canRecord()
+    {
+        $result = 'cannot';
+
+        if ($this->id == 2) {
+            $result = 'can';
+        }
+
+        return $result;
+    }
 }

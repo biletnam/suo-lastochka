@@ -7,6 +7,23 @@
     border-radius: 1em;
 }
 
+.suo-terminal-record-button {
+    font-size: 2em;
+    height: 3em;
+    width: 6em;
+    background: linear-gradient(to top,  #ffd2c0,  #fd773e);
+    border:0 solid;
+    border-radius: 0.3em;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.suo-dlg-record-table {
+    display: table;
+    table-layout: fixed;
+}
+
 .no-close .ui-dialog-titlebar {
   display: none;
 }
