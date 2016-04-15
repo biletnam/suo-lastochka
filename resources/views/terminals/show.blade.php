@@ -14,8 +14,8 @@
 
     <div class="visible-print-block">
         <div class="suo-check">
-            <h2 id="suo-check-title">Поликлиника</h2>
-            <h1 id="suo-check-number"></h1>
+            <p id="suo-check-title">Поликлиника</p>
+            <p id="suo-check-number"></p>
             <p id="suo-check-operator"></p>
             <p id="suo-check-room-number"></p>
             <p id="suo-check-room-description"></p>

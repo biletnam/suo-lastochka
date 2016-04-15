@@ -37,6 +37,14 @@
     text-align: center;
 }
 
+#suo-check-number {
+    font-size:4em;
+}
+
+#suo-check-title {
+    font-size:1.5em;
+}
+
 #suo-check-get-time {
     font-size:0.7em;
 }
