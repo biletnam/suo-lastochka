@@ -92,6 +92,8 @@ function parseCheck( check ) {
     $( "#suo-check-room-description" ).html( check.room_description );
     $( "#suo-check-start-date" ).html( check.start_date );
     $( "#suo-check-get-time" ).html( check.get_time );
+
+    //setTimeout(print, 600);
 }
 
 function ticketcount() {
