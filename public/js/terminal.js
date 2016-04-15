@@ -137,7 +137,7 @@ function recordTicket( room, date ) {
     recordRoom = room;
     dlgRecord.dialog( "open" );
     setTimeout(function() {
-        dlgRecord.dialog( "close" );
+                //dlgRecord.dialog( "close" );
     }, 5000);
 }
 
