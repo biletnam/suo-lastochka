@@ -103,6 +103,9 @@ class TerminalController extends Controller
         $admission_time = $request->date;
         if ('today' == $admission_time) {
             $admission_time = date('Y-m-d H:i:s');
+        } else {
+            $date = explode('.', $admission_time);
+            $admission_time = date('Y-m-d H:i:s', strtotime('2016-' . $date[1] . '-' . $date[0]));
         }
 
         $check_data = $ticketRepo->createTicket($request->room, $admission_time);

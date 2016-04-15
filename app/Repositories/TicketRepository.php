@@ -71,7 +71,7 @@ class TicketRepository
         if (!$room) {
             $result['error'] = 'no room';
         } else {
-            $date = date('Y-m-d');
+            $date = $admission_time;
 
             $check_repo = new CheckRepository();
             $check = $check_repo->newCheckToDate($date);
@@ -88,8 +88,8 @@ class TicketRepository
             $result['operator'] = '';
             $result['room_number'] = '';
             $result['room_description'] = $room->description;
-            $result['start_date'] = '';
-            $result['get_time'] = date('d.m.Y H:i:s', strtotime($admission_time));
+            $result['start_date'] = date('d.m.Y', strtotime($admission_time));
+            $result['get_time'] = date('d.m.Y H:i:s');
         }
 
         return $result;
