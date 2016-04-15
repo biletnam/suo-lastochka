@@ -13,6 +13,7 @@ class CheckRepository
 {
     public function newCheckToDate($date)
     {
+        $date = date('Y-m-d', strtotime($date));
         $number = $this->getMaxNumberToDate($date);
         $number++;
 

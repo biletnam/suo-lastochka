@@ -80,6 +80,7 @@ class TicketRepository
                 'room_id' => $room->id
                 , 'check_id' => $check->id
                 , 'admission_date' => $admission_time
+                , 'status' => Ticket::NEWTICKET
             ]);
 
             $ticket->save();
