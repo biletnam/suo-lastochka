@@ -14,14 +14,14 @@
 
     <div class="visible-print-block">
         <div class="suo-check">
-            <div id="suo-check-title">Поликлиника</div>
-            <div id="suo-check-number"></div>
-            <div id="suo-check-operator"></div>
-            <div id="suo-check-room-number"></div>
-            <div id="suo-check-room-description"></div>
-            <div id="suo-check-start-date"></div>
-            <div id="suo-check-position"></div>
-            <div id="suo-check-get-time"></div>
+            <h2 id="suo-check-title">Поликлиника</h2>
+            <h1 id="suo-check-number"></h1>
+            <p id="suo-check-operator"></p>
+            <p id="suo-check-room-number"></p>
+            <p id="suo-check-room-description"></p>
+            <p id="suo-check-start-date"></p>
+            <p id="suo-check-position"></p>
+            <p id="suo-check-get-time"></p>
         </div>
     </div>
 @endsection
