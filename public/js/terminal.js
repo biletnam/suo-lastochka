@@ -23,6 +23,22 @@ var rooms = [];
  */
 var recordRoom = -1;
 
+/**
+ * Неделя в диалоге записи
+ * 0 - текущая неделя, 1 - следующая неделя на экране. При нажатии кнопки "Другие дни" неделя меняется
+ *
+ * @type Number
+ */
+var currentRecordWeek = 0;
+
+/**
+ * Количество заявок по каждому дню
+ * Индекс - кабинет, значения - массив с днями и количеством записей
+ *
+ * @type Array
+ */
+var weekRecords = [];
+
 function init() {
     $.ajaxSetup({
         headers: {
@@ -57,6 +73,8 @@ function createTicket( room, date ) {
 
         return;
     }
+
+    date = date || "today";
 
     dlgGetACheck.dialog( "open" );
     setTimeout(function() {
@@ -133,20 +151,32 @@ function isLessThenMaxRecords( room ) {
     return result;
 }
 
-function recordTicket( room, date ) {
+function recordTicket( room ) {
     recordRoom = room;
     dlgRecord.dialog( "open" );
     setTimeout(function() {
-                //dlgRecord.dialog( "close" );
-    }, 5000);
+        dlgRecord.dialog( "close" );
+    }, 15000);
 }
 
-function recordDay( day ) {
+function recordDay( dayIndex ) {
     var room = recordRoom;
+    var day = weekRecordCaption[currentRecordWeek][dayIndex];
     dlgRecord.dialog( "close" );
     createTicket( room, day );
 }
 
 function onDlgRecordClose( ) {
     recordRoom = -1;
+    currentRecordWeek = 0;
+}
+
+function nextRecordDay() {
+    currentRecordWeek++;
+    if (currentRecordWeek > 1) {
+        currentRecordWeek = 0;
+    }
+    for (var i = 0; i < 5; i++) {
+        $( "#text-record-day-" + i ).text(weekRecordCaption[currentRecordWeek][i]);
+    }
 }

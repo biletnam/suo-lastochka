@@ -4,12 +4,8 @@
             <div class="row"><div class="col-md-12">&nbsp;</div></div>
             <div class="row"><div class="col-md-12">&nbsp;</div></div>
             <div class="container-fluid center-block text-center">
-                @php($monday=strtotime('Monday this week'))
-
                 <div class="row">
                     @for ($i = 0; $i < 3; $i++)
-                        @php($day=date('d.m',strtotime("+$i day", $monday)))
-
                         @include('terminals.dlg_record_button')
                     @endfor
                 </div>
@@ -18,8 +14,6 @@
                 <div class="row">
                     <div class="col-md-2"></div>
                     @for ($i = 3; $i < 5; $i++)
-                        @php($day=date('d.m',strtotime("+$i day", $monday)))
-
                         @include('terminals.dlg_record_button')
                     @endfor
                 </div>
@@ -28,7 +22,7 @@
                 <div class="row">
                     <div class="col-md-3"></div>
                     <div class="col-md-6">
-                        <div id="btn-record-day-next" class="suo-terminal-record-button" onclick="recordDay( 'next' ); return false;">
+                        <div id="btn-record-day-next" class="suo-terminal-record-button" onclick="nextRecordDay( ); return false;">
                             <p class="suo-terminal-record-button-top">&nbsp;</p>
                             <p>Другие дни</p>
                         </div>
@@ -47,5 +41,7 @@
             dialogClass: "no-close hidden-print",
             close: function( event, ui ) { onDlgRecordClose(); }
         });
+
+        var weekRecordCaption = {!! $weeks !!};
 </script>
 @endpush

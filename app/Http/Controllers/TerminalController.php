@@ -60,8 +60,19 @@ class TerminalController extends Controller
             return redirect("/terminals");
         }
 
+        $monday = strtotime('Monday this week');
+        $week0 = [];
+        $week1 = [];
+        for ($i = 0; $i < 5; $i++) {
+            $week0[] = date('d.m', strtotime("+$i day", $monday));
+            $week1[] = date('d.m', strtotime("+" . ($i + 7) . " day", $monday));
+        }
+
         return view('terminals.show', [
             'terminal' => $terminal,
+            'week0' => $week0,
+            'week1' => $week1,
+            'weeks' => json_encode([$week0, $week1]),
         ]);
     }
 
