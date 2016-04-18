@@ -8,6 +8,7 @@ use Illuminate\View\View;
 use suo\Http\Requests;
 
 use suo\Terminal;
+use suo\Room;
 use suo\Repositories\TicketRepository;
 use suo\Repositories\RoomRepository;
 
@@ -64,8 +65,8 @@ class TerminalController extends Controller
         $week0 = [];
         $week1 = [];
         for ($i = 0; $i < 5; $i++) {
-            $week0[] = ['date' => date('d.m', strtotime("+$i day", $monday)), 'count' => ''];
-            $week1[] = ['date' => date('d.m', strtotime("+" . ($i + 7) . " day", $monday)), 'count' => ''];
+            $week0[] = date('d.m', strtotime("+$i day", $monday));
+            $week1[] = date('d.m', strtotime("+" . ($i + 7) . " day", $monday));
         }
 
         return view('terminals.show', [
@@ -159,29 +160,34 @@ class TerminalController extends Controller
         $date1 = date('Y-m-d', strtotime($request->date1 . '.' . date('Y')));
         $date2 = date('Y-m-d', strtotime($request->date2 . '.' . date('Y')));
 
-        $room = $rooms = $request->rooms;
-        if (!is_array($rooms)) {
-            $rooms = [$rooms];
-        }
+        $room = $request->room;
 
-        $counts = $room_repo->countTicketsByRoomsAndDate($rooms, $date1, $date2);
+        $counts = $room_repo->countTicketsByRoomAndDate($room, $date1, $date2);
 
         $monday = strtotime('Monday this week');
-        $result = [ [], [] ];
-        for ($i = 0; $i < 5; $i++) {
-            $result[0][] = 0;
-            $result[1][] = 0;
-        }
+        $dates = [];
         foreach ($counts as $data) {
-            if ($data->room == $room) {
-                $date = strtotime($data->admission_date);
+            $dates[date('d.m', strtotime($data->admission_date))] = $data->ticket_count;
+        }
+        for ($i = 0; $i < 5; $i++) {
+            $date0 = date('d.m', strtotime("+$i day", $monday));
+            $count0 = 0;
+            if (isset($dates[$date0])) {
+                $count0 = $dates[$date0];
             }
-            if (!isset($result[$data->room])) {
-                $result[$data->room] = [];
+            $week0[] = $count0;
+
+            $date1 = date('d.m', strtotime("+" . ($i + 7) . " day", $monday));
+            $count1 = 0;
+            if (isset($dates[$date1])) {
+                $count1 = $dates[$date1];
             }
-            $result[$data->room][date('d.m', strtotime($data->admission_date))] = $data->ticket_count;
+            $week1[] = $count1;
         }
 
-        return response()->json($result);
+        $room_records = Room::find($room);
+        $max_records = $room_records->max_day_record;
+
+        return response()->json(['weeks' => [$week0, $week1], 'max_day_record' => $max_records]);
     }
 }

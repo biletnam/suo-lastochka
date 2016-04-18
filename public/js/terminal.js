@@ -129,11 +129,7 @@ function ticketcount() {
             rooms: rooms,
             date: "today",
         },
-        function( json ) {
-            $.each( json, function( key, value) {
-                $( "#suo-tickets-count-" + value.room ).text( value.ticket_count );
-            });
-        }),
+        function( json ) { onTicketCount( json ); }),
         "json"
     .fail(function( xhr, status, errorThrown ) {
         console.log( "Error: " + errorThrown );
@@ -141,9 +137,16 @@ function ticketcount() {
         console.dir( xhr );
     })
     ;
+}
+
+function onTicketCount( json ) {
+    $.each( json, function( key, value) {
+        $( "#suo-tickets-count-" + value.room ).text( value.ticket_count );
+    });
+
 
     setTimeout(function() {
-        ticketcount();
+//        ticketcount();
     }, 5000);
 }
 
@@ -164,7 +167,7 @@ function recordTicket( room ) {
     recordRoom = room;
     dlgRecord.dialog( "open" );
     setTimeout(function() {
-        dlgRecord.dialog( "close" );
+        //dlgRecord.dialog( "close" );
     }, 15000);
 
     ticketCountToRecordDialog( room );
@@ -188,19 +191,30 @@ function nextRecordDay() {
         currentRecordWeek = 0;
     }
     for (var i = 0; i < 5; i++) {
-        $( "#text-record-day-" + i ).text(weekRecordCaption[currentRecordWeek][i]['date']);
+        $( "#text-record-day-" + i ).text(weekRecordCaption[currentRecordWeek][i]);
     }
 }
 
 function ticketCountToRecordDialog( room ) {
     $.get("/terminal/ticketcountbyday",
         {
-            rooms: room,
-            date1: weekRecordCaption[0][0]['date'],
-            date2: weekRecordCaption[1][4]['date'],
+            room: room,
+            date1: weekRecordCaption[0][0],
+            date2: weekRecordCaption[1][4],
         },
         function( json ) {
-            weekRecords = json;
+            weekRecords = json[ "weeks" ];
+            for (var i = 0; i < 5; i++) {
+                if (0 != weekRecords[currentRecordWeek][i]) {
+                    $( "#text-record-day-ticket-count-" + i ).text(
+                            "В очереди " + weekRecords[currentRecordWeek][i] + " из " + json[ "max_day_record" ]);
+                    $( "#text-record-day-" + i ).removeClass( "suo-terminal-record-button-on-middle" );
+                } else {
+                    $( "#text-record-day-ticket-count-" + i ).text( "" );
+                    $( "#text-record-day-" + i ).addClass( "suo-terminal-record-button-on-middle" );
+                }
+                
+            }
         }),
         "json"
     .fail(function( xhr, status, errorThrown ) {

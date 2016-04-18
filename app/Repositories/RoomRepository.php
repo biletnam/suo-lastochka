@@ -38,30 +38,26 @@ class RoomRepository
     public function countTicketsByRooms($room_ids, $date)
     {
         $tickets = DB::table('tickets')
-            ->select(DB::raw('count(*) as ticket_count, room_id as room, admission_date'))
+            ->select(DB::raw('count(*) as ticket_count, room_id as room'))
             ->whereBetween('admission_date',
                     [date('Y-m-d 00:00:00', strtotime($date)), date('Y-m-d 23:59:59', strtotime($date))])
             ->whereIn('room_id', $room_ids)
             ->groupBy('room_id')
-            ->groupBy('admission_date')
             ->orderBy('room_id')
-            ->orderBy('admission_date')
             ->get();
 
         return $tickets;
     }
 
 
-    public function countTicketsByRoomsAndDate($room_ids, $date1, $date2)
+    public function countTicketsByRoomAndDate($room_id, $date1, $date2)
     {
         $tickets = DB::table('tickets')
-            ->select(DB::raw('count(*) as ticket_count, room_id as room, admission_date'))
+            ->select(DB::raw('count(*) as ticket_count, admission_date'))
             ->whereBetween('admission_date',
                     [date('Y-m-d 00:00:00', strtotime($date1)), date('Y-m-d 23:59:59', strtotime($date2))])
-            ->whereIn('room_id', $room_ids)
-            ->groupBy('room_id')
+            ->where('room_id', $room_id)
             ->groupBy('admission_date')
-            ->orderBy('room_id')
             ->orderBy('admission_date')
             ->get();
 

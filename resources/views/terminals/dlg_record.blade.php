@@ -23,8 +23,7 @@
                     <div class="col-md-3"></div>
                     <div class="col-md-6">
                         <div id="btn-record-day-next" class="suo-terminal-record-button" onclick="nextRecordDay( ); return false;">
-                            <p class="suo-terminal-record-button-top">&nbsp;</p>
-                            <p>Другие дни</p>
+                            <p class="suo-terminal-record-button-on-middle">Другие дни</p>
                         </div>
                     </div>
                 </div>
