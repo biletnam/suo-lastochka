@@ -24,6 +24,7 @@
         var rooms = {!! $ids !!};
         var panel = {!! $panel !!};
         $(function() {
+            init();
             checks();
         });
 </script>

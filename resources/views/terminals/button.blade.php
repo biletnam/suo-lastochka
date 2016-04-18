@@ -3,7 +3,7 @@
                         <div>
                             {{ $room->description }}
                         </div>
-                        @if(0 != $room->max_day_record)
+                        @if(0 == $room->can_record && 0 != $room->max_day_record)
 
                         <div>
                             Уже записалось <span id="suo-tickets-count-{{ $room->id }}">0</span>.

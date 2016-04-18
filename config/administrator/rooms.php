@@ -10,6 +10,7 @@ return [
         'description',
         'ip',
         'max_day_record',
+        'can_record',
         'num_terminals' => [
             'title' => '# Terminals',
             'relationship' => 'terminals', //this is the name of the Eloquent relationship method!
@@ -43,6 +44,10 @@ return [
         ],
         'max_day_record' => [
             'title' => 'max_day_record',
+            'type' => 'text',
+        ],
+        'can_record' => [
+            'title' => 'can_record',
             'type' => 'text',
         ],
         'terminals' => [

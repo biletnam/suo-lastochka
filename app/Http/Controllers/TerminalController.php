@@ -64,8 +64,8 @@ class TerminalController extends Controller
         $week0 = [];
         $week1 = [];
         for ($i = 0; $i < 5; $i++) {
-            $week0[] = date('d.m', strtotime("+$i day", $monday));
-            $week1[] = date('d.m', strtotime("+" . ($i + 7) . " day", $monday));
+            $week0[] = ['date' => date('d.m', strtotime("+$i day", $monday)), 'count' => ''];
+            $week1[] = ['date' => date('d.m', strtotime("+" . ($i + 7) . " day", $monday)), 'count' => ''];
         }
 
         return view('terminals.show', [
@@ -129,12 +129,59 @@ class TerminalController extends Controller
         $room_repo = new RoomRepository();
 
         $date = $request->date;
-        if ('today' == $date) {
+        if ('today' == $request->date1) {
             $date = date('Y-m-d');
         }
 
-        $counts = $room_repo->countTicketsByRoomsAndDate($request->rooms, $date);
+        $rooms = $request->rooms;
 
-        return response()->json($counts);
+        $result = $room_repo->countTicketsByRooms($rooms, $date);
+
+//        $result = [];
+//        for ($i = 0; $i < 5; $i++) {
+//            $week0[] = date('d.m', strtotime("+$i day", $monday));
+//            $week1[] = date('d.m', strtotime("+" . ($i + 7) . " day", $monday));
+//        }
+//        foreach ($counts as $data) {
+//            if (!isset($result[$data->room])) {
+//                $result[$data->room] = [];
+//            }
+//            $result[$data->room][date('d.m', strtotime($data->admission_date))] = $data->ticket_count;
+//        }
+
+        return response()->json($result);
+    }
+
+    public function ticketcountbyday(Request $request)
+    {
+        $room_repo = new RoomRepository();
+
+        $date1 = date('Y-m-d', strtotime($request->date1 . '.' . date('Y')));
+        $date2 = date('Y-m-d', strtotime($request->date2 . '.' . date('Y')));
+
+        $room = $rooms = $request->rooms;
+        if (!is_array($rooms)) {
+            $rooms = [$rooms];
+        }
+
+        $counts = $room_repo->countTicketsByRoomsAndDate($rooms, $date1, $date2);
+
+        $monday = strtotime('Monday this week');
+        $result = [ [], [] ];
+        for ($i = 0; $i < 5; $i++) {
+            $result[0][] = 0;
+            $result[1][] = 0;
+        }
+        foreach ($counts as $data) {
+            if ($data->room == $room) {
+                $date = strtotime($data->admission_date);
+            }
+            if (!isset($result[$data->room])) {
+                $result[$data->room] = [];
+            }
+            $result[$data->room][date('d.m', strtotime($data->admission_date))] = $data->ticket_count;
+        }
+
+        return response()->json($result);
     }
 }

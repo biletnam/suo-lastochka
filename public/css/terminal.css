@@ -20,6 +20,10 @@
     font-size: 0.3em;
 }
 
+.suo-terminal-record-button-record-count {
+    font-size: 1em;
+}
+
 .no-close .ui-dialog-titlebar {
   display: none;
 }

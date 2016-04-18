@@ -45,6 +45,15 @@ function init() {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    dailyReload();
+}
+
+function dailyReload() {
+    var today = new Date();
+    var tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, 0, 15);
+    var diff = tomorrow.getTime() - today.getTime();
+    setTimeout(function(){window.location.reload();}, diff);
 }
 
 function page( page ) {
@@ -118,7 +127,7 @@ function ticketcount() {
     $.get("/terminal/ticketcount",
         {
             rooms: rooms,
-            date: "today"
+            date: "today",
         },
         function( json ) {
             $.each( json, function( key, value) {
@@ -157,6 +166,8 @@ function recordTicket( room ) {
     setTimeout(function() {
         dlgRecord.dialog( "close" );
     }, 15000);
+
+    ticketCountToRecordDialog( room );
 }
 
 function recordDay( dayIndex ) {
@@ -177,6 +188,27 @@ function nextRecordDay() {
         currentRecordWeek = 0;
     }
     for (var i = 0; i < 5; i++) {
-        $( "#text-record-day-" + i ).text(weekRecordCaption[currentRecordWeek][i]);
+        $( "#text-record-day-" + i ).text(weekRecordCaption[currentRecordWeek][i]['date']);
     }
+}
+
+function ticketCountToRecordDialog( room ) {
+    $.get("/terminal/ticketcountbyday",
+        {
+            rooms: room,
+            date1: weekRecordCaption[0][0]['date'],
+            date2: weekRecordCaption[1][4]['date'],
+        },
+        function( json ) {
+            weekRecords = json;
+        }),
+        "json"
+    .fail(function( xhr, status, errorThrown ) {
+        console.log( "Error: " + errorThrown );
+        console.log( "Status: " + status );
+        console.dir( xhr );
+    })
+    ;
+
+
 }

@@ -1,5 +1,16 @@
 var timers = [];
 
+function init() {
+    dailyReload();
+}
+
+function dailyReload() {
+    var today = new Date();
+    var tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, 0, 15);
+    var diff = tomorrow.getTime() - today.getTime();
+    setTimeout(function(){window.location.reload();}, diff);
+}
+
 function checks() {
     $.get("/panel/checks",
         { rooms: rooms },
