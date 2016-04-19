@@ -3,11 +3,11 @@
 @section('content')
     <div class="hidden-print">
 
-        @include('terminals.dlg_get_a_check')
+        @include('terminals.dialogs.get_a_check')
 
-        @include('terminals.dlg_no_record')
+        @include('terminals.dialogs.no_record')
 
-        @include('terminals.dlg_record')
+        @include('terminals.dialogs.record')
 
         <div id="suo-page"></div>
     </div>

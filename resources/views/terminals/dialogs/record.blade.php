@@ -6,7 +6,7 @@
             <div class="container-fluid center-block text-center">
                 <div class="row">
                     @for ($i = 0; $i < 3; $i++)
-                        @include('terminals.dlg_record_button')
+                        @include('terminals.dialogs.record_button')
                     @endfor
                 </div>
                 <div class="row"><div class="col-md-12">&nbsp;</div></div>
@@ -14,7 +14,7 @@
                 <div class="row">
                     <div class="col-md-2"></div>
                     @for ($i = 3; $i < 5; $i++)
-                        @include('terminals.dlg_record_button')
+                        @include('terminals.dialogs.record_button')
                     @endfor
                 </div>
                 <div class="row"><div class="col-md-12">&nbsp;</div></div>
