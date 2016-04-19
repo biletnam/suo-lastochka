@@ -73,7 +73,7 @@ class TerminalController extends Controller
             'terminal' => $terminal,
             'week0' => $week0,
             'week1' => $week1,
-            'weeks' => json_encode([$week0, $week1]),
+            'weeks' => json_encode([$week0, $week1])
         ]);
     }
 
@@ -100,9 +100,17 @@ class TerminalController extends Controller
 
         $rooms->suoNextPage = $nextPage;
 
+        $ids = [];
+        $roomData = [];
+        foreach ($rooms as $room) {
+            $ids[] = $room->id;
+            $roomData[$room->id]['max_day_record'] = $room->max_day_record;
+        }
+
         return response()->json([
-                'rooms' => $rooms->pluck('id')->all(),
-                'page' => view('terminals.page', [
+            'rooms' => $ids,
+            'roomData' => $roomData,
+            'page' => view('terminals.page', [
                     'rooms' => $rooms,
                 ])->render()
         ]);
@@ -129,26 +137,9 @@ class TerminalController extends Controller
     {
         $room_repo = new RoomRepository();
 
-        $date = $request->date;
-        if ('today' == $request->date1) {
-            $date = date('Y-m-d');
-        }
-
         $rooms = $request->rooms;
 
-        $result = $room_repo->countTicketsByRooms($rooms, $date);
-
-//        $result = [];
-//        for ($i = 0; $i < 5; $i++) {
-//            $week0[] = date('d.m', strtotime("+$i day", $monday));
-//            $week1[] = date('d.m', strtotime("+" . ($i + 7) . " day", $monday));
-//        }
-//        foreach ($counts as $data) {
-//            if (!isset($result[$data->room])) {
-//                $result[$data->room] = [];
-//            }
-//            $result[$data->room][date('d.m', strtotime($data->admission_date))] = $data->ticket_count;
-//        }
+        $result = $room_repo->countTicketsByRooms($rooms);
 
         return response()->json($result);
     }
@@ -185,9 +176,6 @@ class TerminalController extends Controller
             $week1[] = $count1;
         }
 
-        $room_records = Room::find($room);
-        $max_records = $room_records->max_day_record;
-
-        return response()->json(['weeks' => [$week0, $week1], 'max_day_record' => $max_records]);
+        return response()->json(['weeks' => [$week0, $week1]]);
     }
 }

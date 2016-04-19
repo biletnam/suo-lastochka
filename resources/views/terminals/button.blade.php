@@ -1,5 +1,5 @@
 @php($func=(0 != $room->can_record) ? 'recordTicket' : 'createTicket')
-                    <button id="create-ticket-{{ $room->id }}" class="btn suo-terminal-button" onclick="{{ $func }}({{ $room->id }} ); return false;">
+                    <button id="create-ticket-{{ $room->id }}" class="btn suo-terminal-button" onclick="{{ $func }}( {{ $room->id }} ); return false;">
                         <div>
                             {{ $room->description }}
                         </div>

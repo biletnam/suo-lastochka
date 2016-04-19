@@ -33,11 +33,19 @@ var currentRecordWeek = 0;
 
 /**
  * Количество заявок по каждому дню
- * Индекс - кабинет, значения - массив с днями и количеством записей
+ * 0 - текущая неделя, 1 - следующая неделя, значения - массив с количеством записей
  *
  * @type Array
  */
 var weekRecords = [];
+
+/**
+ * Данные по кабинетам
+ * Индекс - ид кабинета, значения max_day_records - максимум для данного кабинета
+ *
+ * @type Array
+ */
+var roomData = [];
 
 function init() {
     $.ajaxSetup({
@@ -62,6 +70,7 @@ function page( page ) {
         function( json ) {
             $( "#suo-page" ).html( json.page );
             rooms = json.rooms;
+            roomData = json.roomData;
             ticketcount();
         }),
         "json"
@@ -127,7 +136,6 @@ function ticketcount() {
     $.get("/terminal/ticketcount",
         {
             rooms: rooms,
-            date: "today",
         },
         function( json ) { onTicketCount( json ); }),
         "json"
@@ -190,9 +198,7 @@ function nextRecordDay() {
     if (currentRecordWeek > 1) {
         currentRecordWeek = 0;
     }
-    for (var i = 0; i < 5; i++) {
-        $( "#text-record-day-" + i ).text(weekRecordCaption[currentRecordWeek][i]);
-    }
+    recordDayChangeCaption( );
 }
 
 function ticketCountToRecordDialog( room ) {
@@ -204,17 +210,7 @@ function ticketCountToRecordDialog( room ) {
         },
         function( json ) {
             weekRecords = json[ "weeks" ];
-            for (var i = 0; i < 5; i++) {
-                if (0 != weekRecords[currentRecordWeek][i]) {
-                    $( "#text-record-day-ticket-count-" + i ).text(
-                            "В очереди " + weekRecords[currentRecordWeek][i] + " из " + json[ "max_day_record" ]);
-                    $( "#text-record-day-" + i ).removeClass( "suo-terminal-record-button-on-middle" );
-                } else {
-                    $( "#text-record-day-ticket-count-" + i ).text( "" );
-                    $( "#text-record-day-" + i ).addClass( "suo-terminal-record-button-on-middle" );
-                }
-                
-            }
+            recordDayChangeCaption( );
         }),
         "json"
     .fail(function( xhr, status, errorThrown ) {
@@ -224,5 +220,20 @@ function ticketCountToRecordDialog( room ) {
     })
     ;
 
+}
 
+function recordDayChangeCaption( ) {
+    for (var i = 0; i < 5; i++) {
+        $( "#text-record-day-" + i ).text(weekRecordCaption[currentRecordWeek][i]);
+
+        if (0 != weekRecords[currentRecordWeek][i]) {
+            $( "#text-record-day-ticket-count-" + i ).text(
+                    "В очереди " + weekRecords[currentRecordWeek][i] + " из " + roomData[ recordRoom ][ "max_day_record" ]);
+            $( "#text-record-day-" + i ).removeClass( "suo-terminal-record-button-on-middle" );
+        } else {
+            $( "#text-record-day-ticket-count-" + i ).text( "" );
+            $( "#text-record-day-" + i ).addClass( "suo-terminal-record-button-on-middle" );
+        }
+
+    }
 }

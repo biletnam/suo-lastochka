@@ -35,15 +35,13 @@ class RoomRepository
         return $operator->rooms()->get();
     }
 
-    public function countTicketsByRooms($room_ids, $date)
+    public function countTicketsByRooms($room_ids)
     {
         $tickets = DB::table('tickets')
             ->select(DB::raw('count(*) as ticket_count, room_id as room'))
-            ->whereBetween('admission_date',
-                    [date('Y-m-d 00:00:00', strtotime($date)), date('Y-m-d 23:59:59', strtotime($date))])
+            ->whereBetween('admission_date', [date('Y-m-d 00:00:00'), date('Y-m-d 23:59:59')])
             ->whereIn('room_id', $room_ids)
             ->groupBy('room_id')
-            ->orderBy('room_id')
             ->get();
 
         return $tickets;
