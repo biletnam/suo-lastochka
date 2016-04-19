@@ -74,12 +74,11 @@ function dailyReload() {
 
 function getPage( page ) {
     $.get("/terminal/" + terminal + "/page",
-        { page: page },
+        { 
+            page: page
+        },
         function( json ) {
-            $( "#suo-page" ).html( json.page );
-            rooms = json.rooms;
-            roomData = json.roomData;
-            getTicketCount();
+            onGetPage( json );
         }),
         "json"
     .fail(function( xhr, status, errorThrown ) {
@@ -100,14 +99,14 @@ function createTicket( room, date ) {
 
     showDialog(dlgGetACheck, 5000);
 
-    $.post(
-        "/terminal/createticket",
+    $.post("/terminal/createticket",
         {
             terminal: terminal,
             room: room,
             date: date,
-        }, function( check ) {
-            onTicketCreated( check );
+        },
+        function( json ) {
+            onTicketCreated( json );
         },
         "json"
     )
@@ -160,6 +159,13 @@ function getTicketCountToRecordDialog( room ) {
 }
 
 // Обработка ответов сервера
+
+function onGetPage( json ) {
+    $( "#suo-page" ).html( json.page );
+    rooms = json.rooms;
+    roomData = json.roomData;
+    getTicketCount();
+}
 
 
 function onTicketCreated( json ) {
