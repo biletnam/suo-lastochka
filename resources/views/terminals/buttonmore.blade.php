@@ -8,7 +8,7 @@
 
                 <td>
 
-                    <button class="btn suo-terminal-button" onclick="page({{ $rooms->suoNextPage }}); return false;">
+                    <button class="btn suo-terminal-button" onclick="onClickNextPage({{ $rooms->suoNextPage }}); return false;">
                         Другие
                     </button>
                 </td>

@@ -24,10 +24,7 @@
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/jquery-ui.min.js"></script>
-    @stack('dlg-record')
-    @stack('dlg-record-by-time')
     @stack('show')
 
-    <script src="/js/terminal.js"></script>
 </body>
 </html>

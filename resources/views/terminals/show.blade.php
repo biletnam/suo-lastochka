@@ -29,12 +29,13 @@
 @endsection
 
 @push('show')
+    @stack('dialogs')
     <script>
         var terminal = {!! $terminal !!};
 
         $(function() {
             init();
-            page(1);
         });
-</script>
+    </script>
+    <script src="/js/terminal.js"></script>
 @endpush

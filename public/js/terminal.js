@@ -1,19 +1,15 @@
-var dlgGetACheck = $( "#suo-dlg-get-a-check" ).dialog({
-    autoOpen: false,
-    height: 300,
-    width: 350,
-    modal: true,
-    dialogClass: "no-close hidden-print"
-});
+/**
+ * Скрипты терминала
+ *
+ */
 
-var dlgNoRecord = $( "#suo-dlg-no-record" ).dialog({
-    autoOpen: false,
-    height: 300,
-    width: 350,
-    modal: true,
-    dialogClass: "no-close hidden-print"
-});
+// Переменные
 
+/**
+ * Ид кабинетов
+ *
+ * @type Array
+ */
 var rooms = [];
 
 /**
@@ -47,6 +43,10 @@ var weekRecords = [];
  */
 var roomData = [];
 
+
+// Инициализация
+
+
 function init() {
     $.ajaxSetup({
         headers: {
@@ -55,23 +55,31 @@ function init() {
     });
 
     dailyReload();
+
+    getPage();
 }
 
 function dailyReload() {
     var today = new Date();
     var tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, 0, 15);
     var diff = tomorrow.getTime() - today.getTime();
-    setTimeout(function(){window.location.reload();}, diff);
+    setTimeout(function() {
+        window.location.reload();
+    }, diff);
 }
 
-function page( page ) {
+
+// Запросы к серверу
+
+
+function getPage( page ) {
     $.get("/terminal/" + terminal + "/page",
         { page: page },
         function( json ) {
             $( "#suo-page" ).html( json.page );
             rooms = json.rooms;
             roomData = json.roomData;
-            ticketcount();
+            getTicketCount();
         }),
         "json"
     .fail(function( xhr, status, errorThrown ) {
@@ -84,20 +92,13 @@ function page( page ) {
 
 function createTicket( room, date ) {
     if (true != isLessThenMaxRecords( room )) {
-        dlgNoRecord.dialog( "open" );
-        setTimeout(function() {
-            dlgNoRecord.dialog( "close" );
-        }, 5000);
-
+        showDialog(dlgNoRecord, 5000);
         return;
     }
 
     date = date || "today";
 
-    dlgGetACheck.dialog( "open" );
-    setTimeout(function() {
-        dlgGetACheck.dialog( "close" );
-    }, 5000);
+    showDialog(dlgGetACheck, 5000);
 
     $.post(
         "/terminal/createticket",
@@ -106,7 +107,7 @@ function createTicket( room, date ) {
             room: room,
             date: date,
         }, function( check ) {
-            parseCheck( check );
+            onTicketCreated( check );
         },
         "json"
     )
@@ -121,23 +122,14 @@ function createTicket( room, date ) {
 
 }
 
-function parseCheck( check ) {
-    $( "#suo-check-number" ).html( check.number );
-    $( "#suo-check-operator" ).html( check.operator );
-    $( "#suo-check-room-number" ).html( check.room_number );
-    $( "#suo-check-room-description" ).html( check.room_description );
-    $( "#suo-check-start-date" ).html( check.start_date );
-    $( "#suo-check-get-time" ).html( check.get_time );
-
-    //setTimeout(print, 600);
-}
-
-function ticketcount() {
+function getTicketCount() {
     $.get("/terminal/ticketcount",
         {
             rooms: rooms,
         },
-        function( json ) { onTicketCount( json ); }),
+        function( counts ) {
+            onTicketCount( counts );
+        }),
         "json"
     .fail(function( xhr, status, errorThrown ) {
         console.log( "Error: " + errorThrown );
@@ -147,68 +139,7 @@ function ticketcount() {
     ;
 }
 
-function onTicketCount( json ) {
-    $.each( json, function( key, value) {
-        $( "#suo-tickets-count-" + value.room ).text( value.ticket_count );
-    });
-
-
-    setTimeout(function() {
-//        ticketcount();
-    }, 5000);
-}
-
-function isLessThenMaxRecords( room ) {
-    var result = true;
-
-    if (0 !== $( "#suo-max-day-record-" + room ).length) {
-        var max = $( "#suo-max-day-record-" + room ).text();
-        if (max <= $( "#suo-tickets-count-" + room ).text()) {
-            result = false;
-        }
-    }
-
-    return result;
-}
-
-function recordTicket( room ) {
-    recordRoom = room;
-    dlgRecord.dialog( "open" );
-    setTimeout(function() {
-        dlgRecord.dialog( "close" );
-    }, 15000);
-
-    ticketCountToRecordDialog( room );
-}
-
-function recordDay( dayIndex ) {
-    var room = recordRoom;
-    var day = weekRecordCaption[currentRecordWeek][dayIndex];
-    dlgRecord.dialog( "close" );
-    if (1 != roomData[ room ][ "can_record_by_time" ]) {
-        createTicket( room, day );
-    } else {
-        dlgRecordByTime.dialog( "open" );
-        setTimeout(function() {
-            dlgRecordByTime.dialog( "close" );
-        }, 15000);
-    }
-}
-
-function onDlgRecordClose( ) {
-    recordRoom = -1;
-    currentRecordWeek = 0;
-}
-
-function nextRecordDay() {
-    currentRecordWeek++;
-    if (currentRecordWeek > 1) {
-        currentRecordWeek = 0;
-    }
-    recordDayChangeCaption( );
-}
-
-function ticketCountToRecordDialog( room ) {
+function getTicketCountToRecordDialog( room ) {
     $.get("/terminal/ticketcountbyday",
         {
             room: room,
@@ -216,8 +147,7 @@ function ticketCountToRecordDialog( room ) {
             date2: weekRecordCaption[1][4],
         },
         function( json ) {
-            weekRecords = json[ "weeks" ];
-            recordDayChangeCaption( );
+            onTicketCountToRecordDialog( json );
         }),
         "json"
     .fail(function( xhr, status, errorThrown ) {
@@ -229,11 +159,143 @@ function ticketCountToRecordDialog( room ) {
 
 }
 
-function recordDayChangeCaption( ) {
+// Обработка ответов сервера
+
+
+function onTicketCreated( json ) {
+    $.each( json, function( key, data) {
+        $( "#suo-check-" + data ).html( data );
+    });
+    
+    //setTimeout(print, 600);
+}
+
+function onTicketCount( json ) {
+    $.each( json, function( key, data) {
+        $( "#suo-tickets-count-" + data.room ).text( data.ticket_count );
+        roomData[ data.room ][ "ticket_count" ] = data.ticket_count;
+    });
+
+    setTimeout(function() {
+        getTicketCount();
+    }, 5000);
+}
+
+function onTicketCountToRecordDialog( json ) {
+    weekRecords = json[ "weeks" ];
+    changeButtonsCaptionOnRecordDialog( );
+}
+
+
+// Обработка нажатий кнопок терминала
+
+/**
+ * Нажатие на выбор кабинета
+ *
+ * @param {integer} room Кабинет
+ * @returns {undefined}
+ */
+function onClickRoom( room ) {
+    if ("1" !== roomData[ room ][ "can_record" ]) {
+        createTicket( room, "today" );
+    } else {
+        recordTicket( room );
+    }
+}
+
+/**
+ * Нажатие на следующую страницу с кабинетами
+ *
+ * @param {integer} page Следующая страница
+ * @returns {undefined}
+ */
+function onClickNextPage( page ) {
+    getPage( page );
+}
+
+/**
+ * Нажатие на выборе следующей недели для записи
+ *
+ * @returns {undefined}
+ */
+function onClickNextWeek() {
+    currentRecordWeek++;
+    if (currentRecordWeek > 1) {
+        currentRecordWeek = 0;
+    }
+    changeButtonsCaptionOnRecordDialog( );
+}
+
+/**
+ * Нажатие на выбор дня записи
+ *
+ * @param {integer} dayIndex
+ * @returns {undefined}
+ */
+function onClickDay( dayIndex ) {
+    var room = recordRoom;
+    var day = weekRecordCaption[currentRecordWeek][dayIndex];
+    dlgRecord.dialog( "close" );
+    if ("1" !== roomData[ room ][ "can_record_by_time" ]) {
+        createTicket( room, day );
+    } else {
+        showDialog(dlgRecordByTime, 15000);
+    }
+}
+
+/**
+ * Нажатие на выбор времени записи
+ *
+ * @param {integer} time
+ * @returns {undefined}
+ */
+function onClickTime( time ) {
+    alert( "recordbyTime" + time );
+}
+
+
+// Обработка закрытий диалогов
+
+
+function onDlgRecordClose( ) {
+    recordRoom = -1;
+    currentRecordWeek = 0;
+}
+
+
+function onDlgRecordByTimeClose() {
+    alert( "onDlgRecordByTimeClose" );
+}
+
+
+// Вспомогательные функции
+
+
+function isLessThenMaxRecords( room ) {
+    var result = true;
+    var data = roomData[ room ];
+
+    if ("0" !== data[ "max_day_record" ]) {
+        if (data[ "ticket_count" ] >= data[ "max_day_record" ]) {
+            result = false;
+        }
+    }
+
+    return result;
+}
+
+function recordTicket( room ) {
+    recordRoom = room;
+    showDialog(dlgRecord, 15000);
+
+    getTicketCountToRecordDialog( room );
+}
+
+function changeButtonsCaptionOnRecordDialog( ) {
     for (var i = 0; i < 5; i++) {
         $( "#text-record-day-" + i ).text(weekRecordCaption[currentRecordWeek][i]);
 
-        if (0 != weekRecords[currentRecordWeek][i]) {
+        if ("0" !== weekRecords[currentRecordWeek][i]) {
             $( "#text-record-day-ticket-count-" + i ).text(
                     "В очереди " + weekRecords[currentRecordWeek][i] + " из " + roomData[ recordRoom ][ "max_day_record" ]);
             $( "#text-record-day-" + i ).removeClass( "suo-terminal-record-button-on-middle" );
@@ -245,10 +307,9 @@ function recordDayChangeCaption( ) {
     }
 }
 
-function recordbyTime() {
-    alert( "recordbyTime" );
-}
-
-function onDlgRecordByTimeClose() {
-    alert( "onDlgRecordByTimeClose" );
+function showDialog( dialog, time_to_show ) {
+    dialog.dialog( "open" );
+    setTimeout(function() {
+        dialog.dialog( "close" );
+    }, time_to_show);
 }

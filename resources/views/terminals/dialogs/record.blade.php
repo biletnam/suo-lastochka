@@ -22,7 +22,7 @@
                 <div class="row">
                     <div class="col-md-3"></div>
                     <div class="col-md-6">
-                        <div id="btn-record-day-next" class="suo-terminal-record-button" onclick="nextRecordDay( ); return false;">
+                        <div id="btn-record-day-next" class="suo-terminal-record-button" onclick="onClickNextWeek( ); return false;">
                             <p class="suo-terminal-record-button-on-middle">Другие дни</p>
                         </div>
                     </div>
@@ -30,7 +30,7 @@
             </div>
         </div>
 
-@push('dlg-record')
+@push('dialogs')
     <script>
         var dlgRecord = $( "#suo-dlg-record" ).dialog({
             autoOpen: false,

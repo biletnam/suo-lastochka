@@ -10,20 +10,20 @@
                     @for ($col = 0; $col <= 4; $col++)
 
                     <div class="col-md-2">
-                        <div class="suo-terminal-record-button" onclick="recordbyTime( ); return false;">
+                        <div class="suo-terminal-record-button" onclick="onClickTime( '{{ $row }} {{ $col }}' ); return false;">
                             <p class="suo-terminal-record-button-on-middle">{{ $row }} {{ $col }}</p>
                         </div>
                     </div>
 
                     @endfor
                 </div>
-                
+
                 @endfor
 
             </div>
         </div>
 
-@push('dlg-record-by-time')
+@push('dialogs')
     <script>
         var dlgRecordByTime = $( "#suo-dlg-record-by-time" ).dialog({
             autoOpen: false,
