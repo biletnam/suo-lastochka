@@ -9,6 +9,8 @@
 
         @include('terminals.dialogs.record')
 
+        @include('terminals.dialogs.record_by_time')
+
         <div id="suo-page"></div>
     </div>
 

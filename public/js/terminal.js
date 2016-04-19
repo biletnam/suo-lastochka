@@ -175,7 +175,7 @@ function recordTicket( room ) {
     recordRoom = room;
     dlgRecord.dialog( "open" );
     setTimeout(function() {
-        //dlgRecord.dialog( "close" );
+        dlgRecord.dialog( "close" );
     }, 15000);
 
     ticketCountToRecordDialog( room );
@@ -185,7 +185,14 @@ function recordDay( dayIndex ) {
     var room = recordRoom;
     var day = weekRecordCaption[currentRecordWeek][dayIndex];
     dlgRecord.dialog( "close" );
-    createTicket( room, day );
+    if (1 != roomData[ room ][ "can_record_by_time" ]) {
+        createTicket( room, day );
+    } else {
+        dlgRecordByTime.dialog( "open" );
+        setTimeout(function() {
+            dlgRecordByTime.dialog( "close" );
+        }, 15000);
+    }
 }
 
 function onDlgRecordClose( ) {
@@ -236,4 +243,12 @@ function recordDayChangeCaption( ) {
         }
 
     }
+}
+
+function recordbyTime() {
+    alert( "recordbyTime" );
+}
+
+function onDlgRecordByTimeClose() {
+    alert( "onDlgRecordByTimeClose" );
 }
