@@ -7,9 +7,9 @@
 
         @include('terminals.dialogs.no_record')
 
-        @include('terminals.dialogs.record')
+        @include('terminals.dialogs.select_day')
 
-        @include('terminals.dialogs.record_by_time')
+        @include('terminals.dialogs.select_time')
 
         <div id="suo-page"></div>
     </div>

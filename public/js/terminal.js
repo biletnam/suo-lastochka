@@ -235,11 +235,11 @@ function onClickNextWeek() {
 function onClickDay( dayIndex ) {
     var room = recordRoom;
     var day = weekRecordCaption[currentRecordWeek][dayIndex];
-    dlgRecord.dialog( "close" );
+    dlgSelectDay.dialog( "close" );
     if ("1" !== roomData[ room ][ "can_record_by_time" ]) {
         createTicket( room, day );
     } else {
-        showDialog(dlgRecordByTime, 15000);
+        showDialog(dlgSelectTime, 15000);
     }
 }
 
@@ -250,21 +250,21 @@ function onClickDay( dayIndex ) {
  * @returns {undefined}
  */
 function onClickTime( time ) {
-    alert( "recordbyTime" + time );
+    alert( "onClickTime" + time );
 }
 
 
 // Обработка закрытий диалогов
 
 
-function onDlgRecordClose( ) {
+function onDlgSelectDayClose( ) {
     recordRoom = -1;
     currentRecordWeek = 0;
 }
 
 
-function onDlgRecordByTimeClose() {
-    alert( "onDlgRecordByTimeClose" );
+function onDlgSelectTimeClose() {
+    alert( "onDlgSelectTimeClose" );
 }
 
 
@@ -286,7 +286,7 @@ function isLessThenMaxRecords( room ) {
 
 function recordTicket( room ) {
     recordRoom = room;
-    showDialog(dlgRecord, 15000);
+    showDialog(dlgSelectDay, 15000);
 
     getTicketCountToRecordDialog( room );
 }

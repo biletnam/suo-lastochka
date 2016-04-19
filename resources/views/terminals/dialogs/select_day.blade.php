@@ -1,12 +1,12 @@
 
-        <div id="suo-dlg-record" class="hidden-print">
+        <div id="suo-dlg-select-day" class="hidden-print">
             <h1 class="center-block text-center">Выберите день записи</h1>
             <div class="row"><div class="col-md-12">&nbsp;</div></div>
             <div class="row"><div class="col-md-12">&nbsp;</div></div>
             <div class="container-fluid center-block text-center">
                 <div class="row">
                     @for ($i = 0; $i < 3; $i++)
-                        @include('terminals.dialogs.record_button')
+                        @include('terminals.dialogs.select_day_button')
                     @endfor
                 </div>
                 <div class="row"><div class="col-md-12">&nbsp;</div></div>
@@ -14,7 +14,7 @@
                 <div class="row">
                     <div class="col-md-2"></div>
                     @for ($i = 3; $i < 5; $i++)
-                        @include('terminals.dialogs.record_button')
+                        @include('terminals.dialogs.select_day_button')
                     @endfor
                 </div>
                 <div class="row"><div class="col-md-12">&nbsp;</div></div>
@@ -32,13 +32,13 @@
 
 @push('dialogs')
     <script>
-        var dlgRecord = $( "#suo-dlg-record" ).dialog({
+        var dlgSelectDay = $( "#suo-dlg-select-day" ).dialog({
             autoOpen: false,
             height: 550,
             width: 650,
             modal: true,
             dialogClass: "no-close hidden-print",
-            close: function( event, ui ) { onDlgRecordClose(); }
+            close: function( event, ui ) { onDlgSelectDayClose(); }
         });
 
         var weekRecordCaption = {!! $weeks !!};
