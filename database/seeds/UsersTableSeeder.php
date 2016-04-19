@@ -33,11 +33,19 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('t'),
         ]);
 
+        DB::table('users')->insert([
+            'name' => 'Urpetrov',
+            'email' => 'ur@aaa.aaa',
+            'password' => bcrypt('u'),
+        ]);
+
         factory(suo\User::class, 10)->create();
 
         suo\User::find(2)->roles()->attach([3]);
         suo\User::find(3)->roles()->attach([3]);
+        suo\User::find(4)->roles()->attach([3]);
         suo\User::find(2)->rooms()->attach([1]);
         suo\User::find(3)->rooms()->attach([2]);
+        suo\User::find(4)->rooms()->attach([3]);
     }
 }
