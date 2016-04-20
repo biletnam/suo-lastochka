@@ -158,6 +158,25 @@ function getTicketCountToRecordDialog( room ) {
 
 }
 
+function getTimeDialog( room, day ) {
+    $.get("/terminal/timedialog",
+        {
+            room: room,
+            day: day,
+        },
+        function( json ) {
+            onGetTimeDialog( json );
+        }),
+        "json"
+    .fail(function( xhr, status, errorThrown ) {
+        console.log( "Error: " + errorThrown );
+        console.log( "Status: " + status );
+        console.dir( xhr );
+    })
+    ;
+
+}
+
 // Обработка ответов сервера
 
 function onGetPage( json ) {
@@ -183,13 +202,19 @@ function onTicketCount( json ) {
     });
 
     setTimeout(function() {
-        getTicketCount();
+        //getTicketCount();
     }, 5000);
 }
 
 function onTicketCountToRecordDialog( json ) {
     weekRecords = json[ "weeks" ];
     changeButtonsCaptionOnRecordDialog( );
+}
+
+function onGetTimeDialog( json ) {
+    $( "#suo-dlg-select-time-container" ).html( json.dialog );
+
+    showDialog(dlgSelectTime, 15000);
 }
 
 
@@ -245,7 +270,7 @@ function onClickDay( dayIndex ) {
     if ("1" !== roomData[ room ][ "can_record_by_time" ]) {
         createTicket( room, day );
     } else {
-        showDialog(dlgSelectTime, 15000);
+        getTimeDialog( room, day );
     }
 }
 

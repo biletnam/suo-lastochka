@@ -4,21 +4,7 @@
             <h1 class="center-block text-center">Выберите время записи</h1>
             <div class="row"><div class="col-md-12">&nbsp;</div></div>
             <div class="row"><div class="col-md-12">&nbsp;</div></div>
-            <div class="container-fluid center-block text-center">
-                @for ($row = 0; $row <= 4; $row++)
-                <div class="row">
-                    @for ($col = 0; $col <= 4; $col++)
-
-                    <div class="col-md-2">
-                        <div class="suo-terminal-record-button" onclick="onClickTime( '{{ $row }} {{ $col }}' ); return false;">
-                            <p class="suo-terminal-record-button-on-middle">{{ $row }} {{ $col }}</p>
-                        </div>
-                    </div>
-
-                    @endfor
-                </div>
-
-                @endfor
+            <div id="suo-dlg-select-time-container" class="container-fluid center-block text-center">
 
             </div>
         </div>

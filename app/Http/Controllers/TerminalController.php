@@ -180,4 +180,13 @@ class TerminalController extends Controller
 
         return response()->json(['weeks' => [$week0, $week1]]);
     }
+
+    public function timedialog(Request $request)
+    {
+        return response()->json([
+            'data' => [],
+            'dialog' => view('terminals.time', [
+                ])->render()
+        ]);
+    }
 }

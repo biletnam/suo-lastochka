@@ -44,6 +44,7 @@ Route::group(['middleware' => ['web', 'localonly']], function () {
     Route::post('/terminal/createticket', 'TerminalController@createticket');
     Route::get('/terminal/ticketcount', 'TerminalController@ticketcount');
     Route::get('/terminal/ticketcountbyday', 'TerminalController@ticketcountbyday');
+    Route::get('/terminal/timedialog', 'TerminalController@timedialog');
     Route::get('/terminal/{terminal}/page', 'TerminalController@page');
     Route::get('/terminal/{terminal}', 'TerminalController@show');
 
