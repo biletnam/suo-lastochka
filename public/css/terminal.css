@@ -16,6 +16,11 @@
     border-radius: 0.3em;
 }
 
+.suo-terminal-record-button-disabled {
+    background: linear-gradient(to top,  #ffd2c0,  #ffd2c0);
+    color: gray;
+}
+
 .suo-terminal-record-button-on-middle {
     padding-top: 0.7em;
 }

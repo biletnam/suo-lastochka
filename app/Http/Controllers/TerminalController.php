@@ -69,11 +69,17 @@ class TerminalController extends Controller
             $week1[] = date('d.m', strtotime("+" . ($i + 7) . " day", $monday));
         }
 
+        /**
+         * Индекс дня. Все дни перед ним должны быть выключены
+         */
+        $indexToday = date('w') - 1;
+
         return view('terminals.show', [
             'terminal' => $terminal,
             'week0' => $week0,
             'week1' => $week1,
-            'weeks' => json_encode([$week0, $week1])
+            'weeks' => json_encode([$week0, $week1]),
+            'indexToday' => $indexToday,
         ]);
     }
 
@@ -127,7 +133,7 @@ class TerminalController extends Controller
         $year = date('Y');
         $hour = date('H');
         $minute = date('i');
-        $second = date('s');
+        $second = 0;
 
         $with_time = false;
 
@@ -176,7 +182,7 @@ class TerminalController extends Controller
         $monday = strtotime('Monday this week');
         $dates = [];
         foreach ($counts as $data) {
-            $dates[date('d.m', strtotime($data->admission_date))] = $data->ticket_count;
+            $dates[date('d.m', strtotime($data->a_date))] = $data->ticket_count;
         }
         for ($i = 0; $i < 5; $i++) {
             $date0 = date('d.m', strtotime("+$i day", $monday));

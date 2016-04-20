@@ -204,18 +204,18 @@ function getTimeDialog( room, day ) {
 // Обработка ответов сервера
 
 function onGetPage( json ) {
-    $( "#suo-page" ).html( json.page );
-    rooms = json.rooms;
-    roomData = json.roomData;
+    $( "#suo-page" ).html( json[ "page" ] );
+    rooms = json[ "rooms" ];
+    roomData = json[ "roomData" ];
     getTicketCount();
 }
 
 
 function onTicketCreated( json ) {
-    if ('' !== json.error) {
+    if ('' !== json[ "error" ]) {
         dlgGetACheck.dialog( "close" );
         showDialog(dlgError, 5000);
-        console.log( "Error: " + json.error );
+        console.log( "Error: " + json[ "error" ] );
     } else {
         $.each( json, function( element, data) {
             $( "#suo-check-" + element ).html( data );
@@ -227,8 +227,8 @@ function onTicketCreated( json ) {
 
 function onTicketCount( json ) {
     $.each( json, function( key, data) {
-        $( "#suo-tickets-count-" + data.room ).text( data.ticket_count );
-        roomData[ data.room ][ "ticket_count" ] = data.ticket_count;
+        $( "#suo-tickets-count-" + data[ "room"] ).text( data[ "ticket_count" ] );
+        roomData[ data.room ][ "ticket_count" ] = data[ "ticket_count" ];
     });
 
     setTimeout(function() {
@@ -242,8 +242,8 @@ function onTicketCountToSelectDayDialog( json ) {
 }
 
 function onGetTimeDialog( json ) {
-    $( "#suo-dlg-select-time-container" ).html( json.dialog );
-    $( "#suo-dlg-select-time-day" ).html( json.day );
+    $( "#suo-dlg-select-time-container" ).html( json[ "dialog" ] );
+    $( "#suo-dlg-select-time-day" ).html( json[ "day" ] );
 
     showDialog(dlgSelectTime, 15000);
 }
@@ -295,6 +295,9 @@ function onClickNextWeek() {
  * @returns {undefined}
  */
 function onClickDay( dayIndex ) {
+    if (0 === selectedWeek && dayIndex < indexToday) {
+        return;
+    }
     needToInitSelected = false;
     dlgSelectDay.dialog( "close" );
     var room = selectedRoom;
@@ -362,19 +365,28 @@ function recordTicket( room ) {
 }
 
 function changeButtonsCaptionOnSelectDayDialog( ) {
+    var elemDay, textCount;
     for (var i = 0; i < 5; i++) {
-        $( "#text-record-day-" + i ).text(weekRecordCaption[selectedWeek][i]);
+        elemDay = $( "#text-record-day-" + i );
+        textCount = "";
 
-        if ("0" !== weekRecords[selectedWeek][i]) {
-            $( "#text-record-day-ticket-count-" + i ).text(
-                    "В очереди " + weekRecords[selectedWeek][i] + " из " + roomData[ selectedRoom ][ "max_day_record" ]);
-            $( "#text-record-day-" + i ).removeClass( "suo-terminal-record-button-on-middle" );
+        elemDay.text(weekRecordCaption[selectedWeek][i]);
+
+        if (0 != weekRecords[selectedWeek][i] && (0 !== selectedWeek || i >= indexToday)) {
+            textCount = "В очереди " + weekRecords[selectedWeek][i] + " из " + roomData[ selectedRoom ][ "max_day_record" ];
+            elemDay.removeClass( "suo-terminal-record-button-on-middle" );
         } else {
-            $( "#text-record-day-ticket-count-" + i ).text( "" );
-            $( "#text-record-day-" + i ).addClass( "suo-terminal-record-button-on-middle" );
+            elemDay.addClass( "suo-terminal-record-button-on-middle" );
         }
+        $( "#text-record-day-ticket-count-" + i ).text( textCount );
 
+        if (0 === selectedWeek && i < indexToday) {
+            $( "#btn-record-day-" + i ).addClass( "suo-terminal-record-button-disabled" );
+        } else {
+            $( "#btn-record-day-" + i ).removeClass( "suo-terminal-record-button-disabled" );
+        }
     }
+
 }
 
 function showDialog( dialog, time_to_show ) {
