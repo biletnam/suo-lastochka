@@ -212,11 +212,17 @@ function onGetPage( json ) {
 
 
 function onTicketCreated( json ) {
-    $.each( json, function( element, data) {
-        $( "#suo-check-" + element ).html( data );
-    });
+    if ('' !== json.error) {
+        dlgGetACheck.dialog( "close" );
+        showDialog(dlgError, 5000);
+        console.log( "Error: " + json.error );
+    } else {
+        $.each( json, function( element, data) {
+            $( "#suo-check-" + element ).html( data );
+        });
 
-    printTicket();
+        printTicket();
+    }
 }
 
 function onTicketCount( json ) {
@@ -318,12 +324,16 @@ function onClickTime( time ) {
 // Обработка закрытий диалогов
 
 
-function onDlgSelectDayClose( ) {
+function onCloseDlgSelectDay( ) {
     initSelected();
 }
 
 
-function onDlgSelectTimeClose() {
+function onCloseDlgSelectTime() {
+    initSelected();
+}
+
+function onCloseDlgGetACheck() {
     initSelected();
 }
 

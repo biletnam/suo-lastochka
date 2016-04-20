@@ -38,7 +38,7 @@
             width: 650,
             modal: true,
             dialogClass: "no-close hidden-print",
-            close: function( event, ui ) { onDlgSelectDayClose(); }
+            close: function( event, ui ) { onCloseDlgSelectDay(); }
         });
 
         var weekRecordCaption = {!! $weeks !!};

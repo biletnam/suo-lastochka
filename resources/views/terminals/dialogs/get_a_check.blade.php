@@ -11,7 +11,8 @@
             height: 300,
             width: 350,
             modal: true,
-            dialogClass: "no-close hidden-print"
+            dialogClass: "no-close hidden-print",
+            close: function( event, ui ) { onCloseDlgGetACheck(); }
         });
 
 </script>

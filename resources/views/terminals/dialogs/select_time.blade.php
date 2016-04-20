@@ -15,7 +15,7 @@
             width: 850,
             modal: true,
             dialogClass: "no-close hidden-print",
-            close: function( event, ui ) { onDlgSelectTimeClose(); }
+            close: function( event, ui ) { onCloseDlgSelectTime(); }
         });
 
 </script>

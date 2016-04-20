@@ -66,10 +66,11 @@ class TicketRepository
     public function createTicket($room_id, $admission_time, $with_time)
     {
         $result = ['error' => ''];
+
         $room = Room::find($room_id);
 
         if (!$room) {
-            $result['error'] = 'no room';
+            $result['error'] = 'No room';
         } else {
             $date = $admission_time;
 
@@ -83,18 +84,20 @@ class TicketRepository
                 , 'status' => Ticket::NEWTICKET
             ]);
 
-            $ticket->save();
-
-            $result['number'] = $check->number;
-            $result['operator'] = '';
-            $result['room-number'] = '';
-            $result['room-description'] = $room->description;
-            $start = date('d.m.Y', strtotime($admission_time));
-            if ($with_time) {
-                $start = date('d.m.Y H:i', strtotime($admission_time));
+            if (true != $ticket->save()) {
+                $result['error'] = 'Not saved';
+            } else {
+                $result['number'] = $check->number;
+                $result['operator'] = '';
+                $result['room-number'] = '';
+                $result['room-description'] = $room->description;
+                $start = date('d.m.Y', strtotime($admission_time));
+                if ($with_time) {
+                    $start = date('d.m.Y H:i', strtotime($admission_time));
+                }
+                $result['start-date'] = $start;
+                $result['get-time'] = date('d.m.Y H:i:s');
             }
-            $result['start-date'] = $start;
-            $result['get-time'] = date('d.m.Y H:i:s');
         }
 
         return $result;

@@ -11,6 +11,8 @@
 
         @include('terminals.dialogs.select_time')
 
+        @include('terminals.dialogs.error')
+
         <div id="suo-page"></div>
     </div>
 
