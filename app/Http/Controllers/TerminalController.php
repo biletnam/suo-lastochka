@@ -122,15 +122,31 @@ class TerminalController extends Controller
     {
         $ticketRepo = new TicketRepository();
 
-        $admission_time = $request->date;
-        if ('today' == $admission_time) {
-            $admission_time = date('Y-m-d H:i:s');
-        } else {
-            $date = explode('.', $admission_time);
-            $admission_time = date('Y-m-d H:i:s', strtotime('2016-' . $date[1] . '-' . $date[0]));
+        $day = date('j');
+        $month = date('m');
+        $year = date('Y');
+        $hour = date('H');
+        $minute = date('i');
+        $second = date('s');
+
+        $with_time = false;
+
+        if ('today' != $request->date) {
+            $date = explode('.', $request->date);
+            $day = $date[0];
+            $month = $date[1];
+            if ('now' != $request->time) {
+                $time = explode(':', $request->time);
+                $hour = $time[0];
+                $minute = $time[1];
+
+                $with_time = true;
+            }
         }
 
-        $check_data = $ticketRepo->createTicket($request->room, $admission_time);
+        $admission_time = date('Y-m-d H:i:s', mktime($hour, $minute, $second, $month, $day, $year));
+
+        $check_data = $ticketRepo->createTicket($request->room, $admission_time, $with_time);
 
         return response()->json($check_data);
     }
@@ -184,9 +200,28 @@ class TerminalController extends Controller
     public function timedialog(Request $request)
     {
         return response()->json([
-            'data' => [],
+            'day' => $request->day,
             'dialog' => view('terminals.time', [
-                ])->render()
+                'times' => $this->getTimeCaption()
+            ])->render()
         ]);
+    }
+
+    private function getTimeCaption()
+    {
+        $result = [];
+
+        $date1 = strtotime("8 hour midnight");
+        $date2 = strtotime("17 hour midnight");
+        $add = 30 * 60; // полчаса
+
+        for ($date = $date1; $date < $date2; $date += $add) {
+            if (12 == date("H", $date)) {
+                continue;
+            }
+            $result[] = date("H:i", $date);
+        }
+
+        return $result;
     }
 }

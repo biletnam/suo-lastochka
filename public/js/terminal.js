@@ -3,6 +3,14 @@
  *
  */
 
+// Печать талона
+function printTicket() {
+    //setTimeout(print, 600);
+
+    initSelected();
+}
+
+
 // Переменные
 
 /**
@@ -13,11 +21,33 @@
 var rooms = [];
 
 /**
+ * Данные по кабинетам
+ * Индекс - ид кабинета, значения max_day_records - максимум для данного кабинета и другие
+ *
+ * @type Array
+ */
+var roomData = [];
+
+/**
  * Кабинет, в который собираемся записываться
  *
  * @type Number
  */
-var recordRoom = -1;
+var selectedRoom = -1;
+
+/**
+ * День, на который собираемся записаться
+ *
+ * @type String
+ */
+var selectedDay = '';
+
+/**
+ * Признак необходимости установки начальных значений для переменных selected...
+ *
+ * @type Boolean
+ */
+var needToInitSelected = true;
 
 /**
  * Неделя в диалоге записи
@@ -25,7 +55,7 @@ var recordRoom = -1;
  *
  * @type Number
  */
-var currentRecordWeek = 0;
+var selectedWeek = 0;
 
 /**
  * Количество заявок по каждому дню
@@ -34,14 +64,6 @@ var currentRecordWeek = 0;
  * @type Array
  */
 var weekRecords = [];
-
-/**
- * Данные по кабинетам
- * Индекс - ид кабинета, значения max_day_records - максимум для данного кабинета
- *
- * @type Array
- */
-var roomData = [];
 
 
 // Инициализация
@@ -89,13 +111,14 @@ function getPage( page ) {
     ;
 }
 
-function createTicket( room, date ) {
-    if (true != isLessThenMaxRecords( room )) {
+function createTicket( room, date, time ) {
+    if (true !== isLessThenMaxRecords( room )) {
         showDialog(dlgNoRecord, 5000);
         return;
     }
 
     date = date || "today";
+    time = time || "now";
 
     showDialog(dlgGetACheck, 5000);
 
@@ -104,6 +127,7 @@ function createTicket( room, date ) {
             terminal: terminal,
             room: room,
             date: date,
+            time: time,
         },
         function( json ) {
             onTicketCreated( json );
@@ -138,7 +162,7 @@ function getTicketCount() {
     ;
 }
 
-function getTicketCountToRecordDialog( room ) {
+function getTicketCountToSelectDayDialog( room ) {
     $.get("/terminal/ticketcountbyday",
         {
             room: room,
@@ -146,7 +170,7 @@ function getTicketCountToRecordDialog( room ) {
             date2: weekRecordCaption[1][4],
         },
         function( json ) {
-            onTicketCountToRecordDialog( json );
+            onTicketCountToSelectDayDialog( json );
         }),
         "json"
     .fail(function( xhr, status, errorThrown ) {
@@ -188,11 +212,11 @@ function onGetPage( json ) {
 
 
 function onTicketCreated( json ) {
-    $.each( json, function( key, data) {
-        $( "#suo-check-" + data ).html( data );
+    $.each( json, function( element, data) {
+        $( "#suo-check-" + element ).html( data );
     });
-    
-    //setTimeout(print, 600);
+
+    printTicket();
 }
 
 function onTicketCount( json ) {
@@ -206,13 +230,14 @@ function onTicketCount( json ) {
     }, 5000);
 }
 
-function onTicketCountToRecordDialog( json ) {
+function onTicketCountToSelectDayDialog( json ) {
     weekRecords = json[ "weeks" ];
-    changeButtonsCaptionOnRecordDialog( );
+    changeButtonsCaptionOnSelectDayDialog( );
 }
 
 function onGetTimeDialog( json ) {
     $( "#suo-dlg-select-time-container" ).html( json.dialog );
+    $( "#suo-dlg-select-time-day" ).html( json.day );
 
     showDialog(dlgSelectTime, 15000);
 }
@@ -250,11 +275,11 @@ function onClickNextPage( page ) {
  * @returns {undefined}
  */
 function onClickNextWeek() {
-    currentRecordWeek++;
-    if (currentRecordWeek > 1) {
-        currentRecordWeek = 0;
+    selectedWeek++;
+    if (selectedWeek > 1) {
+        selectedWeek = 0;
     }
-    changeButtonsCaptionOnRecordDialog( );
+    changeButtonsCaptionOnSelectDayDialog( );
 }
 
 /**
@@ -264,12 +289,14 @@ function onClickNextWeek() {
  * @returns {undefined}
  */
 function onClickDay( dayIndex ) {
-    var room = recordRoom;
-    var day = weekRecordCaption[currentRecordWeek][dayIndex];
+    needToInitSelected = false;
     dlgSelectDay.dialog( "close" );
+    var room = selectedRoom;
+    var day = weekRecordCaption[selectedWeek][dayIndex];
     if ("1" !== roomData[ room ][ "can_record_by_time" ]) {
         createTicket( room, day );
     } else {
+        selectedDay = day;
         getTimeDialog( room, day );
     }
 }
@@ -281,7 +308,10 @@ function onClickDay( dayIndex ) {
  * @returns {undefined}
  */
 function onClickTime( time ) {
-    alert( "onClickTime" + time );
+    needToInitSelected = false;
+    dlgSelectTime.dialog( "close" );
+
+    createTicket( selectedRoom, selectedDay, time );
 }
 
 
@@ -289,13 +319,12 @@ function onClickTime( time ) {
 
 
 function onDlgSelectDayClose( ) {
-    recordRoom = -1;
-    currentRecordWeek = 0;
+    initSelected();
 }
 
 
 function onDlgSelectTimeClose() {
-    alert( "onDlgSelectTimeClose" );
+    initSelected();
 }
 
 
@@ -316,19 +345,19 @@ function isLessThenMaxRecords( room ) {
 }
 
 function recordTicket( room ) {
-    recordRoom = room;
+    selectedRoom = room;
     showDialog(dlgSelectDay, 15000);
 
-    getTicketCountToRecordDialog( room );
+    getTicketCountToSelectDayDialog( room );
 }
 
-function changeButtonsCaptionOnRecordDialog( ) {
+function changeButtonsCaptionOnSelectDayDialog( ) {
     for (var i = 0; i < 5; i++) {
-        $( "#text-record-day-" + i ).text(weekRecordCaption[currentRecordWeek][i]);
+        $( "#text-record-day-" + i ).text(weekRecordCaption[selectedWeek][i]);
 
-        if ("0" !== weekRecords[currentRecordWeek][i]) {
+        if ("0" !== weekRecords[selectedWeek][i]) {
             $( "#text-record-day-ticket-count-" + i ).text(
-                    "В очереди " + weekRecords[currentRecordWeek][i] + " из " + roomData[ recordRoom ][ "max_day_record" ]);
+                    "В очереди " + weekRecords[selectedWeek][i] + " из " + roomData[ selectedRoom ][ "max_day_record" ]);
             $( "#text-record-day-" + i ).removeClass( "suo-terminal-record-button-on-middle" );
         } else {
             $( "#text-record-day-ticket-count-" + i ).text( "" );
@@ -343,4 +372,14 @@ function showDialog( dialog, time_to_show ) {
     setTimeout(function() {
         dialog.dialog( "close" );
     }, time_to_show);
+}
+
+function initSelected() {
+    if (false !== needToInitSelected) {
+        selectedRoom = -1;
+        selectedDay = '';
+        selectedWeek = 0;
+    }
+
+    needToInitSelected = true;
 }
