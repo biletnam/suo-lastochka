@@ -205,15 +205,23 @@ class TerminalController extends Controller
 
     public function timedialog(Request $request)
     {
+        $room_repo = new RoomRepository();
+        $room = $request->room;
+        $date = $request->day . '.2016';
+
+        $busyTimes = $room_repo->getTicketsByDateToTimeDialog($room, $date);
+
+        $times = $this->getTimeCaption($busyTimes);
+
         return response()->json([
             'day' => $request->day,
             'dialog' => view('terminals.time', [
-                'times' => $this->getTimeCaption()
+                'times' => $times,
             ])->render()
         ]);
     }
 
-    private function getTimeCaption()
+    private function getTimeCaption($busyTimes)
     {
         $result = [];
 
@@ -225,9 +233,17 @@ class TerminalController extends Controller
             if (12 == date("H", $date)) {
                 continue;
             }
-            $result[] = date("H:i", $date);
+            $time = date("H:i", $date);
+            $disabled = 'false';
+            if (isset($busyTimes[$time])) {
+                $disabled = 'true';
+            }
+
+            $result[] =  ['caption' => $time, 'disabled' => $disabled];
         }
 
         return $result;
     }
+
+
 }

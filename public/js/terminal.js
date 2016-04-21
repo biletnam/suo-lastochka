@@ -180,7 +180,7 @@ function onTicketCreated( json ) {
 function onTicketCount( json ) {
     $.each( json, function( key, data) {
         $( "#suo-tickets-count-" + data[ "room"] ).text( data[ "ticket_count" ] );
-        roomData[ data.room ][ "ticket_count" ] = data[ "ticket_count" ];
+        roomData[ data[ "room"] ][ "ticket_count" ] = data[ "ticket_count" ];
     });
 
     setTimeout(function() {
@@ -268,11 +268,12 @@ function onClickDay( dayIndex ) {
  * @param {integer} time
  * @returns {undefined}
  */
-function onClickTime( time ) {
-    needToInitSelected = false;
-    dlgSelectTime.dialog( "close" );
-
-    createTicket( selectedRoom, selectedDay, time );
+function onClickTime( time, disabled ) {
+    if (true != disabled) {
+        needToInitSelected = false;
+        dlgSelectTime.dialog( "close" );
+        createTicket( selectedRoom, selectedDay, time );
+    }
 }
 
 

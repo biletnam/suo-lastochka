@@ -47,7 +47,6 @@ class RoomRepository
         return $tickets;
     }
 
-
     public function countTicketsByRoomAndDate($room_id, $date1, $date2)
     {
         $tickets = DB::table('tickets')
@@ -62,4 +61,16 @@ class RoomRepository
         return $tickets;
     }
 
+    public function getTicketsByDateToTimeDialog($room_id, $date)
+    {
+        $date = strtotime($date);
+        $times = DB::table('tickets')
+            ->select(DB::raw("DATE_FORMAT(admission_date, '%H:%i') as a_time"))
+            ->whereBetween('admission_date', [date('Y-m-d 00:00:00', $date), date('Y-m-d 23:59:59', $date)])
+            ->where('room_id', $room_id)
+            ->get();
+
+        $collection = collect($times);
+        return $collection->pluck('a_time')->flip();
+    }
 }
