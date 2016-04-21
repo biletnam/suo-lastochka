@@ -11,7 +11,8 @@ class Room extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'description', 'ip', 'max_day_record', 'can_record', 'can_record_by_time'];
+    protected $fillable = ['name', 'description', 'ip', 'max_day_record', 'can_record', 'can_record_by_time',
+        'timetemplate_id', ];
 
     public function terminals()
     {
@@ -28,4 +29,8 @@ class Room extends Model
         return $this->belongsToMany('suo\Panel');
     }
 
+    public function timetemplate()
+    {
+        return $this->belongsTo('suo\Timetemplate');
+    }
 }

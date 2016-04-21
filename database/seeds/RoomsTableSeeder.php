@@ -33,6 +33,7 @@ class RoomsTableSeeder extends Seeder
             'max_day_record' => 10,
             'can_record' => 1,
             'can_record_by_time' => 1,
+            'timetemplate_id' => 1,
         ]);
 
         factory(suo\Room::class, 50)->create();

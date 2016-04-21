@@ -12,6 +12,7 @@ return [
         'max_day_record',
         'can_record',
         'can_record_by_time',
+        'timetemplate',
         'num_terminals' => [
             'title' => '# Terminals',
             'relationship' => 'terminals', //this is the name of the Eloquent relationship method!
@@ -54,6 +55,11 @@ return [
         'can_record_by_time' => [
             'title' => 'can_record_by_time',
             'type' => 'text',
+        ],
+        'timetemplate' => [
+            'type' => 'relationship',
+            'title' => 'Timetemplate',
+            'name_field' => 'description',
         ],
         'terminals' => [
             'title' => 'Terminals',

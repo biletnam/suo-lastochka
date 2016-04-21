@@ -207,22 +207,27 @@ class TerminalController extends Controller
     public function timedialog(Request $request)
     {
         $room_repo = new RoomRepository();
-        $room = $request->room;
+        $room_id = $request->room;
         $date = $request->day . '.2016';
 
-        $busyTimes = $room_repo->getTicketsByDateToTimeDialog($room, $date);
+        $busyTimes = $room_repo->getTicketsByDateToTimeDialog($room_id, $date);
 
-        $times = $this->getTimeCaption($busyTimes);
+        $room = Room::find($room_id);
+        
+        $timetemplate = $room->timetemplate->name;
+
+        $times = $this->{"getTimeCaption_" . $timetemplate}($busyTimes);
 
         return response()->json([
             'day' => $request->day,
             'dialog' => view('terminals.time', [
+                'type' => $timetemplate,
                 'times' => $times,
             ])->render()
         ]);
     }
 
-    private function getTimeCaption($busyTimes)
+    private function getTimeCaption_8_17_half_hour($busyTimes)
     {
         $result = [];
 
@@ -246,5 +251,28 @@ class TerminalController extends Controller
         return $result;
     }
 
+    private function getTimeCaption_8_17_third_hour($busyTimes)
+    {
+        $result = [];
+
+        $date1 = strtotime("8 hour midnight");
+        $date2 = strtotime("17 hour midnight");
+        $add = 20 * 60; // треть часа
+
+        for ($date = $date1; $date < $date2; $date += $add) {
+            if (12 == date("H", $date)) {
+                continue;
+            }
+            $time = date("H:i", $date);
+            $disabled = 'false';
+            if (isset($busyTimes[$time])) {
+                $disabled = 'true';
+            }
+
+            $result[] =  ['caption' => $time, 'disabled' => $disabled];
+        }
+
+        return $result;
+    }
 
 }
