@@ -113,6 +113,7 @@ class TerminalController extends Controller
             $roomData[$room->id]['max_day_record'] = $room->max_day_record;
             $roomData[$room->id]['can_record'] = $room->can_record;
             $roomData[$room->id]['can_record_by_time'] = $room->can_record_by_time;
+            $roomData[$room->id]['description'] = $room->description;
         }
 
         return response()->json([

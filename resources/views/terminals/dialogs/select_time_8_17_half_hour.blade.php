@@ -1,8 +1,8 @@
 
                 @php($index = 0)
                 @for ($row = 0; $row < 4; $row++)
+                <div class="row"><div class="col-md-12">&nbsp;</div></div>
                 <div class="row">
-                    <div class="row"><div class="col-md-12">&nbsp;</div></div>
                     @for ($col = 0; $col < 4; $col++)
                     @php($time = $times[$index]['caption'])
                     @php($disabled = $times[$index]['disabled'])

@@ -191,11 +191,14 @@ function onTicketCount( json ) {
 function onTicketCountToSelectDayDialog( json ) {
     weekRecords = json[ "weeks" ];
     changeButtonsCaptionOnSelectDayDialog( );
+
+    showDialog(dlgSelectDay, 15000);
 }
 
 function onGetTimeDialog( json ) {
     $( "#suo-dlg-select-time-container" ).html( json[ "dialog" ] );
     $( "#suo-dlg-select-time-day" ).html( json[ "day" ] );
+    $( "#suo-dlg-select-time-room" ).html( roomData[ selectedRoom ][ "description" ] );
 
     showDialog(dlgSelectTime, 15000);
 }
@@ -276,6 +279,14 @@ function onClickTime( time, disabled ) {
     }
 }
 
+function onClickSelectDayClose( ) {
+    dlgSelectDay.dialog( "close" );
+}
+
+function onClickSelectTimeClose( ) {
+    dlgSelectTime.dialog( "close" );
+}
+
 
 // Обработка закрытий диалогов
 
@@ -312,37 +323,39 @@ function isLessThenMaxRecords( room ) {
 
 function recordTicket( room ) {
     selectedRoom = room;
-    showDialog(dlgSelectDay, 15000);
+    $( "#suo-dlg-select-day-room" ).html( roomData[ selectedRoom ][ "description" ] );
 
     getTicketCountToSelectDayDialog( room );
 }
 
 function changeButtonsCaptionOnSelectDayDialog( ) {
-    var elemText,
-        elemButton,
-        currentRecords = 0,
+    var currentRecords = 0,
         maxDayRecord = +roomData[ selectedRoom ][ "max_day_record" ],
         textCount = "",
         captions = weekRecordCaption[ selectedWeek ],
         records = weekRecords[ selectedWeek ];
+
     for (var i = 0; i < 5; i++) {
-        elemText = $( "#text-record-day-" + i );
-        elemButton = $( "#btn-record-day-" + i );
         textCount = "";
         currentRecords = +records[ i ];
 
-        elemText.text( captions[ i ] );
+        $( "#text-record-day-" + i ).text( captions[ i ] );
 
         // отключаем кнопку, если дата меньше сегодняшней или уже записался максимум
         if ((0 == selectedWeek && i < indexToday) || (currentRecords >= maxDayRecord)) {
-            elemText.addClass( "suo-terminal-record-button-on-middle" );
-            elemButton.addClass( "suo-terminal-record-button-disabled" );
-        } else {
-            elemButton.removeClass( "suo-terminal-record-button-disabled" );
-            if (0 == currentRecords) {
-                elemText.addClass( "suo-terminal-record-button-on-middle" );
+            $( "#btn-record-day-" + i ).addClass( "suo-terminal-record-button-disabled" );
+            if (currentRecords < maxDayRecord) {
+                $( "#text-record-day-" + i ).addClass( "suo-terminal-record-button-on-middle" );
             } else {
-                elemText.removeClass( "suo-terminal-record-button-on-middle" );
+                $( "#text-record-day-" + i ).removeClass( "suo-terminal-record-button-on-middle" );
+                textCount = "В очереди " + currentRecords + " из " + maxDayRecord;
+            }
+        } else {
+            $( "#btn-record-day-" + i ).removeClass( "suo-terminal-record-button-disabled" );
+            if (0 == currentRecords) {
+                $( "#text-record-day-" + i ).addClass( "suo-terminal-record-button-on-middle" );
+            } else {
+                $( "#text-record-day-" + i ).removeClass( "suo-terminal-record-button-on-middle" );
                 textCount = "В очереди " + currentRecords + " из " + maxDayRecord;
             }
         }

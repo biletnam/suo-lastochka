@@ -1,7 +1,7 @@
 
         <div id="suo-dlg-select-day" class="hidden-print">
             <h1 class="center-block text-center">Выберите день записи</h1>
-            <div class="row"><div class="col-md-12">&nbsp;</div></div>
+            <h3 class="center-block text-center">Кабинет <span id="suo-dlg-select-day-room"></span></h3>
             <div class="row"><div class="col-md-12">&nbsp;</div></div>
             <div class="container-fluid center-block text-center">
                 <div class="row">
@@ -20,10 +20,14 @@
                 <div class="row"><div class="col-md-12">&nbsp;</div></div>
                 <div class="row"><div class="col-md-12">&nbsp;</div></div>
                 <div class="row">
-                    <div class="col-md-3"></div>
                     <div class="col-md-6">
                         <div id="btn-record-day-next" class="suo-terminal-record-button" onclick="onClickNextWeek( ); return false;">
                             <p class="suo-terminal-record-button-on-middle">Другие дни</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="btn-record-day-next" class="suo-terminal-record-button" onclick="onClickSelectDayClose( ); return false;">
+                            <p class="suo-terminal-record-button-on-middle">Закрыть</p>
                         </div>
                     </div>
                 </div>
