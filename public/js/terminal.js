@@ -95,20 +95,7 @@ function dailyReload() {
 
 
 function getPage( page ) {
-    $.get("/terminal/" + terminal + "/page",
-        { 
-            page: page
-        },
-        function( json ) {
-            onGetPage( json );
-        }),
-        "json"
-    .fail(function( xhr, status, errorThrown ) {
-        console.log( "Error: " + errorThrown );
-        console.log( "Status: " + status );
-        console.dir( xhr );
-    })
-    ;
+    getDataFromServer("/terminal/" + terminal + "/page", { page: page }, onGetPage );
 }
 
 function createTicket( room, date, time ) {
@@ -146,59 +133,24 @@ function createTicket( room, date, time ) {
 }
 
 function getTicketCount() {
-    $.get("/terminal/ticketcount",
-        {
-            rooms: rooms,
-        },
-        function( counts ) {
-            onTicketCount( counts );
-        }),
-        "json"
-    .fail(function( xhr, status, errorThrown ) {
-        console.log( "Error: " + errorThrown );
-        console.log( "Status: " + status );
-        console.dir( xhr );
-    })
-    ;
+    getDataFromServer("/terminal/ticketcount", { rooms: rooms }, onTicketCount );
 }
 
 function getTicketCountToSelectDayDialog( room ) {
-    $.get("/terminal/ticketcountbyday",
-        {
-            room: room,
-            date1: weekRecordCaption[0][0],
-            date2: weekRecordCaption[1][4],
-        },
-        function( json ) {
-            onTicketCountToSelectDayDialog( json );
-        }),
-        "json"
-    .fail(function( xhr, status, errorThrown ) {
-        console.log( "Error: " + errorThrown );
-        console.log( "Status: " + status );
-        console.dir( xhr );
-    })
-    ;
-
+    getDataFromServer("/terminal/ticketcountbyday", {
+        room: room,
+        date1: weekRecordCaption[0][0],
+        date2: weekRecordCaption[1][4],
+    },
+    onTicketCountToSelectDayDialog );
 }
 
 function getTimeDialog( room, day ) {
-    $.get("/terminal/timedialog",
-        {
-            room: room,
-            day: day,
-        },
-        function( json ) {
-            onGetTimeDialog( json );
-        }),
-        "json"
-    .fail(function( xhr, status, errorThrown ) {
-        console.log( "Error: " + errorThrown );
-        console.log( "Status: " + status );
-        console.dir( xhr );
-    })
-    ;
-
+    getDataFromServer("/terminal/timedialog", {
+        room: room,
+        day: day,
+    },
+    onGetTimeDialog );
 }
 
 // Обработка ответов сервера
@@ -365,26 +317,36 @@ function recordTicket( room ) {
 }
 
 function changeButtonsCaptionOnSelectDayDialog( ) {
-    var elemDay, textCount;
+    var elemText,
+        elemButton,
+        currentRecords = 0,
+        maxDayRecord = +roomData[ selectedRoom ][ "max_day_record" ],
+        textCount = "",
+        captions = weekRecordCaption[ selectedWeek ],
+        records = weekRecords[ selectedWeek ];
     for (var i = 0; i < 5; i++) {
-        elemDay = $( "#text-record-day-" + i );
+        elemText = $( "#text-record-day-" + i );
+        elemButton = $( "#btn-record-day-" + i );
         textCount = "";
+        currentRecords = +records[ i ];
 
-        elemDay.text(weekRecordCaption[selectedWeek][i]);
+        elemText.text( captions[ i ] );
 
-        if (0 != weekRecords[selectedWeek][i] && (0 !== selectedWeek || i >= indexToday)) {
-            textCount = "В очереди " + weekRecords[selectedWeek][i] + " из " + roomData[ selectedRoom ][ "max_day_record" ];
-            elemDay.removeClass( "suo-terminal-record-button-on-middle" );
+        // отключаем кнопку, если дата меньше сегодняшней или уже записался максимум
+        if ((0 == selectedWeek && i < indexToday) || (currentRecords >= maxDayRecord)) {
+            elemText.addClass( "suo-terminal-record-button-on-middle" );
+            elemButton.addClass( "suo-terminal-record-button-disabled" );
         } else {
-            elemDay.addClass( "suo-terminal-record-button-on-middle" );
+            elemButton.removeClass( "suo-terminal-record-button-disabled" );
+            if (0 == currentRecords) {
+                elemText.addClass( "suo-terminal-record-button-on-middle" );
+            } else {
+                elemText.removeClass( "suo-terminal-record-button-on-middle" );
+                textCount = "В очереди " + currentRecords + " из " + maxDayRecord;
+            }
         }
+
         $( "#text-record-day-ticket-count-" + i ).text( textCount );
-
-        if (0 === selectedWeek && i < indexToday) {
-            $( "#btn-record-day-" + i ).addClass( "suo-terminal-record-button-disabled" );
-        } else {
-            $( "#btn-record-day-" + i ).removeClass( "suo-terminal-record-button-disabled" );
-        }
     }
 
 }
@@ -404,4 +366,14 @@ function initSelected() {
     }
 
     needToInitSelected = true;
+}
+
+function getDataFromServer(url, data, success) {
+    $.get(url, data, success)
+        .fail(function( xhr, status, errorThrown ) {
+            console.log( "Error: " + errorThrown );
+            console.log( "Status: " + status );
+            console.dir( xhr );
+        })
+    ;
 }
