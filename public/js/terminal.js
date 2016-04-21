@@ -250,7 +250,10 @@ function onClickNextWeek() {
  * @returns {undefined}
  */
 function onClickDay( dayIndex ) {
-    if (0 === selectedWeek && dayIndex < indexToday) {
+    if (
+            (0 == selectedWeek && dayIndex < indexToday)
+        || (+weekRecords[ selectedWeek ][ dayIndex ] >= +roomData[ selectedRoom ][ "max_day_record" ])
+        ) {
         return;
     }
     needToInitSelected = false;
