@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use suo\Http\Requests;
 
 use suo\Repositories\RoomRepository;
+use suo\Repositories\TicketRepository;
 use suo\Timetemplate;
 
 class ReceptionController extends Controller
@@ -47,7 +48,31 @@ class ReceptionController extends Controller
             'rooms' => $rooms,
             'roomData' => json_encode($roomData),
             'weeks' => $weeks,
-            'tickets' => $ticketByRoomsAndDays
+            'tickets' => $ticketByRoomsAndDays,
+            'tickets_json' => json_encode($ticketByRoomsAndDays),
         ]);
+    }
+
+    public function createticket(Request $request)
+    {
+        $ticketRepo = new TicketRepository();
+
+        $with_time = false;
+
+        if ('today' == $request->date) {
+            $admission_time = date('Y-m-d H:i:s');
+        } else {
+            $admission_time = $request->date;
+            if ('now' == $request->time) {
+                $admission_time .= date(' H:i:s');
+            } else {
+                $admission_time .= ' ' . $request->time;
+                $with_time = true;
+            }
+        }
+
+        $check_data = $ticketRepo->createTicket($request->room, $admission_time, $with_time);
+
+        return response()->json($check_data);
     }
 }

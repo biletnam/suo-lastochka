@@ -41,7 +41,11 @@
 @push('scripts')
     @stack('dialogs')
     <script>
-        var roomData = {!! $roomData !!};
+        var roomData = {!! $roomData !!},
+            tickets = {!! $tickets_json !!};
 
+        $(function() {
+            init();
+        });
     </script>
 @endpush
