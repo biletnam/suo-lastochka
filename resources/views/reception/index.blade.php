@@ -2,6 +2,8 @@
 
 @section('content')
 
+    @include('reception.dialogs.check')
+
     <div class="container">
         <h1>Запись клиентов</h1>
         <table class="table suo-reception-table">
@@ -42,7 +44,8 @@
     @stack('dialogs')
     <script>
         var roomData = {!! $roomData !!},
-            tickets = {!! $tickets_json !!};
+            tickets = {!! $tickets_json !!},
+            rooms = {!! $rooms_json !!};
 
         $(function() {
             init();

@@ -1,3 +1,7 @@
+.no-close .ui-dialog-titlebar {
+  display: none;
+}
+
 .suo-reception-table > tbody > tr > td {
     vertical-align: middle;
     text-align: center;
@@ -18,4 +22,13 @@
 .suo-reception-button-disabled {
     background: linear-gradient(to top,  #ffd2c0,  #ffd2c0);
     color: gray;
+}
+
+.suo-dialog-button-close {
+    height: 3em;
+    width: 9em;
+    background: linear-gradient(to top,  #ffd2c0,  #fd773e);
+    border:0 solid;
+    border-radius: 0.3em;
+    font-weight: bold;
 }
