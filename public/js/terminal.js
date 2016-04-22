@@ -55,7 +55,7 @@ var needToInitSelected = true;
  *
  * @type Number
  */
-var selectedWeek = 0;
+var selectedWeek = "current";
 
 /**
  * Количество заявок по каждому дню
@@ -139,8 +139,8 @@ function getTicketCount() {
 function getTicketCountToSelectDayDialog( room ) {
     getDataFromServer("/terminal/ticketcountbyday", {
         room: room,
-        date1: weekRecordCaption[0][0],
-        date2: weekRecordCaption[1][4],
+        date1: weekRecordCaption[ "current" ][ 0 ][ "long" ],
+        date2: weekRecordCaption[ "next" ][ 4 ][ "long" ],
     },
     onTicketCountToSelectDayDialog );
 }
@@ -236,9 +236,10 @@ function onClickNextPage( page ) {
  * @returns {undefined}
  */
 function onClickNextWeek() {
-    selectedWeek++;
-    if (selectedWeek > 1) {
-        selectedWeek = 0;
+    if ("current" == selectedWeek) {
+        selectedWeek = "next";
+    } else {
+        selectedWeek = "current";
     }
     changeButtonsCaptionOnSelectDayDialog( );
 }
@@ -251,7 +252,7 @@ function onClickNextWeek() {
  */
 function onClickDay( dayIndex ) {
     if (
-            (0 == selectedWeek && dayIndex < indexToday)
+            ("current" == selectedWeek && dayIndex < indexToday)
         || (+weekRecords[ selectedWeek ][ dayIndex ] >= +roomData[ selectedRoom ][ "max_day_record" ])
         ) {
         return;
@@ -259,7 +260,7 @@ function onClickDay( dayIndex ) {
     needToInitSelected = false;
     dlgSelectDay.dialog( "close" );
     var room = selectedRoom;
-    var day = weekRecordCaption[selectedWeek][dayIndex];
+    var day = weekRecordCaption[ selectedWeek ][ dayIndex ][ "long" ];
     if ("1" !== roomData[ room ][ "can_record_by_time" ]) {
         createTicket( room, day );
     } else {
@@ -342,10 +343,10 @@ function changeButtonsCaptionOnSelectDayDialog( ) {
         textCount = "";
         currentRecords = +records[ i ];
 
-        $( "#text-record-day-" + i ).text( captions[ i ] );
+        $( "#text-record-day-" + i ).text( captions[ i ][ "short" ] );
 
         // отключаем кнопку, если дата меньше сегодняшней или уже записался максимум
-        if ((0 == selectedWeek && i < indexToday) || (currentRecords >= maxDayRecord)) {
+        if (("current" == selectedWeek && i < indexToday) || (currentRecords >= maxDayRecord)) {
             $( "#btn-record-day-" + i ).addClass( "suo-terminal-record-button-disabled" );
             if (currentRecords < maxDayRecord) {
                 $( "#text-record-day-" + i ).addClass( "suo-terminal-record-button-on-middle" );
@@ -379,7 +380,7 @@ function initSelected() {
     if (false !== needToInitSelected) {
         selectedRoom = -1;
         selectedDay = '';
-        selectedWeek = 0;
+        selectedWeek = "current";
     }
 
     needToInitSelected = true;

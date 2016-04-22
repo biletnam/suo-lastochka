@@ -18,6 +18,27 @@ class Timetemplate extends Model
         return $this->belongsTo('suo\Room');
     }
 
+    public static function getDaysTo2Weeks()
+    {
+        $weeks = ['current' => [], 'next' => []];
+
+        $monday = strtotime('Monday this week');
+        for ($i = 0; $i < 5; $i++) {
+            $weeks['current'][] = self::formatDate(strtotime("+$i day", $monday));
+            $weeks['next'][] = self::formatDate(strtotime("+" . ($i + 7) . " day", $monday));
+        }
+
+        return $weeks;
+    }
+
+    private static function formatDate($date)
+    {
+        return [
+            'short' => date('d.m', $date),
+            'long' => date('Y-m-d', $date),
+        ];
+    }
+
     public function getTimeCaption($busyTimes)
     {
         $method = 'getTimeCaption_' . $this->name;

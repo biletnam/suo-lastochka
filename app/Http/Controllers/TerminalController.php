@@ -9,6 +9,7 @@ use suo\Http\Requests;
 
 use suo\Terminal;
 use suo\Room;
+use suo\Timetemplate;
 use suo\Repositories\TicketRepository;
 use suo\Repositories\RoomRepository;
 
@@ -61,13 +62,7 @@ class TerminalController extends Controller
             return redirect("/terminals");
         }
 
-        $monday = strtotime('Monday this week');
-        $week0 = [];
-        $week1 = [];
-        for ($i = 0; $i < 5; $i++) {
-            $week0[] = date('d.m', strtotime("+$i day", $monday));
-            $week1[] = date('d.m', strtotime("+" . ($i + 7) . " day", $monday));
-        }
+        $weeks = Timetemplate::getDaysTo2Weeks();
 
         /**
          * Индекс дня. Все дни перед ним должны быть выключены
@@ -76,9 +71,8 @@ class TerminalController extends Controller
 
         return view('terminals.show', [
             'terminal' => $terminal,
-            'week0' => $week0,
-            'week1' => $week1,
-            'weeks' => json_encode([$week0, $week1]),
+            'weeks' => $weeks,
+            'weeks_json' => json_encode($weeks),
             'indexToday' => $indexToday,
         ]);
     }
@@ -164,7 +158,7 @@ class TerminalController extends Controller
 
         $rooms = $request->rooms;
 
-        $result = $room_repo->countTicketsByRooms($rooms);
+        $result = $room_repo->countTicketsByRoomsForToday($rooms);
 
         return response()->json($result);
     }
@@ -173,35 +167,26 @@ class TerminalController extends Controller
     {
         $room_repo = new RoomRepository();
 
-        $date1 = date('Y-m-d', strtotime($request->date1 . '.' . date('Y')));
-        $date2 = date('Y-m-d', strtotime($request->date2 . '.' . date('Y')));
-
         $room = $request->room;
 
-        $counts = $room_repo->countTicketsByRoomAndDate($room, $date1, $date2);
+        $counts = $room_repo->countTicketsByRoomAndDate($room, $request->date1, $request->date2);
 
         $monday = strtotime('Monday this week');
         $dates = [];
         foreach ($counts as $data) {
-            $dates[date('d.m', strtotime($data->a_date))] = $data->ticket_count;
-        }
-        for ($i = 0; $i < 5; $i++) {
-            $date0 = date('d.m', strtotime("+$i day", $monday));
-            $count0 = 0;
-            if (isset($dates[$date0])) {
-                $count0 = $dates[$date0];
-            }
-            $week0[] = $count0;
-
-            $date1 = date('d.m', strtotime("+" . ($i + 7) . " day", $monday));
-            $count1 = 0;
-            if (isset($dates[$date1])) {
-                $count1 = $dates[$date1];
-            }
-            $week1[] = $count1;
+            $dates[$data->a_date] = $data->ticket_count;
         }
 
-        return response()->json(['weeks' => [$week0, $week1]]);
+        $weeks = Timetemplate::getDaysTo2Weeks();
+        $countByDate = ['current' => [], 'next' => []];
+        foreach ($weeks['current'] as $index => $data) {
+            $current = $data['short'];
+            $countByDate['current'][$index] = (!isset($dates[$current])) ? 0 : $dates[$current];
+            $next = $weeks['next'][$index]['short'];
+            $countByDate['next'][$index] = (!isset($dates[$next])) ? 0 : $dates[$next];
+        }
+
+        return response()->json(['weeks' => $countByDate]);
     }
 
     public function timedialog(Request $request)

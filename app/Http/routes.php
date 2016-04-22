@@ -36,6 +36,8 @@ Route::group(['middleware' => ['web', 'auth', 'localonly']], function () {
     Route::post('/operator/call', 'OperatorController@call');
     Route::post('/operator/accept', 'OperatorController@accept');
     Route::post('/operator/close', 'OperatorController@close');
+
+    Route::get('/reception', 'ReceptionController@index');
 });
 
 Route::group(['middleware' => ['web', 'localonly']], function () {

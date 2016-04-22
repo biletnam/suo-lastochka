@@ -2,8 +2,8 @@
         <div id="suo-dlg-select-day" class="hidden-print">
             <h1 class="center-block text-center">Выберите день записи</h1>
             <h3 class="center-block text-center">Кабинет <span id="suo-dlg-select-day-room"></span></h3>
-            <div class="row"><div class="col-md-12">&nbsp;</div></div>
             <div class="container-fluid center-block text-center">
+                <div class="row"><div class="col-md-12">&nbsp;</div></div>
                 <div class="row">
                     @for ($i = 0; $i < 3; $i++)
                         @include('terminals.dialogs.select_day_button')
@@ -45,7 +45,7 @@
             close: function( event, ui ) { onCloseDlgSelectDay(); }
         });
 
-        var weekRecordCaption = {!! $weeks !!};
+        var weekRecordCaption = {!! $weeks_json !!};
         var indexToday = {{ $indexToday }};
 </script>
 @endpush
