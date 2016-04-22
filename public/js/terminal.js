@@ -251,10 +251,7 @@ function onClickNextWeek() {
  * @returns {undefined}
  */
 function onClickDay( dayIndex ) {
-    if (
-            ("current" == selectedWeek && dayIndex < indexToday)
-        || (+weekRecords[ selectedWeek ][ dayIndex ] >= +roomData[ selectedRoom ][ "max_day_record" ])
-        ) {
+    if (+weekRecords[ selectedWeek ][ dayIndex ] >= +roomData[ selectedRoom ][ "max_day_record" ]) {
         return;
     }
     needToInitSelected = false;
@@ -346,14 +343,10 @@ function changeButtonsCaptionOnSelectDayDialog( ) {
         $( "#text-record-day-" + i ).text( captions[ i ][ "short" ] );
 
         // отключаем кнопку, если дата меньше сегодняшней или уже записался максимум
-        if (("current" == selectedWeek && i < indexToday) || (currentRecords >= maxDayRecord)) {
+        if (currentRecords >= maxDayRecord) {
             $( "#btn-record-day-" + i ).addClass( "suo-terminal-record-button-disabled" );
-            if (currentRecords < maxDayRecord) {
-                $( "#text-record-day-" + i ).addClass( "suo-terminal-record-button-on-middle" );
-            } else {
-                $( "#text-record-day-" + i ).removeClass( "suo-terminal-record-button-on-middle" );
-                textCount = "В очереди " + currentRecords + " из " + maxDayRecord;
-            }
+            $( "#text-record-day-" + i ).removeClass( "suo-terminal-record-button-on-middle" );
+            textCount = "В очереди " + currentRecords + " из " + maxDayRecord;
         } else {
             $( "#btn-record-day-" + i ).removeClass( "suo-terminal-record-button-disabled" );
             if (0 == currentRecords) {

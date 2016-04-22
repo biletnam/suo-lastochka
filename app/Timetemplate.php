@@ -22,10 +22,17 @@ class Timetemplate extends Model
     {
         $weeks = ['current' => [], 'next' => []];
 
-        $monday = strtotime('Monday this week');
+        $today = strtotime('today');
+        $add = 0;
+        $freeDay = [0, 6];
         for ($i = 0; $i < 5; $i++) {
-            $weeks['current'][] = self::formatDate(strtotime("+$i day", $monday));
-            $weeks['next'][] = self::formatDate(strtotime("+" . ($i + 7) . " day", $monday));
+            $current = strtotime(($i + $add) . " day", $today);
+            while (in_array(date('w', $current), $freeDay)) {
+                $add++;
+                $current = strtotime(($i + $add) . " day", $today);
+            }
+            $weeks['current'][] = self::formatDate($current);
+            $weeks['next'][] = self::formatDate(strtotime(($i + $add + 7) . " day", $today));
         }
 
         return $weeks;

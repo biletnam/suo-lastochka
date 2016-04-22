@@ -46,6 +46,5 @@
         });
 
         var weekRecordCaption = {!! $weeks_json !!};
-        var indexToday = {{ $indexToday }};
 </script>
 @endpush

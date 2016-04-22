@@ -64,16 +64,10 @@ class TerminalController extends Controller
 
         $weeks = Timetemplate::getDaysTo2Weeks();
 
-        /**
-         * Индекс дня. Все дни перед ним должны быть выключены
-         */
-        $indexToday = date('w') - 1;
-
         return view('terminals.show', [
             'terminal' => $terminal,
             'weeks' => $weeks,
             'weeks_json' => json_encode($weeks),
-            'indexToday' => $indexToday,
         ]);
     }
 
@@ -123,29 +117,19 @@ class TerminalController extends Controller
     {
         $ticketRepo = new TicketRepository();
 
-        $day = date('j');
-        $month = date('m');
-        $year = date('Y');
-        $hour = date('H');
-        $minute = date('i');
-        $second = 0;
-
         $with_time = false;
 
-        if ('today' != $request->date) {
-            $date = explode('.', $request->date);
-            $day = $date[0];
-            $month = $date[1];
-            if ('now' != $request->time) {
-                $time = explode(':', $request->time);
-                $hour = $time[0];
-                $minute = $time[1];
-
+        if ('today' == $request->date) {
+            $admission_time = date('Y-m-d H:i:s');
+        } else {
+            $admission_time = $request->date;
+            if ('now' == $request->time) {
+                $admission_time .= date(' H:i:s');
+            } else {
+                $admission_time .= ' ' . $request->time;
                 $with_time = true;
             }
         }
-
-        $admission_time = date('Y-m-d H:i:s', mktime($hour, $minute, $second, $month, $day, $year));
 
         $check_data = $ticketRepo->createTicket($request->room, $admission_time, $with_time);
 
