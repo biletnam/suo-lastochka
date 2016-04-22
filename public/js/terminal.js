@@ -145,10 +145,10 @@ function getTicketCountToSelectDayDialog( room ) {
     onTicketCountToSelectDayDialog );
 }
 
-function getTimeDialog( room, day ) {
+function getTimeDialog( room, date ) {
     getDataFromServer("/terminal/timedialog", {
         room: room,
-        day: day,
+        date: date,
     },
     onGetTimeDialog );
 }
@@ -257,12 +257,12 @@ function onClickDay( dayIndex ) {
     needToInitSelected = false;
     dlgSelectDay.dialog( "close" );
     var room = selectedRoom;
-    var day = weekRecordCaption[ selectedWeek ][ dayIndex ][ "long" ];
+    var date = weekRecordCaption[ selectedWeek ][ dayIndex ][ "long" ];
     if ("1" !== roomData[ room ][ "can_record_by_time" ]) {
-        createTicket( room, day );
+        createTicket( room, date );
     } else {
-        selectedDay = day;
-        getTimeDialog( room, day );
+        selectedDay = date;
+        getTimeDialog( room, date );
     }
 }
 

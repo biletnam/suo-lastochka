@@ -9,6 +9,7 @@ use suo\Http\Requests;
 use suo\Repositories\RoomRepository;
 use suo\Repositories\TicketRepository;
 use suo\Timetemplate;
+use suo\Room;
 
 class ReceptionController extends Controller
 {
@@ -76,6 +77,29 @@ class ReceptionController extends Controller
         $ticketByRoomsAndDays = $this->getTicketByRoomsAndDays($rooms, $weeks);
 
         return response()->json($ticketByRoomsAndDays);
+    }
+
+    public function timedialog(Request $request)
+    {
+        $room_repo = new RoomRepository();
+        $room_id = $request->room;
+        $date = $request->date;
+
+        $busyTimes = $room_repo->getTicketsByDateToTimeDialog($room_id, $date);
+
+        $room = Room::find($room_id);
+
+        $timetemplate = $room->timetemplate;
+
+        $times = $timetemplate->getTimeCaption($busyTimes);
+
+        return response()->json([
+            'day' => date('d.m', strtotime($request->date)),
+            'dialog' => view('reception.time', [
+                'type' => $timetemplate->name,
+                'times' => $times,
+            ])->render()
+        ]);
     }
 
     private function getTicketByRoomsAndDays($rooms, $weeks)

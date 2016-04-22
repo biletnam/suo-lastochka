@@ -177,7 +177,7 @@ class TerminalController extends Controller
     {
         $room_repo = new RoomRepository();
         $room_id = $request->room;
-        $date = $request->day . '.2016';
+        $date = $request->date;
 
         $busyTimes = $room_repo->getTicketsByDateToTimeDialog($room_id, $date);
 
@@ -188,7 +188,7 @@ class TerminalController extends Controller
         $times = $timetemplate->getTimeCaption($busyTimes);
 
         return response()->json([
-            'day' => $request->day,
+            'day' => date('d.m', strtotime($request->date)),
             'dialog' => view('terminals.time', [
                 'type' => $timetemplate->name,
                 'times' => $times,

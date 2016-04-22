@@ -4,6 +4,8 @@
 
     @include('reception.dialogs.check')
 
+    @include('reception.dialogs.time')
+
     <div class="container">
         <h1>Запись клиентов</h1>
         <table class="table suo-reception-table">

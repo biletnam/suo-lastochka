@@ -40,6 +40,7 @@ Route::group(['middleware' => ['web', 'auth', 'localonly']], function () {
     Route::get('/reception', 'ReceptionController@index');
     Route::post('/reception/createticket', 'ReceptionController@createticket');
     Route::get('/reception/ticketcount', 'ReceptionController@ticketcount');
+    Route::get('/reception/timedialog', 'ReceptionController@timedialog');
 });
 
 Route::group(['middleware' => ['web', 'localonly']], function () {

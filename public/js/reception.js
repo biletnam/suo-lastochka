@@ -9,7 +9,13 @@ function init() {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    setTimeout(function() {
+        getTicketCount();
+    }, 5000);
 }
+
+var selectedRoom = -1;
 
 
 // Запросы серверу
@@ -61,6 +67,25 @@ function getTicketCount() {
     ;
 }
 
+function getTimeDialog( room, date ) {
+    $.get(
+            "/reception/timedialog",
+            {
+                room: room,
+                date: date
+            },
+            function( json ) {
+                onGetTimeDialog( json );
+            }
+        )
+        .fail(function( xhr, status, errorThrown ) {
+            console.log( "Error: " + errorThrown );
+            console.log( "Status: " + status );
+            console.dir( xhr );
+        })
+    ;
+}
+
 
 // Обработка ответов сервера
 
@@ -92,8 +117,16 @@ function onTicketCount( json ) {
     });
 
     setTimeout(function() {
-        //getTicketCount();
+        getTicketCount();
     }, 5000);
+}
+
+function onGetTimeDialog( json ) {
+    $( "#suo-dlg-select-time-container" ).html( json[ "dialog" ] );
+    $( "#suo-dlg-select-time-day" ).html( json[ "day" ] );
+    $( "#suo-dlg-select-time-room" ).html( roomData[ selectedRoom ][ "description" ] );
+
+    showDialog(dlgSelectTime, 15000);
 }
 
 
@@ -106,12 +139,25 @@ function onClickDay( room, date ) {
     if (current >= max) {
         return;
     }
-    
-    createTicket( room, date );
+
+    if ("0" == roomData[ room ][ "can_record_by_time" ]) {
+        createTicket( room, date );
+    } else {
+        selectedRoom = room;
+        getTimeDialog( room, date );
+    }
 }
 
 function onClickDlgCheckClose( ) {
     dlgCheck.dialog( "close" );
+}
+
+function onClickSelectTimeClose( ) {
+    dlgSelectTime.dialog( "close" );
+}
+
+function onClickTime( time, disabled ) {
+    alert( time );
 }
 
 
@@ -120,6 +166,10 @@ function onClickDlgCheckClose( ) {
 
 function onCloseDlgСheck() {
 
+}
+
+function onCloseDlgSelectTime( ) {
+    selectedRoom = -1;
 }
 
 

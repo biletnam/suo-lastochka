@@ -32,3 +32,12 @@
     border-radius: 0.3em;
     font-weight: bold;
 }
+
+.suo-reception-record-button-disabled {
+    background: linear-gradient(to top,  #ffd2c0,  #ffd2c0);
+    color: gray;
+}
+
+.suo-reception-record-button-on-middle {
+    padding-top: 0.7em;
+}
