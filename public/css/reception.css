@@ -1,0 +1,21 @@
+.suo-reception-table > tbody > tr > td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.suo-reception-table > thead > tr > td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.suo-reception-button {
+    background: linear-gradient(to top,  #ffd2c0,  #fd773e);
+    border:0 solid;
+    border-radius: 0.3em;
+    font-weight: bold;
+}
+
+.suo-reception-button-disabled {
+    background: linear-gradient(to top,  #ffd2c0,  #ffd2c0);
+    color: gray;
+}

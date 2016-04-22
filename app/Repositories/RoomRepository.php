@@ -117,7 +117,7 @@ class RoomRepository
     public function countTicketsByRoomsAndDays($room_ids, $date1, $date2)
     {
         $tickets = DB::table('tickets')
-            ->select(DB::raw('room_id as room, DATE(admission_date) as a_date, count(*) as ticket_count'))
+            ->select(DB::raw("room_id as room, DATE(admission_date) as a_date, count(*) as ticket_count"))
             ->whereBetween('admission_date', [
                 date('Y-m-d 00:00:00', strtotime($date1)),
                 date('Y-m-d 23:59:59', strtotime($date2))])

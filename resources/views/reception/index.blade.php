@@ -4,7 +4,7 @@
 
     <div class="container">
         <h1>Запись клиентов</h1>
-        <table class="table">
+        <table class="table suo-reception-table">
             <thead>
                 <tr>
                     <td>Кабинет</td>
@@ -23,17 +23,25 @@
 
                 <tr>
                     <td>{{ $room->description }}</td>
-                        @foreach($weeks['current'] as $day)
+                    
+                    @foreach($weeks['current'] as $day)
+                        @include('reception.buttons.record')
 
-                        <td>{{ $day['short'] }}</td>
-                        @endforeach
-                        @foreach($weeks['next'] as $day)
-
-                        <td>{{ $day['short'] }}</td>
-                        @endforeach
+                    @endforeach
+                    @foreach($weeks['next'] as $day)
+                        @include('reception.buttons.record')
+                    @endforeach
                 </tr>
             @endforeach
             </tbody>
         </table>
     </div>
 @endsection
+
+@push('scripts')
+    @stack('dialogs')
+    <script>
+        var roomData = {!! $roomData !!};
+
+    </script>
+@endpush

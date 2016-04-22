@@ -14,7 +14,7 @@
     <!-- Styles -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/jquery-ui.min.css" rel="stylesheet">
-    <link href="/css/terminal.css" rel="stylesheet">
+    <link href="/css/reception.css" rel="stylesheet">
 
 </head>
 <body id="app-layout">
@@ -24,6 +24,7 @@
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/jquery-ui.min.js"></script>
+    @stack('scripts')
     <script src="/js/reception.js"></script>
 
 </body>
