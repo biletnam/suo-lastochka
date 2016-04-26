@@ -41,11 +41,26 @@ class Ticket extends Model
     const ACCEPTED = 4;
 
     /**
+     * Заявка создана через терминал
+     */
+    const CREATED_BY_TERMINAL = 'terminal';
+
+    /**
+     * Заявка создана через администратора
+     */
+    const CREATED_BY_RECEPTION = 'reception';
+
+    /**
+     * Заявка создана через врача
+     */
+    const CREATED_BY_OPERATOR = 'operator';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['room_id', 'status', 'check_id', 'admission_date'];
+    protected $fillable = ['room_id', 'status', 'check_id', 'admission_date', 'created_by_type', 'created_by_id'];
 
     public function room()
     {

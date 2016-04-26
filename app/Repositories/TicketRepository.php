@@ -63,7 +63,7 @@ class TicketRepository
         return $result;
     }
 
-    public function createTicket($room_id, $admission_time, $with_time)
+    public function createTicket($room_id, $admission_time, $with_time, $created_by_type, $created_by_id)
     {
         $result = ['error' => ''];
 
@@ -78,10 +78,12 @@ class TicketRepository
             $check = $check_repo->newCheckToDate($date);
 
             $ticket = new Ticket([
-                'room_id' => $room->id
-                , 'check_id' => $check->id
-                , 'admission_date' => $admission_time
-                , 'status' => Ticket::NEWTICKET
+                'room_id' => $room->id,
+                'check_id' => $check->id,
+                'admission_date' => $admission_time,
+                'status' => Ticket::NEWTICKET,
+                'created_by_type' => $created_by_type,
+                'created_by_id' => $created_by_id
             ]);
 
             if (true != $ticket->save()) {

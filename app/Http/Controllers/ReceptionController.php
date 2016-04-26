@@ -10,6 +10,8 @@ use suo\Repositories\RoomRepository;
 use suo\Repositories\TicketRepository;
 use suo\Timetemplate;
 use suo\Room;
+use suo\Ticket;
+use Auth;
 
 class ReceptionController extends Controller
 {
@@ -64,7 +66,8 @@ class ReceptionController extends Controller
             }
         }
 
-        $check_data = $ticketRepo->createTicket($request->room, $admission_time, $with_time);
+        $check_data = $ticketRepo->createTicket($request->room, $admission_time, $with_time,
+                Ticket::CREATED_BY_RECEPTION, Auth::user()->id);
 
         return response()->json($check_data);
     }

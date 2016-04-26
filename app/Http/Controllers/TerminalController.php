@@ -10,6 +10,7 @@ use suo\Http\Requests;
 use suo\Terminal;
 use suo\Room;
 use suo\Timetemplate;
+use suo\Ticket;
 use suo\Repositories\TicketRepository;
 use suo\Repositories\RoomRepository;
 
@@ -131,7 +132,8 @@ class TerminalController extends Controller
             }
         }
 
-        $check_data = $ticketRepo->createTicket($request->room, $admission_time, $with_time);
+        $check_data = $ticketRepo->createTicket($request->room, $admission_time, $with_time,
+                Ticket::CREATED_BY_TERMINAL, $request->terminal);
 
         return response()->json($check_data);
     }
