@@ -67,12 +67,13 @@ function blink( room, text ) {
 }
 
 function playNote() {
-    $( "#audio" ).removeProp( "muted" );
+    $( "#audio" ).trigger( "play" );
     stopPlayNote();
 }
 
 function stopPlayNote() {
-    $( "#audio" ).attr( "muted", "muted" );
+    $( "#audio" ).trigger( "pause" );
+    $( "#audio" ).prop( "currentTime", 0 );
 }
 
 function nextChecks() {
