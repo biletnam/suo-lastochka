@@ -3,8 +3,9 @@
                 @for ($row = 0; $row < 4; $row++)
                 <div class="row"><div class="col-md-12">&nbsp;</div></div>
                 <div class="row">
+                    <div class="col-md-2">&nbsp;</div>
                     @for ($col = 0; $col < 4; $col++)
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         @include('reception.buttons.time')
                     </div>
 

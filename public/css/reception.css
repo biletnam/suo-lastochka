@@ -25,12 +25,19 @@
 }
 
 .suo-dialog-button-close {
-    height: 3em;
+    height: 2em;
     width: 9em;
     background: linear-gradient(to top,  #ffd2c0,  #fd773e);
     border:0 solid;
     border-radius: 0.3em;
     font-weight: bold;
+}
+
+.suo-reception-record-button {
+    height: 2em;
+    background: linear-gradient(to top,  #ffd2c0,  #fd773e);
+    border:0 solid;
+    border-radius: 0.3em;
 }
 
 .suo-reception-record-button-disabled {
@@ -39,5 +46,6 @@
 }
 
 .suo-reception-record-button-on-middle {
-    padding-top: 0.7em;
+    padding-top: 0.3em;
 }
+

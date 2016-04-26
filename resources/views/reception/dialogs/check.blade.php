@@ -10,15 +10,16 @@
             <p id="suo-check-start-date"></p>
             <p id="suo-check-position"></p>
             <p id="suo-check-get-time"></p>
-            <div class="suo-dialog-button-close" onclick="onClickDlgCheckClose(); return false;">Закрыть</div>
+            <p class="suo-dialog-button-close suo-reception-record-button-on-middle pull-right" onclick="onClickDlgCheckClose(); return false;">Закрыть</p>
+            <div class="clearfix"></div>
         </div>
 
 @push('dialogs')
     <script>
         var dlgCheck = $( "#suo-dlg-check" ).dialog({
             autoOpen: false,
-            height: 300,
-            width: 350,
+            height: 250,
+            width: 300,
             modal: true,
             dialogClass: "no-close hidden-print",
             close: function( event, ui ) { onCloseDlgСheck(); }

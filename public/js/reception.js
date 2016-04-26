@@ -17,6 +17,10 @@ function init() {
 
 var selectedRoom = -1;
 
+var selectedDate = '';
+
+var needToInitSelected = true;
+
 
 // Запросы серверу
 
@@ -25,7 +29,7 @@ function createTicket( room, date, time ) {
     date = date || "today";
     time = time || "now";
 
-//    showDialog(dlgGetACheck, 5000);
+    showDialog(dlgCheck, 5000);
 
     $.post("/reception/createticket",
         {
@@ -144,6 +148,7 @@ function onClickDay( room, date ) {
         createTicket( room, date );
     } else {
         selectedRoom = room;
+        selectedDate = date;
         getTimeDialog( room, date );
     }
 }
@@ -157,7 +162,11 @@ function onClickSelectTimeClose( ) {
 }
 
 function onClickTime( time, disabled ) {
-    alert( time );
+    if (true != disabled) {
+        needToInitSelected = false;
+        dlgSelectTime.dialog( "close" );
+        createTicket( selectedRoom, selectedDate, time );
+    }
 }
 
 
@@ -165,11 +174,11 @@ function onClickTime( time, disabled ) {
 
 
 function onCloseDlgСheck() {
-
+    initSelected();
 }
 
 function onCloseDlgSelectTime( ) {
-    selectedRoom = -1;
+    initSelected();
 }
 
 
@@ -181,4 +190,13 @@ function showDialog( dialog, time_to_show ) {
     setTimeout(function() {
         dialog.dialog( "close" );
     }, time_to_show);
+}
+
+function initSelected() {
+    if (false !== needToInitSelected) {
+        selectedRoom = -1;
+        selectedDay = '';
+    }
+
+    needToInitSelected = true;
 }
