@@ -184,7 +184,7 @@ function onTicketCount( json ) {
     });
 
     setTimeout(function() {
-        //getTicketCount();
+        getTicketCount();
     }, 5000);
 }
 
