@@ -42,7 +42,7 @@ class User extends Authenticatable
     public function isOperator()
     {
         $isOperator = !$this->roles->filter(function($item) {
-            return $item->name == 'Operator';
+            return strtolower($item->name) == 'operator';
         })->isEmpty();
     
         return $isOperator;
