@@ -16,6 +16,7 @@ class RoomsTableSeeder extends Seeder
         DB::table('rooms')->insert([
             'name' => 'reg',
             'description' => 'Регистратура',
+            'window_count' => 2,
         ]);
 
         DB::table('rooms')->insert([

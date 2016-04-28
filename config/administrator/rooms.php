@@ -9,6 +9,7 @@ return [
         'name',
         'description',
         'ip',
+        'window_count',
         'max_day_record',
         'can_record',
         'can_record_by_time',
@@ -42,6 +43,10 @@ return [
         ],
         'ip' => [
             'title' => 'ip',
+            'type' => 'text',
+        ],
+        'window_count' => [
+            'title' => 'window_count',
             'type' => 'text',
         ],
         'max_day_record' => [

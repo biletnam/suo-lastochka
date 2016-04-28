@@ -7,15 +7,20 @@ body {
     vertical-align: middle;
 }
 
+.suo-table > tbody > tr > th {
+    vertical-align: middle;
+}
+
 .suo-header {
+    text-align: center;
     font-size: 3em;
 }
 
 .suo-current-check {
-    font-size: 10em;
+    font-size: 8em;
     font-weight: bolder;
 }
 
 .suo-next-check {
-    font-size: 8em;
+    font-size: 7em;
 }

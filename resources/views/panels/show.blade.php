@@ -4,17 +4,11 @@
     <table class="table suo-table">
         <thead>
             <th class="suo-header">Кабинет</th>
-            @each('panels.table.header', $rooms, 'room')
+            <th class="suo-header">Обслуживается</th>
+            <th class="suo-header">Следующий</th>
         </thead>
         <tbody>
-            <tr>
-                <td class="suo-header">Обслуживается</td>
-                @each('panels.table.current', $rooms, 'room')
-            </tr>
-            <tr>
-                <td class="suo-header">Следующий</td>
-                @each('panels.table.next', $rooms, 'room')
-            </tr>
+            @each('panels.table.room', $rooms, 'room')
         </tbody>
     </table>
 @endsection
