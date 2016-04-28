@@ -29,8 +29,11 @@ class TicketRepository
             ->whereBetween('tickets.admission_date', [date('Y-m-d 00:00:00'), date('Y-m-d 23:59:59')])
             ->whereIn('tickets.room_id', $rooms)
             ->whereIn('tickets.status', [Ticket::NEWTICKET, Ticket::CALLED, Ticket::ACCEPTED])
+            ->orderBy('tickets.room_id')
+            ->orderBy('tickets.window')
             ->orderBy('tickets.admission_date')
             ->get(['tickets.room_id'
+                , 'tickets.window'
                 , 'tickets.admission_date'
                 , 'tickets.status'
                 , 'checks.number AS check_number'
@@ -145,19 +148,23 @@ class TicketRepository
         ];
         if (count($tickets) > 0) {
             $current_room_id = current($tickets)->room_id;
-            $result['rooms'][$current_room_id] = $init_room;
+            $window = 1;
+            $result['rooms'][$current_room_id][$window] = $init_room;
 
             foreach ($tickets as $ticket) {
-                if ($ticket->room_id != $current_room_id) {
+                if (
+                        $ticket->room_id != $current_room_id
+                        || $ticket->window != $window) {
                     $current_room_id = $ticket->room_id;
-                    $result['rooms'][$current_room_id] = $init_room;
+                    $window = $ticket->window;
+                    $result['rooms'][$current_room_id][$window] = $init_room;
                 }
                 if (Ticket::ACCEPTED == $ticket->status) {
-                    $result['rooms'][$current_room_id]['accepted'] = $ticket->check_number;
+                    $result['rooms'][$current_room_id][$window]['accepted'] = $ticket->check_number;
                 } else if (Ticket::CALLED == $ticket->status) {
-                    $result['rooms'][$current_room_id]['called'] = $ticket->check_number;
-                } else if ('' == $result['rooms'][$current_room_id]['next']) {
-                    $result['rooms'][$current_room_id]['next'] = $ticket->check_number;
+                    $result['rooms'][$current_room_id][$window]['called'] = $ticket->check_number;
+                } else if ('' == $result['rooms'][$current_room_id][$window]['next']) {
+                    $result['rooms'][$current_room_id][$window]['next'] = $ticket->check_number;
                 }
             }
         }

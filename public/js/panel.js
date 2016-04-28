@@ -31,24 +31,26 @@ function checks() {
 function parseTickets( tickets ) {
     nextChecks();
 
-    $.each( rooms, function( key, value) {
-        $( "#current-" + value ).html( "&nbsp;" );
-        $( "#next-" + value ).html( "&nbsp;" );
-    });
+    $( "#current-room-" ).html( "&nbsp;" );
+    $( "#next-room-" ).html( "&nbsp;" );
 
     if ( tickets[ "count" ] > 0) {
-        $.each( tickets[ "rooms" ], function( room, ticket) {
-            if ('' != ticket[ "accepted" ]) {
-                $( "#current-" + room ).html( ticket[ "accepted" ] );
-            } else if ('' != ticket[ "called" ]) {
-                $( "#current-" + room ).html( ticket[ "called" ] );
-                playNote();
-                blink( room, ticket[ "called" ] );
-            }
+        $.each( tickets[ "rooms" ], function( room, windows ) {
+            $.each( windows, function ( window, ticket ) {
+                var id = "-room-" + room + "-window-" + window;
+                if ('' != ticket[ "accepted" ]) {
 
-            if ('' != ticket[ "next" ]) {
-                $( "#next-" + room ).html( ticket[ "next" ] );
-            }
+                    $( "#current" + id ).html( ticket[ "accepted" ] );
+                } else if ('' != ticket[ "called" ]) {
+                    $( "#current" + id ).html( ticket[ "called" ] );
+                    playNote();
+                    blink( room, ticket[ "called" ] );
+                }
+
+                if ('' != ticket[ "next" ]) {
+                    $( "#next" + id ).html( ticket[ "next" ] );
+                }
+            });
         });
     }
 }

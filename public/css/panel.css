@@ -24,3 +24,13 @@ body {
 .suo-next-check {
     font-size: 7em;
 }
+
+.suo-current-check-with-window {
+    font-size: 0.3em;
+    text-align: left;
+}
+
+.suo-current-check-with-window-check {
+    font-size: 2.5em;
+    margin-left: 3em;
+}

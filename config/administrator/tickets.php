@@ -7,6 +7,7 @@ return [
     'columns' => [
         'id',
         'room_id',
+        'window',
         'status',
         'check_id',
         'created_by_type',
@@ -21,6 +22,10 @@ return [
             'type' => 'relationship',
             'title' => 'Room',
             'name_field' => 'description',
+        ],
+        'window' => [
+            'type' => 'text',
+            'title' => 'Window',
         ],
         'status' => [
             'type' => 'text',
