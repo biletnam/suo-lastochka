@@ -21,7 +21,7 @@
         <div class="container">
             <!-- Collapsed Hamburger -->
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
-                <span class="sr-only">Управление</span>
+                <span class="sr-only">Меню</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -29,8 +29,8 @@
 
             <div class="navbar-header">
                 <!-- Branding Image -->
-                <a class="navbar-brand" href="{{ url('#') }}">
-                    Электронная очередь
+                <a class="navbar-brand" href="{{ url('/') }}">
+                    Электронная очередь - {{ $title_room }}
                 </a>
             </div>
 
@@ -55,11 +55,14 @@
         </div>
     </nav>
 
+    <div class="container">
 @yield('content')
+    </div>
 
     <!-- JavaScripts -->
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    @stack('scripts')
     <script src="/js/operator.js"></script>
 </body>
 </html>

@@ -48,19 +48,6 @@ class AuthController extends Controller
         $this->middleware('guest', ['except' => 'logout']);
     }
 
-    protected function authenticated($request, $user)
-    {
-        if ($user->isOperator()) {
-            $room_repo = new RoomRepository();
-            $rooms = $room_repo->forOperator($user->id);
-            session(['rooms' => $rooms->pluck('id')->all()]);
-
-            return redirect()->intended('/operator');
-        }
-
-        return redirect()->intended('/'); //redirect to standard user homepage
-    }
-
     /**
      * Get a validator for an incoming registration request.
      *

@@ -13,3 +13,11 @@
     </button>
 </p>
 @endsection
+
+@push('scripts')
+    <script>
+        $(function() {
+            init();
+        });
+    </script>
+@endpush

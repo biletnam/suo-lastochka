@@ -1,10 +1,6 @@
 var ticket_to_call = 0;
 var timers = [];
 
-$(function() {
-    init();
-});
-
 function init() {
     $.ajaxSetup({
         headers: {
@@ -12,83 +8,66 @@ function init() {
         }
     });
 
-    checks();
+    getChecks();
 }
 
-function checks() {
-    $.get("/operator/checks",
-        function( tickets ) {
-            parseTickets( tickets );
-        })
-    // Code to run if the request fails; the raw request and
-    // status codes are passed to the function
-    .fail(function( xhr, status, errorThrown ) {
-        console.log( "Error: " + errorThrown );
-        console.log( "Status: " + status );
-        console.dir( xhr );
-    })
-    ;
+// Получение данных с сервера
+
+function getChecks() {
+    getDataFromServer(window.location.href, {}, onGetChecks);
 }
+
+function call( ) {
+    postDataToServer("/operator/call", {
+            ticket: ticket_to_call
+        }, onCall);
+}
+
+function accept( ) {
+    postDataToServer("/operator/accept", {
+            ticket: ticket_to_call
+        }, onAccept);
+}
+
+function close( ) {
+    postDataToServer("/operator/close", {
+            ticket: ticket_to_call
+        }, onClose);
+}
+
+// Обработка полученных данных с сервера
+
+function onGetChecks( json ) {
+    parseTickets( json );
+}
+
+function onCall( json ) {
+    parseTickets( json );
+}
+
+function onAccept( json ) {
+    parseTickets( json );
+}
+
+function onClose( json ) {
+    parseTickets( json );
+}
+
+// Обработка нажатий кнопок
 
 function onclickCall() {
-    $.post(
-        "/operator/call",
-        {
-            ticket: ticket_to_call
-        }, function( tickets ) {
-            parseTickets( tickets );
-        },
-        "json"
-    )
-    // Code to run if the request fails; the raw request and
-    // status codes are passed to the function
-    .fail(function( xhr, status, errorThrown ) {
-        console.log( "Error: " + errorThrown );
-        console.log( "Status: " + status );
-        console.dir( xhr );
-    })
-    ;
+    call( );
 }
 
 function onclickAccept() {
-    $.post(
-        "/operator/accept",
-        {
-            ticket: ticket_to_call
-        }, function( tickets ) {
-            parseTickets( tickets );
-        },
-        "json"
-    )
-    // Code to run if the request fails; the raw request and
-    // status codes are passed to the function
-    .fail(function( xhr, status, errorThrown ) {
-        console.log( "Error: " + errorThrown );
-        console.log( "Status: " + status );
-        console.dir( xhr );
-    })
-    ;
+    accept( );
 }
 
 function onclickClose() {
-    $.post(
-        "/operator/close",
-        {
-            ticket: ticket_to_call
-        }, function( tickets ) {
-            parseTickets( tickets );
-        },
-        "json"
-    )
-    // Code to run if the request fails; the raw request and
-    // status codes are passed to the function
-    .fail(function( xhr, status, errorThrown ) {
-        console.log( "Error: " + errorThrown );
-        console.log( "Status: " + status );
-        console.dir( xhr );
-    })
-    ;
+    close( );
 }
+
+// Вспомогательные функции
 
 function parseTickets( tickets ) {
     var call = '', accept = '', close = '';
@@ -100,8 +79,8 @@ function parseTickets( tickets ) {
         ticket_to_call = tickets[ "called" ][ "id" ];
         call = accept = close = tickets[ "called" ][ "check_number" ];
     } else if ( 0 != tickets[ "count" ] ) { // нет вызыванных или принятых, но в очереди кто-то есть, можно "Вызвать"
-        ticket_to_call = tickets[ "current" ][ "id" ];
-        call = tickets[ "current" ][ "check_number" ];
+        ticket_to_call = tickets[ "inqueue" ][ "id" ];
+        call = tickets[ "inqueue" ][ "check_number" ];
     }
 
     $( "#call-check-number" ).text( call );
@@ -121,6 +100,26 @@ function nextChecks() {
     });
 
     timers[ "checks" ] = setTimeout(function() {
-        checks();
+        getChecks();
     }, 5000);
+}
+
+function getDataFromServer(url, data, success) {
+    $.get(url, data, success)
+        .fail(function( xhr, status, errorThrown ) {
+            console.log( "Error: " + errorThrown );
+            console.log( "Status: " + status );
+            console.dir( xhr );
+        })
+    ;
+}
+
+function postDataToServer(url, data, success) {
+    $.post(url, data, success, "json" )
+        .fail(function( xhr, status, errorThrown ) {
+            console.log( "Error: " + errorThrown );
+            console.log( "Status: " + status );
+            console.dir( xhr );
+        })
+    ;
 }

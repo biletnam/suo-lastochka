@@ -45,23 +45,24 @@ class TicketRepository
         return $result;
     }
 
-    public function forOperator($rooms)
+    public function forOperator($room, $window)
     {
         $tickets = DB::table('tickets')
             ->leftJoin('checks', 'checks.id', '=', 'tickets.check_id')
             ->whereBetween('tickets.admission_date', [date('Y-m-d 00:00:00'), date('Y-m-d 23:59:59')])
-            ->whereIn('tickets.room_id', $rooms)
-            ->whereIN('tickets.status', [Ticket::NEWTICKET, Ticket::CALLED, Ticket::ACCEPTED])
+            ->where('tickets.room_id', $room)
+            ->whereIn('tickets.status', [Ticket::NEWTICKET, Ticket::CALLED, Ticket::ACCEPTED])
             ->orderBy('tickets.admission_date')
             ->get([
                 'tickets.id'
                 , 'tickets.room_id'
+                , 'tickets.window'
                 , 'tickets.admission_date'
                 , 'tickets.status'
                 , 'checks.number AS check_number'
             ]);
 
-        $result = $this->convertOperatorData($tickets);
+        $result = $this->convertOperatorData($tickets, $window);
 
         return $result;
     }
@@ -108,27 +109,28 @@ class TicketRepository
         return $result;
     }
 
-    public function call($ticket_id)
+    public function call($ticket_id, $window)
     {
-        return $this->setStatus($ticket_id, Ticket::CALLED);
+        return $this->setStatus($ticket_id, Ticket::CALLED, $window);
     }
 
-    public function accept($ticket_id)
+    public function accept($ticket_id, $window)
     {
-        return $this->setStatus($ticket_id, Ticket::ACCEPTED);
+        return $this->setStatus($ticket_id, Ticket::ACCEPTED, $window);
     }
 
-    public function close($ticket_id)
+    public function close($ticket_id, $window)
     {
-        return $this->setStatus($ticket_id, Ticket::CLOSED);
+        return $this->setStatus($ticket_id, Ticket::CLOSED, $window);
     }
 
-    private function setStatus($ticket_id, $status)
+    private function setStatus($ticket_id, $status, $window)
     {
         $ticket = Ticket::find($ticket_id);
 
         if (null != $ticket) {
             $ticket->status = $status;
+            $ticket->window = $window;
 
             $ticket->save();
         }
@@ -172,7 +174,7 @@ class TicketRepository
         return $result;
     }
 
-    private function convertOperatorData($tickets)
+    private function convertOperatorData($tickets, $window)
     {
         $result = [];
 
@@ -180,13 +182,15 @@ class TicketRepository
         if (count($tickets) > 0) {
             $result['accepted'] = 0;
             $result['called'] = 0;
-            $result['current'] = current($tickets);
+            $result['inqueue'] = current($tickets);
 
             foreach ($tickets as $ticket) {
-                if (Ticket::ACCEPTED == $ticket->status) {
-                    $result['accepted'] = $ticket;
-                } else if (Ticket::CALLED == $ticket->status) {
-                    $result['called'] = $ticket;
+                if ($ticket->window == $window) { // вызванные и принятые считаем только на нашего окна
+                    if (Ticket::ACCEPTED == $ticket->status) {
+                        $result['accepted'] = $ticket;
+                    } else if (Ticket::CALLED == $ticket->status) {
+                        $result['called'] = $ticket;
+                    }
                 }
             }
         }

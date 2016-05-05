@@ -29,10 +29,6 @@ class Authenticate
                 Auth::loginUsingId($user_id);
 
                 if (Auth::user()->isOperator()) {
-                    $room_repo = new RoomRepository();
-                    $rooms = $room_repo->forOperator($user_id);
-                    session(['rooms' => $rooms->pluck('id')->all()]);
-
                     return redirect()->intended('/operator');
                 }
 

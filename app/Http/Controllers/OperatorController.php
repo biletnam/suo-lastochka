@@ -9,6 +9,8 @@ use suo\Http\Requests;
 use Auth;
 
 use suo\Repositories\TicketRepository;
+use suo\Repositories\RoomRepository;
+use suo\Room;
 
 class OperatorController extends Controller
 {
@@ -37,49 +39,91 @@ class OperatorController extends Controller
         $this->operator = Auth::user()->id;
     }
 
-    /**
-     * Display a list of terminals.
-     *
-     * @param  Request  $request
-     * @return Response
-     */
     public function index(Request $request)
     {
-        $rooms = session('rooms');
+        $room_id = $request->query('room', 'no');
+        if ('no' == $room_id) {
+            return redirect()->action('OperatorController@rooms');
+        }
 
-        return view('operators.index', [
-            'tickets' => $this->tickets->forOperator($rooms),
+        return redirect()->action('OperatorController@tickets', ['room' => $room_id,
+            'window' => $request->query('window', 1)]);
+    }
+
+    public function tickets(Request $request)
+    {
+        $room_id = $request->query('room', 'no');
+        if ('no' == $room_id) {
+            return redirect()->action('OperatorController@rooms');
+        }
+
+        $window = $request->query('window');
+
+        $room = Room::find($room_id);
+        $desc = $room->description;
+        if ($room->window_count > 1) {
+            $desc .= ' - окно ' . $window;
+        }
+
+        return view('operators.tickets', [
+            'tickets' => $this->tickets->forOperator($room_id, $window),
+            'title_room' => $desc
         ]);
     }
 
-    public function checks()
+    public function checks(Request $request)
     {
-        $rooms = session('rooms');
+        $room = $request->query('room');
+        $window = $request->query('window');
 
-        $data = $this->tickets->forOperator($rooms);
+        $data = $this->tickets->forOperator($room, $window);
 
         return response()->json($data);
     }
 
     public function call(Request $request)
     {
-        $this->tickets->call($request->ticket);
+        $this->tickets->call($request->ticket, $request->session()->get('window'));
 
         return $this->checks();
     }
 
     public function accept(Request $request)
     {
-        $this->tickets->accept($request->ticket);
+        $this->tickets->accept($request->ticket, $request->session()->get('window'));
 
         return $this->checks();
     }
 
     public function close(Request $request)
     {
-        $this->tickets->close($request->ticket);
+        $this->tickets->close($request->ticket, $request->session()->get('window'));
 
         return $this->checks();
+    }
+
+    public function rooms(Request $request)
+    {
+        $room_repo = new RoomRepository();
+        $rooms = $room_repo->forOperator($this->operator);
+
+        return view('operators.rooms', [
+            'rooms' => $rooms,
+            'title_room' => 'Выбор кабинета'
+        ]);
+    }
+
+    public function selectroom(Request $request)
+    {
+        $room = $request->room;
+        $window = 1;
+        if (false !== strpos($room, '-')) {
+            $parts = explode('-', $room);
+            $room = $parts[0];
+            $window = $parts[1];
+        }
+
+        return redirect()->action('OperatorController@tickets', ['room' => $room, 'window' => $window]);
     }
 
 }
