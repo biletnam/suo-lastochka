@@ -26,10 +26,16 @@ class Authenticate
             } else {
                 $user_repo = new UserRepository();
                 $user_id = $user_repo->forAuth($request->ip());
-                Auth::loginUsingId($user_id);
+                $user = Auth::loginUsingId($user_id);
 
-                if (Auth::user()->isOperator()) {
-                    return redirect()->intended('/operator');
+                if (false != $user) {
+                    if ($user->isReception()) {
+                        return redirect()->intended('/reception');
+                    }
+
+                    if ($user->isOperator()) {
+                        return redirect()->intended('/operator');
+                    }
                 }
 
                 return redirect()->guest('login');

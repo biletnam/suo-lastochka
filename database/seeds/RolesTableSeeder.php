@@ -28,5 +28,10 @@ class RolesTableSeeder extends Seeder
             'description' => 'Оператор',
         ]);
 
+        DB::table('roles')->insert([
+            'name' => 'Reception',
+            'description' => 'Регистратор',
+        ]);
+
     }
 }

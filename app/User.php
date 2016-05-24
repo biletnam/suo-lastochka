@@ -39,6 +39,15 @@ class User extends Authenticatable
         return $this->belongsToMany('suo\Room');
     }
 
+    public function isReception()
+    {
+        $isReception = !$this->roles->filter(function($item) {
+            return strtolower($item->name) == 'reception';
+        })->isEmpty();
+
+        return $isReception;
+    }
+
     public function isOperator()
     {
         $isOperator = !$this->roles->filter(function($item) {
