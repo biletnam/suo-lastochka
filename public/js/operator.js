@@ -14,7 +14,7 @@ function init() {
 // Получение данных с сервера
 
 function getChecks() {
-    getDataFromServer(window.location.href, {}, onGetChecks);
+    getDataFromServer("/operator/checks", {}, onGetChecks);
 }
 
 function call( ) {

@@ -69,7 +69,7 @@ var weekRecords = [];
 // Инициализация
 
 
-function init() {
+function initTerminal() {
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -313,7 +313,7 @@ function isLessThenMaxRecords( room ) {
     var result = true;
     var data = roomData[ room ];
 
-    if ("0" !== data[ "max_day_record" ]) {
+    if (0 != data[ "max_day_record" ]) {
         if (data[ "ticket_count" ] >= data[ "max_day_record" ]) {
             result = false;
         }

@@ -36,7 +36,7 @@
         var terminal = {!! $terminal !!};
 
         $(function() {
-            init();
+            initTerminal();
         });
     </script>
     <script src="/js/terminal.js"></script>

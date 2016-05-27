@@ -65,6 +65,9 @@ class OperatorController extends Controller
             $desc .= ' - окно ' . $window;
         }
 
+        $request->session()->put('room', $room_id);
+        $request->session()->put('window', $window);
+
         return view('operators.tickets', [
             'tickets' => $this->tickets->forOperator($room_id, $window),
             'title_room' => $desc
@@ -73,8 +76,8 @@ class OperatorController extends Controller
 
     public function checks(Request $request)
     {
-        $room = $request->query('room');
-        $window = $request->query('window');
+        $room = $request->session()->get('room');
+        $window = $request->session()->get('window');
 
         $data = $this->tickets->forOperator($room, $window);
 
@@ -85,21 +88,21 @@ class OperatorController extends Controller
     {
         $this->tickets->call($request->ticket, $request->session()->get('window'));
 
-        return $this->checks();
+        return $this->checks($request);
     }
 
     public function accept(Request $request)
     {
         $this->tickets->accept($request->ticket, $request->session()->get('window'));
 
-        return $this->checks();
+        return $this->checks($request);
     }
 
     public function close(Request $request)
     {
         $this->tickets->close($request->ticket, $request->session()->get('window'));
 
-        return $this->checks();
+        return $this->checks($request);
     }
 
     public function rooms(Request $request)
